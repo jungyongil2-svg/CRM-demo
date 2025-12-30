@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CRM 메인화면 데모 (AI연계과제 → 채널선택 → TM 실행)</title>
+  <title>CRM 데모 (AI/필수/밀착/일정 + TM/SMS)</title>
   <style>
     :root{
       --bg:#f3f4f6; --panel:#fff; --line:#cfd6df; --line2:#e6ebf2;
@@ -14,6 +14,12 @@
       --tab:#f2f6fb; --tabLine:#bfcbe0;
       --accent:#6c4ee6; --accent2:#8a6bff;
       --purple:#5b48d8;
+
+      --cal-ai:#16a34a;
+      --cal-req:#2563eb;
+      --cal-close:#dc2626;
+      --cal-sched:#7c3aed;
+
       --shadow: 0 6px 16px rgba(16,24,40,.10);
       --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     }
@@ -55,7 +61,7 @@
     .top2 .mini-btn{ background: rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:4px; padding:6px 10px; cursor:pointer; }
 
     /* ======= Layout ======= */
-    .wrap{ display:grid; grid-template-columns: 44px 260px 1fr; height: calc(100vh - 76px); }
+    .wrap{ display:grid; grid-template-columns: 44px 200px 1fr; height: calc(100vh - 76px); }
     .vbar{
       background: linear-gradient(180deg, var(--leftbar), var(--leftbar2));
       border-right:1px solid #1a2531; display:flex; flex-direction:column; align-items:center; padding:8px 0; gap:10px;
@@ -66,16 +72,20 @@
     .vico.dim{ opacity:.7; }
 
     .left{ background:#f7f8fb; border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
-    .left-head{ padding:10px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; }
-    .left-head .btn{
-      height:24px; padding:0 10px; border-radius:3px; border:1px solid var(--btnLine);
-      background: var(--btn); font-size:12px; cursor:pointer;
+    .left-head{
+      padding:8px; background:#fff; border-bottom:1px solid var(--line);
+      display:flex; align-items:center; gap:4px;
     }
-    .left-card{ padding:10px; display:flex; flex-direction:column; gap:10px; overflow:auto; }
+    .left-head .btn{
+      height:24px; padding:0 6px; border-radius:3px;
+      border:1px solid var(--btnLine); background: var(--btn);
+      font-size:11px; cursor:pointer; white-space:nowrap;
+    }
+    .left-card{ padding:8px; display:flex; flex-direction:column; gap:8px; overflow:auto; }
     .box{ background:#fff; border:1px solid var(--line); border-radius:4px; padding:8px; }
     .box .title{ font-weight:800; font-size:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
     .fields{ display:grid; grid-template-columns: 1fr; gap:6px; }
-    .field{ display:grid; grid-template-columns: 72px 1fr; gap:6px; align-items:center; font-size:12px; }
+    .field{ display:grid; grid-template-columns: 64px 1fr; gap:6px; align-items:center; font-size:12px; }
     .field input{ height:22px; border:1px solid var(--line); border-radius:2px; padding:0 6px; background:#fff; outline:none; font-size:12px; }
     .mini-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:6px; }
     .mini-tile{
@@ -116,15 +126,17 @@
       min-height:0; overflow:hidden; display:flex; flex-direction:column;
     }
 
-    .iconRow{ padding:10px; border-bottom:1px solid var(--line); display:flex; gap:18px; justify-content:center; align-items:center; background:#fff; }
+    /* Icon row */
+    .iconRow{
+      padding:10px; border-bottom:1px solid var(--line); display:flex; gap:18px;
+      justify-content:center; align-items:center; background:#fff;
+    }
     .round{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; user-select:none; }
     .round .circle{
       width:44px; height:44px; border-radius:999px; background:#f1f5ff; border:1px solid #d7e2ff;
       display:flex; align-items:center; justify-content:center; font-weight:900; color:#2f6fbf; position:relative;
     }
-    .round .circle .dot{ position:absolute; right:6px; bottom:6px; width:10px; height:10px; border-radius:999px; background:#ff8a00; border:2px solid #fff; display:none; }
     .round.active .circle{ background:#e6f0ff; border-color:#9fbaf0; box-shadow: inset 0 0 0 2px rgba(47,111,191,.10); }
-    .round.active .circle .dot{ display:block; }
     .round .label{ font-size:12px; font-weight:800; color:#1f2937; }
     .round .label span{ color:#2f6fbf; font-weight:900; }
 
@@ -135,12 +147,24 @@
     .calWeek div{ padding:8px; border-right:1px solid var(--line); text-align:center; }
     .calWeek div:last-child{ border-right:none; }
     .calDays{ display:grid; grid-template-columns: repeat(7, 1fr); }
-    .cell{ height:88px; border-right:1px solid var(--line2); border-bottom:1px solid var(--line2); padding:6px 8px; font-size:12px; background:#fff; }
+    .cell{
+      height:92px; border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);
+      padding:6px 8px; font-size:12px; background:#fff; cursor:pointer;
+    }
     .cell:nth-child(7n){ border-right:none; }
     .num{ font-weight:800; color:#111827; }
     .num.sun{ color:#e11d48; }
     .num.sat{ color:#2563eb; }
+    .cell.dim{ background:#fafafa; color:#9ca3af; }
     .cell.selected{ background:#eaf5ff; outline:2px solid rgba(47,111,191,.35); outline-offset:-2px; }
+    .badges{ margin-top:6px; display:flex; flex-direction:column; gap:4px; }
+    .badgeRow{ display:flex; align-items:center; gap:6px; font-weight:800; }
+    .sq{ width:10px; height:10px; border-radius:2px; }
+    .sq.ai{ background:var(--cal-ai); }
+    .sq.req{ background:var(--cal-req); }
+    .sq.close{ background:var(--cal-close); }
+    .sq.sched{ background:var(--cal-sched); }
+    .badgeRow .n{ font-size:11px; color:#111827; }
 
     /* Right task panel */
     .taskTabs{ display:flex; gap:2px; border-bottom:1px solid var(--line); background:#f7fafc; padding:6px 6px 0 6px; }
@@ -155,9 +179,17 @@
     tbody td{ border:1px solid var(--line2); padding:8px 8px; white-space:nowrap; background:#fff; }
     tbody tr:hover td{ background:#f8fbff; }
     tbody tr.active td{ background:#fff4d6; border-color:#f2d08a; }
-    .taskTableWrap{ padding:8px; overflow:auto; flex:1; }
+    .taskTableWrap{ padding:8px; overflow:auto; flex:1; display:flex; flex-direction:column; gap:8px; }
+    .taskTopBar{
+      display:flex; align-items:center; justify-content:flex-end; gap:8px;
+    }
+    .quickLinkBtn{
+      height:26px; padding:0 10px; border-radius:8px;
+      border:1px solid #cfd6df; background:#fff; cursor:pointer; font-size:12px; font-weight:900;
+    }
+    .quickLinkBtn:hover{ background:#f3f7ff; }
     .hint{ padding:10px; font-size:12px; color:var(--muted); }
-    .chk{ width:14px; height:14px; accent-color:#1f5aa6; }
+    .empty{ padding:12px; font-size:12px; color:var(--muted); border:1px dashed #d8e0ea; border-radius:8px; background:#fbfcff; }
 
     /* Bottom customers */
     .bottom{
@@ -170,16 +202,30 @@
     }
     .bottomHead .title{ font-weight:900; font-size:12px; display:flex; align-items:center; gap:10px; }
     .radio{ display:flex; align-items:center; gap:10px; font-size:12px; color:#374151; font-weight:700; }
+
+    .run-btn{
+      background:#ff7a18;
+      color:#111827;
+      border:none; border-radius:8px;
+      padding:10px 14px; font-weight:900; cursor:pointer; min-width:170px;
+      box-shadow: 0 10px 20px rgba(255,122,24,.22);
+      text-shadow: 0 1px 0 rgba(255,255,255,.35);
+    }
+    .run-btn:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; text-shadow:none; }
+
     .bottomHead button{
       height:24px; padding:0 10px; border-radius:3px; border:1px solid var(--btnLine);
       background:var(--btn); cursor:pointer; font-size:12px; white-space:nowrap;
     }
     .bottomBody{ overflow:auto; flex:1; }
-    .pill-btn{
-      background: var(--purple); color:#fff; border:none; border-radius:6px;
-      padding:10px 14px; font-weight:800; cursor:pointer; min-width:170px;
+    .chk{ width:14px; height:14px; accent-color:#1f5aa6; }
+
+    .mag-btn{
+      width:28px; height:22px;
+      border:1px solid #cfd6df; background:#fff; border-radius:6px;
+      cursor:pointer; font-weight:900;
     }
-    .pill-btn:disabled{ opacity:.6; cursor:not-allowed; }
+    .mag-btn:hover{ background:#f3f7ff; }
 
     /* ======= Modals ======= */
     .overlay{
@@ -201,7 +247,6 @@
       border:1px solid #cfd6df; background:#fff; cursor:pointer; font-size:12px;
     }
 
-    /* 1차 팝업(채널선택) */
     .modal1{ width:720px; max-width:calc(100vw - 24px); }
     .modal1Body{ padding:14px; }
     .agentBox{ border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff; }
@@ -213,9 +258,7 @@
       width:100%; background: var(--purple); color:#fff; border:none;
       border-radius:6px; padding:10px 12px; font-weight:900; cursor:pointer; text-align:center;
     }
-    .btnBig.secondary{ background:#6c6f7a; }
 
-    /* 2차 팝업(T M 전용 - 크게) */
     .modal2{ width:1120px; max-width:calc(100vw - 24px); }
     .modal2Body{
       display:grid;
@@ -235,7 +278,6 @@
       font-size:12px; color:#111827; line-height:1.65;
       flex:1; overflow:auto; white-space:pre-wrap;
     }
-
     .tmSide{
       border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff;
       display:flex; flex-direction:column; gap:10px;
@@ -254,6 +296,153 @@
     }
     .tmExec:disabled{ opacity:.6; cursor:not-allowed; }
 
+    .modalSMS{ width:980px; max-width:calc(100vw - 24px); }
+    .smsBody{ padding:14px; }
+    .smsCard{ border:1px solid #e1e7ef; border-radius:10px; background:#fff; padding:12px; }
+    .smsTitle{
+      font-weight:900; font-size:16px; margin-bottom:10px;
+      border-bottom:2px solid #e9edf5; padding-bottom:8px;
+    }
+    .smsGrid{
+      display:grid;
+      grid-template-columns: 1fr 280px;
+      gap:14px;
+      align-items:start;
+    }
+    .smsLeft{ display:flex; flex-direction:column; gap:10px; }
+    .smsLeft .sub{ font-weight:900; }
+    .smsTableWrap{ border:1px solid #dfe6ef; border-radius:10px; overflow:hidden; }
+    .smsPreview{
+      border:1px solid #dfe6ef; border-radius:10px; padding:10px; background:#fbfcff;
+      min-height: 170px;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .smsPreview .ph{ font-weight:900; }
+    .smsPreview .pbox{
+      flex:1; border:1px solid #e6ebf2; border-radius:10px; padding:10px; background:#fff;
+      font-size:12px; line-height:1.6; white-space:pre-wrap; color:#111827; overflow:auto;
+    }
+
+    .smsRight{ display:flex; flex-direction:column; gap:10px; }
+    .smsCustBox{
+      border:1px solid #dfe6ef; border-radius:10px; padding:10px; background:#fbfcff;
+      display:flex; flex-direction:column; gap:8px;
+      min-height: 210px;
+    }
+    .smsBtn{
+      background: var(--purple); color:#fff; border:none; border-radius:8px;
+      padding:12px; font-weight:900; cursor:pointer;
+    }
+    .smsBtn:disabled{ opacity:.6; cursor:not-allowed; }
+    .rowPick{ background:#eef2ff !important; }
+
+    .modalBrief{ width:860px; max-width:calc(100vw - 24px); }
+    .briefBody{ padding:12px; }
+    .briefBox{
+      border:1px solid #e1e7ef; border-radius:10px; background:#fff; padding:10px;
+      min-height: 420px;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .briefHeader{
+      display:flex; align-items:center; gap:10px; font-weight:900; color:#0f2f63;
+      border-bottom:1px solid #e9edf5; padding-bottom:8px;
+    }
+    .briefScroll{
+      border:1px solid #dfe6ef; border-radius:10px; padding:12px; background:#fbfcff;
+      font-size:12px; line-height:1.7; color:#111827;
+      white-space:pre-wrap; overflow:auto; flex:1;
+    }
+
+    /* MyCare 이동 팝업 */
+    .modalMyCare{ width:520px; max-width:calc(100vw - 24px); }
+    .mycareBody{ padding:16px; }
+    .mycareBox{
+      border:1px solid #e1e7ef; border-radius:12px; padding:16px; background:#fbfcff;
+      font-size:14px; line-height:1.6; color:#111827;
+    }
+
+    /* ==========================
+       ✅ Bottom Final Report (첨부 이미지 간략 형태)
+       - "고객리스트 영역" 안에서 구현
+    =========================== */
+    .finalInline{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:100%;
+    }
+    .finalInlineTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:1px solid #e1e7ef;
+      background:#fbfcff;
+      border-radius:10px;
+      padding:10px;
+    }
+    .finalInlineTop .l{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .finalInlineTop .ttl{
+      font-weight:900; color:#0f2f63;
+    }
+    .finalInlineTop select{
+      height:28px; border:1px solid #cfd6df; border-radius:8px; padding:0 10px;
+      font-size:12px; background:#fff; outline:none; min-width: 420px;
+      max-width: 100%;
+    }
+    .pill2{
+      height:28px; padding:0 10px; border-radius:999px;
+      border:1px solid #cfd6df; background:#fff;
+      display:flex; align-items:center; gap:8px; font-size:12px; font-weight:900; color:#374151;
+      white-space:nowrap;
+    }
+
+    .finalKpiRow{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;
+    }
+    .miniKpi{
+      border:1px solid #e1e7ef; border-radius:10px; background:#fff;
+      padding:10px;
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .miniKpi .k{ font-size:12px; font-weight:900; color:#374151; }
+    .miniKpi .v{ font-size:16px; font-weight:900; color:#111827; }
+    .miniKpi .s{ font-size:11px; color:#6b7280; }
+
+    .finalChecklist{
+      border:1px solid #e1e7ef;
+      border-radius:10px;
+      background:#fff;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .finalChecklist .h{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900; color:#0f2f63; font-size:12px;
+      padding-bottom:6px; border-bottom:1px solid #eef2f7;
+    }
+    .finalChecklist ul{
+      margin:0; padding:0; list-style:none;
+      display:flex; flex-direction:column; gap:6px;
+      font-size:12px; color:#111827;
+    }
+    .finalChecklist li{
+      display:flex; align-items:flex-start; gap:8px;
+    }
+    .tick{
+      width:16px; height:16px; border-radius:4px;
+      border:1px solid #cfd6df; background:#f7fafc;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px;
+      margin-top:2px;
+      flex:0 0 auto;
+    }
+    .tick.on{ background:#e6f0ff; border-color:#9fbaf0; }
     @media (max-width: 1320px){
       .mid{ grid-template-columns: 138px 1fr; }
       .taskPanel{ display:none; }
@@ -261,6 +450,9 @@
     @media (max-width: 980px){
       .modal2Body{ grid-template-columns: 1fr; }
       .tmSide{ min-height:auto; }
+      .smsGrid{ grid-template-columns: 1fr; }
+      .finalKpiRow{ grid-template-columns: 1fr; }
+      .finalInlineTop select{ min-width: 240px; }
     }
   </style>
 </head>
@@ -321,14 +513,11 @@
       </div>
       <div class="left-card">
         <div class="box">
-          <div class="title">조회 조건 <span style="font-weight:700;color:var(--muted);font-size:11px;">(목업)</span></div>
+          <div class="title">조회 조건</div>
           <div class="fields">
-            <div class="field"><div>고객번호</div><input/></div>
-            <div class="field"><div>실명번호</div><input/></div>
-            <div class="field"><div>계좌번호</div><input/></div>
-            <div class="field"><div>휴대폰</div><input/></div>
-            <div class="field"><div>직장전화</div><input/></div>
-            <div class="field"><div>자택전화</div><input/></div>
+            <div class="field"><div>고객</div><input/></div>
+            <div class="field"><div>실명</div><input/></div>
+            <div class="field"><div>계좌</div><input/></div>
           </div>
         </div>
         <div class="box">
@@ -340,21 +529,13 @@
             <div class="mini-tile">URL</div>
           </div>
         </div>
-        <div class="box">
-          <div class="title">과제상황 바로가기</div>
-          <div class="fields" style="gap:4px;">
-            <div class="field"><div>방카</div><input placeholder="—"/></div>
-            <div class="field"><div>대출</div><input placeholder="—"/></div>
-            <div class="field"><div>연금</div><input placeholder="—"/></div>
-          </div>
-        </div>
       </div>
     </section>
 
     <!-- MAIN -->
     <section class="main">
       <div class="content-top">
-        <div class="path">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
+        <div class="path" id="pathText">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
         <div class="actions">
           <button>초기화</button>
           <button>조회</button>
@@ -362,120 +543,156 @@
         </div>
       </div>
 
-      <div class="mid">
-        <div class="dateTile">
-          <div class="ym"><span>2025-12</span><span style="opacity:.95;font-weight:900;">▦</span></div>
-          <div class="big"><div class="d">17</div><div class="dow">WEDNESDAY</div></div>
-          <div class="ar"><span>‹</span><span>›</span></div>
-        </div>
-
-        <div class="calendarPanel">
-          <div class="iconRow">
-            <div class="round active"><div class="circle">👤<span class="dot"></span></div><div class="label">AI연계과제<span>(12)</span></div></div>
-            <div class="round"><div class="circle">🧩</div><div class="label">필수케어<span>(5)</span></div></div>
-            <div class="round"><div class="circle">📎</div><div class="label">밀착케어<span>(0)</span></div></div>
-            <div class="round"><div class="circle">📋</div><div class="label">일정정보<span>(0)</span></div></div>
-            <div class="round"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
-            <div class="round"><div class="circle">🎯</div><div class="label">스마일콜<span>(0)</span></div></div>
-            <div class="round"><div class="circle">🎯</div><div class="label">비대면 필수<span>(0)</span></div></div>
+      <!-- 기본 화면 영역(캘린더 + 과제패널) -->
+      <div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
+        <div class="mid">
+          <div class="dateTile">
+            <div class="ym"><span>2026-01</span><span style="opacity:.95;font-weight:900;">▦</span></div>
+            <div class="big"><div class="d" id="bigDay">19</div><div class="dow" id="bigDow">MONDAY</div></div>
+            <div class="ar"><span>‹</span><span>›</span></div>
           </div>
-          <div class="calBody">
-            <div class="calHeader">
-              <div>일정정보</div>
-              <div>
-                <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">월간일정</button>
-                <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">일정추가</button>
-              </div>
+
+          <div class="calendarPanel" id="calendarPanel">
+            <div class="iconRow" id="iconRow">
+              <div class="round active" data-cat="AI"><div class="circle">👤</div><div class="label">AI연계과제<span id="cntAI">(0)</span></div></div>
+              <div class="round" data-cat="REQ"><div class="circle">🧩</div><div class="label">필수케어<span id="cntREQ">(0)</span></div></div>
+              <div class="round" data-cat="CLOSE"><div class="circle">📎</div><div class="label">밀착케어<span id="cntCLOSE">(0)</span></div></div>
+              <div class="round" data-cat="SCH"><div class="circle">📋</div><div class="label">일정정보<span id="cntSCH">(0)</span></div></div>
+              <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+              <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
+              <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">비대면 필수</div></div>
             </div>
-            <div class="calGrid">
-              <div class="calWeek">
-                <div style="color:#e11d48;">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div style="color:#2563eb;">토</div>
-              </div>
-              <div class="calDays">
-                <div class="cell"><div class="num sun">30</div></div>
-                <div class="cell"><div class="num">01</div></div>
-                <div class="cell"><div class="num">02</div></div>
-                <div class="cell"><div class="num">03</div></div>
-                <div class="cell"><div class="num">04</div></div>
-                <div class="cell"><div class="num">05</div></div>
-                <div class="cell"><div class="num sat">06</div></div>
 
-                <div class="cell"><div class="num sun">07</div></div>
-                <div class="cell"><div class="num">08</div></div>
-                <div class="cell"><div class="num">09</div></div>
-                <div class="cell"><div class="num">10</div></div>
-                <div class="cell"><div class="num">11</div></div>
-                <div class="cell"><div class="num">12</div></div>
-                <div class="cell"><div class="num sat">13</div></div>
-
-                <div class="cell"><div class="num sun">14</div></div>
-                <div class="cell"><div class="num">15</div></div>
-                <div class="cell"><div class="num">16</div></div>
-                <div class="cell selected"><div class="num">17</div></div>
-                <div class="cell"><div class="num">18</div></div>
-                <div class="cell"><div class="num">19</div></div>
-                <div class="cell"><div class="num sat">20</div></div>
+            <div class="calBody">
+              <div class="calHeader">
+                <div>일정정보 (2026-01)</div>
+                <div>
+                  <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">월간일정</button>
+                  <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">일정추가</button>
+                </div>
               </div>
+
+              <div class="calGrid">
+                <div class="calWeek">
+                  <div style="color:#e11d48;">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div style="color:#2563eb;">토</div>
+                </div>
+                <div class="calDays" id="calDays"></div>
+              </div>
+              <div class="hint">* 날짜를 선택하면 우측 과제 리스트/상단 카운트가 선택 날짜 기준으로 동적으로 변경됩니다.</div>
             </div>
           </div>
+
+          <div class="taskPanel" id="taskPanel">
+            <div class="taskTabs" id="taskTabs">
+              <div class="t active" data-cat="AI">AI연계과제</div>
+              <div class="t" data-cat="REQ">필수케어</div>
+              <div class="t" data-cat="CLOSE">밀착케어</div>
+              <div class="t" data-cat="SCH">일정관리</div>
+            </div>
+
+            <div class="taskTableWrap">
+              <div class="taskTopBar">
+                <button id="btnQuickMyCare" class="quickLinkBtn" style="display:none;">바로가기</button>
+              </div>
+
+              <div id="taskEmpty" class="empty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
+              <table id="taskTable">
+                <thead id="taskThead">
+                  <tr><th style="width:56px;">No</th><th>과제명</th></tr>
+                </thead>
+                <tbody id="taskTbody"></tbody>
+              </table>
+
+              <div class="hint" id="taskHint">
+                * AI연계과제만 하단 고객명단이 표시됩니다. (필수/밀착/일정은 과제리스트만 표시)
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="taskPanel">
-          <div class="taskTabs">
-            <div class="t active">AI연계과제</div>
-            <div class="t">필수케어</div>
-            <div class="t">밀착케어</div>
-            <div class="t">일정관리</div>
+        <!-- Bottom (AI에서만 표시) -->
+        <div class="bottom" id="bottomPanel">
+          <div class="bottomHead">
+            <div class="title">
+              AI Agent 알림센터
+              <span class="radio">
+                <label><input type="radio" name="r" id="radioCust" checked/> 고객 현황</label>
+                <label><input type="radio" name="r" id="radioFinal"/> Final Report</label>
+              </span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button id="btnClear">초기화</button>
+              <button id="btnRun" class="run-btn" disabled>실행</button>
+            </div>
           </div>
-          <div class="taskTableWrap">
-            <table>
-              <thead><tr><th style="width:56px;">No</th><th>과제명</th></tr></thead>
-              <tbody id="taskTbody"></tbody>
-            </table>
-            <div class="hint">* 과제를 클릭하면 하단 고객 명단이 바뀝니다. 고객 선택 후 [실행]을 누르세요.</div>
+
+          <div class="bottomBody">
+            <!-- 고객 현황 -->
+            <div id="custArea">
+              <div id="custHint" class="hint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
+              <table id="custTable" style="display:none;">
+                <thead>
+                  <tr>
+                    <th style="width:60px; text-align:center;">
+                      <input id="chkAllCustomers" class="chk" type="checkbox" title="전체 선택"/>
+                    </th>
+                    <th style="width:86px;">실시여부</th>
+                    <th style="width:110px;">고객번호</th>
+                    <th style="width:90px;">고객명</th>
+                    <th style="width:110px;">과제시작일</th>
+                    <th style="width:110px;">과제종료일</th>
+                    <th style="width:90px;">고객브리핑</th>
+                    <th style="width:90px;">우선순위</th>
+                  </tr>
+                </thead>
+                <tbody id="custTbody"></tbody>
+              </table>
+            </div>
+
+            <!-- ✅ Final Report (하단 영역에 “간략” 구현) -->
+            <div id="finalInlineArea" class="finalInline" style="display:none;">
+              <div class="finalInlineTop">
+                <div class="l">
+                  <div class="ttl">과제 별 성과 Final Report</div>
+                  <div class="pill2" id="finalInlineDatePill">기준일: -</div>
+                </div>
+                <select id="finalInlineTaskSelect"></select>
+              </div>
+
+              <div class="finalKpiRow">
+                <div class="miniKpi">
+                  <div class="k">완료대상</div>
+                  <div class="v" id="kpiDone">-</div>
+                  <div class="s">완료/전체 (더미)</div>
+                </div>
+                <div class="miniKpi">
+                  <div class="k">완료 건수</div>
+                  <div class="v" id="kpiTouchedInline">-</div>
+                  <div class="s">TM+SMS 접촉 (더미)</div>
+                </div>
+                <div class="miniKpi">
+                  <div class="k">미완료</div>
+                  <div class="v" id="kpiNotDone">-</div>
+                  <div class="s">잔여 고객수 (더미)</div>
+                </div>
+              </div>
+
+              <div class="finalChecklist">
+                <div class="h">
+                  <span id="finalChecklistTitle">-</span>
+                  <span style="color:#6b7280; font-weight:800;">* 시연용 더미</span>
+                </div>
+                <ul id="finalChecklistUl"></ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="bottom">
-        <div class="bottomHead">
-          <div class="title">
-            AI Agent 알림센터
-            <span class="radio">
-              <label><input type="radio" name="r" checked/> 고객 현황</label>
-              <label><input type="radio" name="r"/> Final Report</label>
-            </span>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center;">
-            <button id="btnClear">초기화</button>
-            <button id="btnRun" class="pill-btn" disabled>실행</button>
-          </div>
-        </div>
-        <div class="bottomBody">
-          <div id="custHint" class="hint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
-          <table id="custTable" style="display:none;">
-            <thead>
-              <tr>
-                <th style="width:60px;"></th>
-                <th style="width:86px;">실시여부</th>
-                <th style="width:110px;">고객번호</th>
-                <th style="width:90px;">고객명</th>
-                <th style="width:110px;">심의시작일</th>
-                <th style="width:110px;">심의종료일</th>
-                <th>추천사유</th>
-                <th style="width:90px;">우선순위</th>
-              </tr>
-            </thead>
-            <tbody id="custTbody"></tbody>
-          </table>
-        </div>
-      </div>
     </section>
   </div>
 
-  <!-- =========================
-      1차 팝업: 채널 선택(첨부2)
-  ========================== -->
+  <!-- 1차 팝업: 채널 선택 -->
   <div id="overlay1" class="overlay">
     <div class="modal modal1">
       <div class="modalTop">
@@ -486,27 +703,25 @@
         <div class="agentBox">
           <div class="agentTitle">AI Agent 과제 수행</div>
           <div class="agentRow">
-            <div class="agentText" id="agentIntro">
+            <div class="agentText">
 안녕하세요! AI CRM 아이참이에요~
 선택된 고객을 기반으로
 적합 채널과 스크립트를 추천해 드릴게요.
             </div>
             <div class="btnCol">
-              <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">2</span>명)</button>
-              <button id="btnGoSMS" class="btnBig secondary">문자 적합 고객 (3명)</button>
+              <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
+              <button id="btnGoSMS" class="btnBig">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
             </div>
           </div>
           <div class="hint" style="padding:10px 0 0 0;">
-            * TM을 누르면 스크립트 생성/실행 화면이 별도로 열립니다. (문자는 추후 동일 방식으로 확장)
+            * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다.
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- =========================
-      2차 팝업: TM 스크립트 생성/실행(크게)
-  ========================== -->
+  <!-- 2차 팝업: TM -->
   <div id="overlayTM" class="overlay">
     <div class="modal modal2">
       <div class="modalTop">
@@ -515,7 +730,6 @@
       </div>
 
       <div class="modal2Body">
-        <!-- left big script -->
         <div class="scriptPanel">
           <div class="h">AI-Generated TM 스크립트</div>
           <div id="scriptBox" class="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
@@ -524,7 +738,6 @@
           </div>
         </div>
 
-        <!-- right pick + execute -->
         <div class="tmSide">
           <div class="h">고객 선택</div>
           <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
@@ -535,51 +748,264 @@
     </div>
   </div>
 
+  <!-- 2차 팝업: SMS -->
+  <div id="overlaySMS" class="overlay">
+    <div class="modal modalSMS">
+      <div class="modalTop">
+        <div class="mtitle">문자 발송 하기</div>
+        <button id="closeSMS">닫기</button>
+      </div>
+
+      <div class="smsBody">
+        <div class="smsCard">
+          <div class="smsTitle">문자 발송 하기</div>
+
+          <div class="smsGrid">
+            <div class="smsLeft">
+              <div class="sub">맞춤 문자 List</div>
+              <div class="smsTableWrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width:44px;"></th>
+                      <th>템플릿명</th>
+                      <th style="width:92px;">발송목적</th>
+                      <th style="width:80px;">미리보기</th>
+                    </tr>
+                  </thead>
+                  <tbody id="smsTplTbody"></tbody>
+                </table>
+              </div>
+
+              <div class="smsPreview">
+                <div class="ph">미리보기</div>
+                <div id="smsPreviewBox" class="pbox">템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.</div>
+              </div>
+            </div>
+
+            <div class="smsRight">
+              <div class="smsCustBox">
+                <div style="font-weight:900;">발송 대상</div>
+                <div id="smsCustList"></div>
+              </div>
+              <button id="btnSmsSend" class="smsBtn" disabled>문자 발송</button>
+            </div>
+          </div>
+
+          <div class="hint" style="padding:10px 0 0 0;">
+            * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 고객 브리핑 팝업 -->
+  <div id="overlayBrief" class="overlay">
+    <div class="modal modalBrief">
+      <div class="modalTop">
+        <div class="mtitle">추천사유</div>
+        <button id="closeBrief">닫기</button>
+      </div>
+      <div class="briefBody">
+        <div class="briefBox">
+          <div class="briefHeader">🪄 AI Agent 고객 브리핑</div>
+          <div id="briefText" class="briefScroll">고객 브리핑을 생성 중입니다...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ MyCare 바로가기 팝업 -->
+  <div id="overlayMyCare" class="overlay">
+    <div class="modal modalMyCare">
+      <div class="modalTop">
+        <div class="mtitle">바로가기</div>
+        <button id="closeMyCare">닫기</button>
+      </div>
+      <div class="mycareBody">
+        <div class="mycareBox">
+          마이케어과제로 이동합니다. (시연용)
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     /* =====================
-      1) 과제 리스트
+      0) 과제 마스터(전체 풀)
     ====================== */
-    const TASK_NAMES = [
-      "[예적금] 타행적금 만기도래",
-      "[예적금] 타행예금 만기도래",
-      "[예적금] 재형저축 만기도래",
-      "[예적금] 만기해지 후 미신규",
-      "[예적금] 가계대출 예적금 우대금리 미적용",
-      "[예적금] 전일자 중도해지",
-      "[예적금] 급여증가고객",
-      "[자산증대] 전일자 거액입금",
-      "[자산증대] 고자산가망고객",
-      "[공통] 비대면상품관심",
-      "[결제계좌] 타행결제계좌",
-      "[급여가계대출] 급여 우대금리 미적용"
-    ];
+    const TASKS_MASTER = {
+      AI: [
+        "[예적금] 타행적금 만기도래",
+        "[예적금] 타행예금 만기도래",
+        "[예적금] 재형저축 만기도래",
+        "[예적금] 만기해지 후 미신규",
+        "[예적금] 가계대출 예적금 우대금리 미적용",
+        "[예적금] 전일자 중도해지",
+        "[예적금] 급여증가고객",
+        "[자산증대] 전일자 거액입금",
+        "[자산증대] 고자산가망고객",
+        "[공통] 비대면상품관심",
+        "[결제계좌] 타행결제계좌",
+        "[급여가계대출] 급여 우대금리 미적용"
+      ],
+      REQ: [
+        "[필수케어] 고객정보 최신화 요청",
+        "[필수케어] 연락처 미확인 고객 점검",
+        "[필수케어] 이메일 수신동의 확인",
+        "[필수케어] 모바일 전자통지 등록 유도",
+        "[필수케어] 보이스피싱 예방 안내",
+        "[필수케어] 장기 미접속 고객 확인",
+        "[필수케어] 중요 고지사항 안내"
+      ],
+      CLOSE: [
+        "[밀착케어] VIP 고객 정기 컨택",
+        "[밀착케어] 고액자산 변동 모니터링",
+        "[밀착케어] 대출 실행 예정 사전 안내",
+        "[밀착케어] 연금 수급/이체 점검",
+        "[밀착케어] 투자상품 수익률 점검",
+        "[밀착케어] 전담관리 고객 리마인드"
+      ],
+      SCH: [
+        "[일정] 상담 예약 확인",
+        "[일정] 고객 미팅 준비",
+        "[일정] 캠페인 회의",
+        "[일정] 서류 점검 일정",
+        "[일정] 업무 마감 알림"
+      ]
+    };
 
+    /* =====================
+      1) 날짜별 과제 할당(동적)
+    ====================== */
+    const CAL_YEAR = 2026, CAL_MONTH = 1; // 2026-01
+    const DATE_TASK_MAP = {}; // { "YYYY-MM-DD": { AI:[idx], REQ:[idx], CLOSE:[idx], SCH:[idx] } }
+
+    function ymd(y,m,d){ return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
+    function dayOfWeekStr(y,m,d){
+      const w = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+      return w[new Date(y,m-1,d).getDay()];
+    }
+
+    function seededPickIndices(total, count, seed){
+      const set = new Set();
+      let x = seed * 1103515245 + 12345;
+      while(set.size < count && set.size < total){
+        x = (x * 1664525 + 1013904223) >>> 0;
+        set.add(x % total);
+      }
+      return Array.from(set);
+    }
+
+    function buildDateTaskMap(){
+      const lastDate = new Date(CAL_YEAR, CAL_MONTH, 0).getDate();
+      for(let d=1; d<=lastDate; d++){
+        const key = ymd(CAL_YEAR, CAL_MONTH, d);
+
+        const aiCnt    = (d % 3 === 0) ? 0 : (d % 2);
+        const reqCnt   = (d % 5 === 0) ? 0 : (d % 2 ? 1:0);
+        const closeCnt = (d % 7 === 0) ? 0 : 1;
+        const schCnt   = (d % 4 === 0) ? 0 : 1;
+
+        DATE_TASK_MAP[key] = {
+          AI:    seededPickIndices(TASKS_MASTER.AI.length,    aiCnt,    d*11+3),
+          REQ:   seededPickIndices(TASKS_MASTER.REQ.length,   reqCnt,   d*17+5),
+          CLOSE: seededPickIndices(TASKS_MASTER.CLOSE.length, closeCnt, d*19+7),
+          SCH:   seededPickIndices(TASKS_MASTER.SCH.length,   schCnt,   d*23+9),
+        };
+      }
+
+      // 1/19은 “과제 많은 날” 유지
+      const k = "2026-01-19";
+      DATE_TASK_MAP[k] = {
+        AI:    Array.from({length: TASKS_MASTER.AI.length}, (_,i)=>i),
+        REQ:   Array.from({length: TASKS_MASTER.REQ.length}, (_,i)=>i).slice(0,5),
+        CLOSE: Array.from({length: TASKS_MASTER.CLOSE.length}, (_,i)=>i).slice(0,4),
+        SCH:   Array.from({length: TASKS_MASTER.SCH.length}, (_,i)=>i).slice(0,3),
+      };
+    }
+
+    function getCountsForDate(dateKey){
+      const m = DATE_TASK_MAP[dateKey] || {AI:[],REQ:[],CLOSE:[],SCH:[]};
+      return { AI:m.AI.length, REQ:m.REQ.length, CLOSE:m.CLOSE.length, SCH:m.SCH.length };
+    }
+
+    /* ✅ 필수/밀착 탭 대상건수/실시건수 더미 생성 */
+    function makeDummyCounts(dateKey, cat, masterIdx){
+      const d = Number(dateKey.split("-")[2]);
+      const seed = (d * 97 + masterIdx * 131 + (cat === "REQ" ? 7 : 17)) >>> 0;
+      const target = 20 + (seed % 180);
+      const done = Math.min(target, Math.floor(target * (0.25 + ((seed % 50) / 100))));
+      return { target, done };
+    }
+
+    /* =====================
+      2) AI 고객리스트(선택된 과제 기준)
+    ====================== */
     function buildCustomersForTask(taskIdx){
       const base = 600000000 + (taskIdx * 10000);
-      const names = ["박상수","김수진","정민수","성현수","김소진","이도현","최은지","홍길동","윤지아","한서준"];
-      const reasons = [
-        "만기 도래 사전 안내 및 재가입 유도",
-        "우대금리 조건 미충족(급여/결제계좌) 점검 필요",
-        "최근 대량 유입 자금 탐지(관계형성 기회)",
-        "타행 상품 보유/관심도 기반 전환 가능성",
-        "중도해지/이탈 신호 탐지"
-      ];
-      const prios = ["가","나","다","라","마"];
+      const names = ["박상수","김수진","정민수","성현수","김소진","이도현","최은지","홍길동","윤지아","한서준","정*일","곽*선","고*표"];
+      const prios = ["1","2","3","4","5"];
+
       const n = 6 + (taskIdx % 3);
       const list = [];
       for(let i=0;i<n;i++){
         const custNo = String(base + (i*37) + 123);
         const custName = names[(taskIdx + i) % names.length];
         const done = (i===0 && taskIdx%4===0) ? "Y" : "N";
-        const start = "202512" + String(10 + ((taskIdx+i)%15)).padStart(2,"0");
-        const end   = "202512" + String(20 + ((taskIdx+i)%10)).padStart(2,"0");
-        list.push({ done, custNo, custName, start, end, reason: reasons[(taskIdx+i)%reasons.length], prio: prios[(taskIdx+i)%prios.length] });
+        const start = "202601" + String(10 + ((taskIdx+i)%15)).padStart(2,"0");
+        const end   = "202601" + String(20 + ((taskIdx+i)%10)).padStart(2,"0");
+        list.push({ done, custNo, custName, start, end, prio: prios[(taskIdx+i)%prios.length] });
       }
       return list;
     }
 
     /* =====================
-      2) LLM 타이핑 스크립트
+      3) SMS 템플릿
+    ====================== */
+    const CONTENT_KEYWORDS = [
+      "우대금리 점검", "만기 리마인드", "급여이체 등록", "결제계좌 변경", "재가입 혜택", "이벤트 안내"
+    ];
+
+    function makeTplTitle(baseName, kw){
+      const map = {
+        "적립식": "적립식 적금 우대조건 안내",
+        "적금 이벤트": "적금 이벤트 · 기간한정 혜택 안내",
+        "모두의 적금": "맞춤 적금 추천 · 우대조건 제안",
+        "거치식": "거치식 예금 · 만기/재예치 안내",
+        "예금 이벤트": "예금 이벤트 · 우대조건/혜택 안내"
+      };
+      const body = map[baseName] || baseName;
+      return `[${kw}] ${body}`;
+    }
+
+    function makeSmsCopy({custName, product, kw}){
+      return `[신한] ${custName} 고객님
+${product} 관련 ${kw} 안내드립니다.
+
+• 조건 충족 시 우대금리 적용 가능
+• 모바일에서 1분 확인/등록 가능
+
+지금 확인하기 ▶ https://shb.kr/ab12cd (더미)
+수신거부 080-000-0000`;
+    }
+
+    const SMS_TEMPLATES = [
+      { base:"적립식", purpose:"상품안내", product:"적립식 적금" },
+      { base:"적금 이벤트", purpose:"상품안내", product:"이벤트 적금" },
+      { base:"모두의 적금", purpose:"상품안내", product:"맞춤 적금" },
+      { base:"거치식", purpose:"상품안내", product:"거치식 예금" },
+      { base:"예금 이벤트", purpose:"상품안내", product:"이벤트 예금" },
+    ].map((x, i)=>({
+      ...x,
+      kw: CONTENT_KEYWORDS[i % CONTENT_KEYWORDS.length],
+      name: makeTplTitle(x.base, CONTENT_KEYWORDS[i % CONTENT_KEYWORDS.length]),
+      preview: "🔍"
+    }));
+
+    /* =====================
+      4) TM 스크립트 타이핑
     ====================== */
     const SCRIPT_TM = `✨ AI-Generated TM 스크립트
 
@@ -603,7 +1029,7 @@
 - 지금 안내드린 사항 중 원하시는 방식으로 한 가지만 선택해 진행 도와드리겠습니다.
 `;
 
-    function typewriter(el, text, speed=10){
+    function typewriter(el, text, speed=9){
       el.textContent = "";
       let i = 0;
       const timer = setInterval(()=>{
@@ -616,110 +1042,559 @@
     }
 
     /* =====================
-      3) DOM
+      5) 고객 브리핑(타이핑 출력)
     ====================== */
+    function buildBriefing(cust, taskName){
+      const today = "2026.01.19";
+      const maturity = "2050.06.15";
+      const balance = (295_851_504).toLocaleString();
+      const rateMax = "0.10%";
+      const rateNow = "3.97%";
+      const savedInterest = (24_879).toLocaleString();
+
+      return `【고객상황 및 접촉 전략】
+- 상품명: ${taskName} (관련 가망 고객)
+- 잔액: ${balance}원
+- 약정시작일자: 2020.06.15
+- 만기일자: ${maturity}
+- 가입/상품유형: 예적금/정기예금/적금(더미)
+- 최대금리경로: ${rateMax}
+- 현재금리: ${rateNow}
+- 우대금리 적용 시 예상 절감(이자): ${savedInterest}원 (더미)
+
+【최적 접촉 정보】
+- 집/회사/실거주지 주소(신한)와 영업점 주소(인천) 일치(더미)
+- 전화 최적 시간대: 10:00
+- 전일 콜 시도: 1건
+- 마케팅 동의 여부: 미기재(더미)
+- 전략: “조건 충족 1개만 선택” 방식으로 부담 최소화 및 즉시 행동 유도 권장
+
+※ 본 브리핑은 LLM이 고객 데이터/과제 맥락을 요약해 생성한 시연용 더미입니다.
+생성기준일: ${today}`;
+    }
+
+    /* =====================
+      ✅ 6) Bottom Final Report 더미 성과 (첨부 이미지형 간략)
+    ====================== */
+    function hashSeed(str){
+      let h = 2166136261;
+      for(let i=0;i<str.length;i++){
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return h >>> 0;
+    }
+    function rand01(seed){
+      let x = seed >>> 0;
+      x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
+      return (x >>> 0) / 4294967295;
+    }
+
+    function buildFinalInlineMetrics(dateKey, taskName){
+      const seed = hashSeed(`${dateKey}|${taskName}|INLINE`);
+      const r1 = rand01(seed + 11);
+      const r2 = rand01(seed + 37);
+      const r3 = rand01(seed + 71);
+
+      // 첨부 이미지 느낌: 완료대상/완료/미완료
+      const total = 100 + Math.floor(r1 * 900);               // 100~999
+      const done = Math.floor(total * (0.15 + r2 * 0.35));     // 15%~50%
+      const notDone = Math.max(0, total - done);
+
+      // 완료건수(접촉)도 간단 지표로 사용
+      const touched = Math.floor(done * (0.6 + r3 * 0.35));    // done 중 60%~95% 정도
+
+      // 체크리스트 문구(첨부 이미지 스타일 단순)
+      const lines = [
+        `접촉 완료 ${done.toLocaleString()}명 중 적립식 상품 신규 1건 / ${Math.floor(rand01(seed+201)*80_000_000+5_000_000).toLocaleString()}원 완료`,
+        `접촉 완료 ${done.toLocaleString()}명 중 거치식 상품 신규 2건 / ${Math.floor(rand01(seed+301)*120_000_000+10_000_000).toLocaleString()}원 완료`,
+        `영업점 접근 고객과제 성과 확인 요망입니다.`
+      ];
+
+      // 체크 여부도 더미로 일부 on
+      const checks = [
+        rand01(seed+501) > 0.25,
+        rand01(seed+601) > 0.35,
+        true
+      ];
+
+      return { total, done, notDone, touched, lines, checks };
+    }
+
+    function renderFinalInline(dateKey, taskName){
+      const m = buildFinalInlineMetrics(dateKey, taskName);
+
+      document.getElementById("finalInlineDatePill").textContent = `기준일: ${dateKey}`;
+      document.getElementById("kpiDone").textContent = `${m.done.toLocaleString()} / ${m.total.toLocaleString()}`;
+      document.getElementById("kpiTouchedInline").textContent = `${m.touched.toLocaleString()}`;
+      document.getElementById("kpiNotDone").textContent = `${m.notDone.toLocaleString()}`;
+
+      document.getElementById("finalChecklistTitle").textContent = taskName;
+
+      const ul = document.getElementById("finalChecklistUl");
+      ul.innerHTML = "";
+      m.lines.forEach((t, i)=>{
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="tick ${m.checks[i] ? "on" : ""}">${m.checks[i] ? "✓" : ""}</span>
+          <span>${escapeHtml(t)}</span>
+        `;
+        ul.appendChild(li);
+      });
+    }
+
+    /* =====================
+      7) DOM
+    ====================== */
+    const calDays = document.getElementById("calDays");
+    const bigDay = document.getElementById("bigDay");
+    const bigDow = document.getElementById("bigDow");
+
     const taskTbody = document.getElementById("taskTbody");
+    const taskTabs  = document.getElementById("taskTabs");
+    const iconRow   = document.getElementById("iconRow");
+    const taskEmpty = document.getElementById("taskEmpty");
+    const taskTable = document.getElementById("taskTable");
+    const taskThead = document.getElementById("taskThead");
+    const btnQuickMyCare = document.getElementById("btnQuickMyCare");
+
+    const bottomPanel = document.getElementById("bottomPanel");
+    const btnClear  = document.getElementById("btnClear");
+    const btnRun    = document.getElementById("btnRun");
     const custHint  = document.getElementById("custHint");
     const custTable = document.getElementById("custTable");
     const custTbody = document.getElementById("custTbody");
-    const btnClear  = document.getElementById("btnClear");
-    const btnRun    = document.getElementById("btnRun");
 
-    // 1차 팝업
+    const cntAI    = document.getElementById("cntAI");
+    const cntREQ   = document.getElementById("cntREQ");
+    const cntCLOSE = document.getElementById("cntCLOSE");
+    const cntSCH   = document.getElementById("cntSCH");
+
+    /* ✅ Bottom Final Inline */
+    const radioCust = document.getElementById("radioCust");
+    const radioFinal = document.getElementById("radioFinal");
+    const custArea = document.getElementById("custArea");
+    const finalInlineArea = document.getElementById("finalInlineArea");
+    const finalInlineTaskSelect = document.getElementById("finalInlineTaskSelect");
+
+    /* SMS */
+    const overlaySMS = document.getElementById("overlaySMS");
+    const smsTplTbody= document.getElementById("smsTplTbody");
+    const smsCustList= document.getElementById("smsCustList");
+    const btnSmsSend = document.getElementById("btnSmsSend");
+    const smsPreviewBox = document.getElementById("smsPreviewBox");
+
+    /* Overlays */
     const overlay1  = document.getElementById("overlay1");
+    const overlayTM = document.getElementById("overlayTM");
     const close1    = document.getElementById("close1");
+    const closeTM   = document.getElementById("closeTM");
+    const closeSMS  = document.getElementById("closeSMS");
     const btnGoTM   = document.getElementById("btnGoTM");
     const btnGoSMS  = document.getElementById("btnGoSMS");
     const tmCnt     = document.getElementById("tmCnt");
+    const smsCnt    = document.getElementById("smsCnt");
 
-    // 2차 TM 팝업
-    const overlayTM = document.getElementById("overlayTM");
-    const closeTM   = document.getElementById("closeTM");
+    /* TM */
     const scriptBox = document.getElementById("scriptBox");
     const btnGenTM  = document.getElementById("btnGenTM");
     const tmPickList= document.getElementById("tmPickList");
     const btnTmExec = document.getElementById("btnTmExec");
-
-    let selectedTaskIdx = 0;
-    let currentCustomers = [];
-    let selectedCustNos = new Set();
     let typingTimer = null;
 
+    /* Briefing */
+    const overlayBrief = document.getElementById("overlayBrief");
+    const closeBrief = document.getElementById("closeBrief");
+    const briefText = document.getElementById("briefText");
+    let briefTimer = null;
+
+    /* MyCare */
+    const overlayMyCare = document.getElementById("overlayMyCare");
+    const closeMyCare = document.getElementById("closeMyCare");
+
+    /* 헤더 전체선택 체크박스 */
+    const chkAllCustomers = document.getElementById("chkAllCustomers");
+
     /* =====================
-      4) Render tasks
+      8) 상태
     ====================== */
-    function renderTasks(){
+    let selectedCategory = "AI";
+    let selectedDateKey = "2026-01-19";
+    let selectedTaskIdxWithinDate = 0;
+
+    let currentTasksForDate = { AI:[], REQ:[], CLOSE:[], SCH:[] };
+    let currentCustomers = [];
+    let selectedCustNos = new Set();
+
+    let selectedTplIdx = null;
+    let selectedTaskName = "";
+
+    /* =====================
+      9) 캘린더 렌더
+    ====================== */
+    function buildCalendar(){
+      calDays.innerHTML = "";
+
+      const first = new Date(CAL_YEAR, CAL_MONTH-1, 1);
+      const firstDow = first.getDay();
+      const lastDate = new Date(CAL_YEAR, CAL_MONTH, 0).getDate();
+
+      const prevLast = new Date(CAL_YEAR, CAL_MONTH-1, 0).getDate();
+      const totalCells = 42;
+      let dayNum = 1;
+
+      for(let i=0;i<totalCells;i++){
+        const cell = document.createElement("div");
+        cell.className = "cell";
+
+        let dObj, showNum, isDim=false;
+
+        if(i < firstDow){
+          isDim = true;
+          showNum = (prevLast - (firstDow-1 - i));
+          dObj = new Date(CAL_YEAR, CAL_MONTH-2, showNum);
+        } else if(dayNum <= lastDate){
+          showNum = dayNum;
+          dObj = new Date(CAL_YEAR, CAL_MONTH-1, showNum);
+          dayNum++;
+        } else {
+          isDim = true;
+          showNum = (dayNum - lastDate);
+          dObj = new Date(CAL_YEAR, CAL_MONTH, showNum);
+          dayNum++;
+        }
+
+        const dow = dObj.getDay();
+        const isSun = dow===0, isSat = dow===6;
+        const numClass = isSun ? "num sun" : (isSat ? "num sat" : "num");
+
+        if(isDim) cell.classList.add("dim");
+
+        const key = ymd(dObj.getFullYear(), dObj.getMonth()+1, dObj.getDate());
+
+        const showBadges = (key.startsWith("2026-01-"));
+        const counts = showBadges ? getCountsForDate(key) : null;
+
+        cell.innerHTML = `
+          <div class="${numClass}">${showNum}</div>
+          ${counts && (counts.AI+counts.REQ+counts.CLOSE+counts.SCH>0) ? `
+            <div class="badges">
+              ${counts.AI>0 ? `<div class="badgeRow"><span class="sq ai"></span><span class="n">${counts.AI}</span></div>` : ``}
+              ${counts.REQ>0 ? `<div class="badgeRow"><span class="sq req"></span><span class="n">${counts.REQ}</span></div>` : ``}
+              ${counts.CLOSE>0 ? `<div class="badgeRow"><span class="sq close"></span><span class="n">${counts.CLOSE}</span></div>` : ``}
+              ${counts.SCH>0 ? `<div class="badgeRow"><span class="sq sched"></span><span class="n">${counts.SCH}</span></div>` : ``}
+            </div>
+          ` : ``}
+        `;
+
+        if(key === selectedDateKey) cell.classList.add("selected");
+
+        cell.addEventListener("click", ()=>{
+          if(!key.startsWith("2026-01-")) return;
+          selectDate(key);
+        });
+
+        calDays.appendChild(cell);
+      }
+    }
+
+    function updateBigDate(dateKey){
+      const d = Number(dateKey.split("-")[2]);
+      bigDay.textContent = String(d);
+      bigDow.textContent = dayOfWeekStr(CAL_YEAR, CAL_MONTH, d);
+    }
+
+    function refreshSelectedCell(){
+      buildCalendar();
+    }
+
+    /* =====================
+      10) 카테고리/탭 전환 + 카운트 갱신
+    ====================== */
+    function setActiveIcons(cat){
+      [...iconRow.querySelectorAll(".round")].forEach(r=>{
+        r.classList.toggle("active", r.dataset.cat === cat);
+      });
+    }
+    function setActiveTabs(cat){
+      [...taskTabs.querySelectorAll(".t")].forEach(t=>{
+        t.classList.toggle("active", t.dataset.cat === cat);
+      });
+    }
+
+    function updateHeaderCounts(){
+      const c = getCountsForDate(selectedDateKey);
+      cntAI.textContent    = `(${c.AI})`;
+      cntREQ.textContent   = `(${c.REQ})`;
+      cntCLOSE.textContent = `(${c.CLOSE})`;
+      cntSCH.textContent   = `(${c.SCH})`;
+    }
+
+    function selectCategory(cat){
+      if(["ETC1","ETC2","ETC3"].includes(cat)){
+        alert("해당 아이콘은 별도 화면으로 이동하는 영역입니다. (데모에서는 화면 전환만 구현)");
+        return;
+      }
+      selectedCategory = cat;
+      setActiveIcons(cat);
+      setActiveTabs(cat);
+
+      renderTasksForSelectedDateAndCategory();
+
+      if(cat === "AI"){
+        bottomPanel.style.display = "flex";
+        if(currentTasksForDate.AI.length === 0){
+          custTable.style.display = "none";
+          custHint.textContent = "선택한 날짜에는 AI연계과제가 없습니다.";
+          btnRun.disabled = true;
+          selectedCustNos.clear();
+          syncHeaderCheckbox();
+        } else {
+          selectTaskAI(0);
+        }
+      } else {
+        bottomPanel.style.display = "none";
+      }
+    }
+
+    iconRow.querySelectorAll(".round").forEach(el=>{
+      el.addEventListener("click", ()=>selectCategory(el.dataset.cat));
+    });
+    taskTabs.querySelectorAll(".t").forEach(el=>{
+      el.addEventListener("click", ()=>selectCategory(el.dataset.cat));
+    });
+
+    /* =====================
+      11) 날짜 선택
+    ====================== */
+    function selectDate(dateKey){
+      selectedDateKey = dateKey;
+      updateBigDate(dateKey);
+      updateHeaderCounts();
+
+      currentTasksForDate = DATE_TASK_MAP[dateKey] || {AI:[],REQ:[],CLOSE:[],SCH:[]};
+
+      renderTasksForSelectedDateAndCategory();
+      refreshSelectedCell();
+
+      // ✅ Final Report 모드면: 하단 리포트 재렌더
+      if(isFinalMode()){
+        refreshFinalInlineDropdown();
+        return;
+      }
+
+      if(selectedCategory === "AI"){
+        if(currentTasksForDate.AI.length === 0){
+          custTable.style.display = "none";
+          custHint.textContent = "선택한 날짜에는 AI연계과제가 없습니다.";
+          selectedCustNos.clear();
+          btnRun.disabled = true;
+          syncHeaderCheckbox();
+        } else {
+          selectTaskAI(0);
+        }
+      }
+    }
+
+    /* =====================
+      12) 우측 과제 리스트 렌더
+    ====================== */
+    function setTaskTableHeaderForCategory(cat){
+      if(cat === "REQ" || cat === "CLOSE"){
+        taskThead.innerHTML = `
+          <tr>
+            <th style="width:56px;">No</th>
+            <th>과제명</th>
+            <th style="width:90px;">대상건수</th>
+            <th style="width:90px;">실시건수</th>
+          </tr>`;
+      } else {
+        taskThead.innerHTML = `<tr><th style="width:56px;">No</th><th>과제명</th></tr>`;
+      }
+    }
+
+    function renderTasksForSelectedDateAndCategory(){
+      const idxList = currentTasksForDate[selectedCategory] || [];
       taskTbody.innerHTML = "";
-      TASK_NAMES.forEach((name, idx)=>{
+
+      btnQuickMyCare.style.display = (selectedCategory === "REQ" || selectedCategory === "CLOSE") ? "inline-flex" : "none";
+      setTaskTableHeaderForCategory(selectedCategory);
+
+      if(idxList.length === 0){
+        taskEmpty.style.display = "block";
+        taskTable.style.display = "none";
+        return;
+      }
+      taskEmpty.style.display = "block";
+      taskEmpty.style.display = "none";
+      taskTable.style.display = "table";
+
+      idxList.forEach((masterIdx, i)=>{
+        const name = TASKS_MASTER[selectedCategory][masterIdx];
         const tr = document.createElement("tr");
-        tr.dataset.idx = idx;
-        tr.innerHTML = `<td>${idx+1}</td><td>${escapeHtml(name)}</td>`;
-        tr.addEventListener("click", ()=>selectTask(idx));
-        if(idx===0) tr.classList.add("active");
+        tr.dataset.idx = i;
+        tr.dataset.master = masterIdx;
+
+        if(selectedCategory === "REQ" || selectedCategory === "CLOSE"){
+          const c = makeDummyCounts(selectedDateKey, selectedCategory, masterIdx);
+          tr.innerHTML = `
+            <td>${i+1}</td>
+            <td>${escapeHtml(name)}</td>
+            <td style="text-align:right;">${c.target.toLocaleString()}</td>
+            <td style="text-align:right;">${c.done.toLocaleString()}</td>`;
+        } else {
+          tr.innerHTML = `<td>${i+1}</td><td>${escapeHtml(name)}</td>`;
+        }
+
+        if(selectedCategory === "AI"){
+          tr.addEventListener("click", ()=>selectTaskAI(i));
+          if(i===selectedTaskIdxWithinDate) tr.classList.add("active");
+        } else {
+          tr.addEventListener("click", ()=>{
+            [...taskTbody.querySelectorAll("tr")].forEach(x=>x.classList.remove("active"));
+            tr.classList.add("active");
+          });
+        }
+
         taskTbody.appendChild(tr);
       });
     }
 
-    function selectTask(idx){
-      selectedTaskIdx = idx;
+    /* =====================
+      13) AI 과제 선택 → 고객 리스트
+    ====================== */
+    function selectTaskAI(idxWithinDate){
+      selectedTaskIdxWithinDate = idxWithinDate;
+
       [...taskTbody.querySelectorAll("tr")].forEach(tr=>{
-        tr.classList.toggle("active", Number(tr.dataset.idx) === idx);
+        tr.classList.toggle("active", Number(tr.dataset.idx) === idxWithinDate);
       });
 
-      currentCustomers = buildCustomersForTask(idx);
+      const masterIdx = currentTasksForDate.AI[idxWithinDate];
+      selectedTaskName = TASKS_MASTER.AI[masterIdx];
+
+      currentCustomers = buildCustomersForTask(masterIdx);
       selectedCustNos.clear();
+
       renderCustomers();
       updateRunButton();
-      custHint.textContent = `선택 과제: ${TASK_NAMES[idx]} (고객 ${currentCustomers.length}명)`;
+
+      custHint.textContent = `선택 과제: ${selectedTaskName} (고객 ${currentCustomers.length}명)`;
       custTable.style.display = "table";
+
+      // ✅ Final 모드면: 드롭다운 우선 선택 갱신 + 리포트 재렌더
+      if(isFinalMode()){
+        refreshFinalInlineDropdown();
+      }
     }
 
-    /* =====================
-      5) Render customers (bottom)
-    ====================== */
+    function syncHeaderCheckbox(){
+      if(!chkAllCustomers) return;
+
+      const all = currentCustomers.map(c=>c.custNo);
+      const anyChecked = all.some(no=>selectedCustNos.has(no));
+      const allChecked = all.length>0 && all.every(no=>selectedCustNos.has(no));
+
+      chkAllCustomers.checked = allChecked;
+      chkAllCustomers.indeterminate = !allChecked && anyChecked;
+    }
+
     function renderCustomers(){
       custTbody.innerHTML = "";
+
+      if(chkAllCustomers){
+        chkAllCustomers.checked = false;
+        chkAllCustomers.indeterminate = false;
+      }
+
       currentCustomers.forEach((c)=>{
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><input class="chk" type="checkbox" data-cust="${c.custNo}"/></td>
+          <td style="text-align:center;">
+            <input class="chk custChk" type="checkbox" data-cust="${c.custNo}"/>
+          </td>
           <td>${escapeHtml(c.done)}</td>
           <td>${escapeHtml(c.custNo)}</td>
           <td>${escapeHtml(c.custName)}</td>
           <td>${escapeHtml(c.start)}</td>
           <td>${escapeHtml(c.end)}</td>
-          <td style="white-space:normal;">${escapeHtml(c.reason)}</td>
+          <td style="text-align:center;">
+            <button class="mag-btn" title="고객브리핑 보기" data-cust="${c.custNo}">🔍</button>
+          </td>
           <td>${escapeHtml(c.prio)}</td>
         `;
         custTbody.appendChild(tr);
       });
 
-      custTbody.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+      if(chkAllCustomers){
+        chkAllCustomers.onchange = () => {
+          const checked = chkAllCustomers.checked;
+          custTbody.querySelectorAll("input.custChk").forEach(cb=>{
+            cb.checked = checked;
+            const custNo = cb.dataset.cust;
+            if(checked) selectedCustNos.add(custNo);
+            else selectedCustNos.delete(custNo);
+          });
+          chkAllCustomers.indeterminate = false;
+          updateRunButton();
+        };
+      }
+
+      custTbody.querySelectorAll("input.custChk").forEach(cb=>{
         cb.addEventListener("change", (e)=>{
           const custNo = e.target.dataset.cust;
           if(e.target.checked) selectedCustNos.add(custNo);
           else selectedCustNos.delete(custNo);
+
+          syncHeaderCheckbox();
           updateRunButton();
         });
       });
+
+      custTbody.querySelectorAll(".mag-btn").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          const custNo = e.currentTarget.dataset.cust;
+          const cust = currentCustomers.find(x=>x.custNo === custNo);
+          openBriefingModal(cust);
+        });
+      });
+
+      syncHeaderCheckbox();
     }
 
     function updateRunButton(){
-      btnRun.disabled = selectedCustNos.size === 0;
+      btnRun.disabled = (selectedCustNos.size === 0);
     }
 
+    btnClear.addEventListener("click", ()=>{
+      selectedCustNos.clear();
+      custTbody.querySelectorAll("input.custChk").forEach(cb=>cb.checked=false);
+      syncHeaderCheckbox();
+      updateRunButton();
+    });
+
     /* =====================
-      6) Popup control
+      14) 팝업 공통
     ====================== */
     function openOverlay(el){ el.style.display = "flex"; }
     function closeOverlay(el){ el.style.display = "none"; }
 
+    /* =====================
+      15) 1차 팝업(채널 선택)
+    ====================== */
     function openModal1(){
       const picked = Array.from(selectedCustNos);
-      tmCnt.textContent = Math.min(2, picked.length); // 시연용
+      tmCnt.textContent = Math.min(2, picked.length);
+      smsCnt.textContent = Math.min(3, picked.length);
       openOverlay(overlay1);
     }
+    btnRun.addEventListener("click", openModal1);
+    close1.addEventListener("click", ()=>closeOverlay(overlay1));
+    overlay1.addEventListener("click", (e)=>{ if(e.target === overlay1) closeOverlay(overlay1); });
 
+    /* =====================
+      16) TM 팝업
+    ====================== */
     function resetTMModal(){
       if(typingTimer) clearInterval(typingTimer);
       typingTimer = null;
@@ -728,17 +1603,6 @@
       btnTmExec.disabled = true;
     }
 
-    function openTMModal(){
-      // 1차 팝업은 닫고, 2차 TM 팝업을 연다
-      closeOverlay(overlay1);
-      resetTMModal();
-      renderTmPickList();
-      openOverlay(overlayTM);
-    }
-
-    /* =====================
-      7) TM pick list + exec
-    ====================== */
     function renderTmPickList(){
       tmPickList.innerHTML = "";
       const pickedNos = Array.from(selectedCustNos);
@@ -766,12 +1630,23 @@
       });
     }
 
-    function generateTM(){
-      if(typingTimer) clearInterval(typingTimer);
-      typingTimer = typewriter(scriptBox, SCRIPT_TM, 9);
+    function openTMModal(){
+      closeOverlay(overlay1);
+      resetTMModal();
+      renderTmPickList();
+      openOverlay(overlayTM);
     }
 
-    function execTM(){
+    btnGoTM.addEventListener("click", openTMModal);
+    closeTM.addEventListener("click", ()=>closeOverlay(overlayTM));
+    overlayTM.addEventListener("click", (e)=>{ if(e.target === overlayTM) closeOverlay(overlayTM); });
+
+    btnGenTM.addEventListener("click", ()=>{
+      if(typingTimer) clearInterval(typingTimer);
+      typingTimer = typewriter(scriptBox, SCRIPT_TM, 9);
+    });
+
+    btnTmExec.addEventListener("click", ()=>{
       const chosen = [...tmPickList.querySelectorAll(".tmPick")]
         .filter(x=>x.checked)
         .map(x=>x.dataset.cust);
@@ -781,12 +1656,225 @@
         return c ? `${c.custNo}(${c.custName})` : no;
       });
 
-      alert(`TM 실행(시연):\n${names.join(", ")}\n\n※ 실제 운영에서는 여기서 TM 콜/업무처리로 연동됩니다.`);
+      alert(`TM 실행(시연):\n${names.join(", ")}\n\n※ 운영 연동은 별도.`);
       closeOverlay(overlayTM);
+    });
+
+    /* =====================
+      17) SMS 팝업
+    ====================== */
+    function getFirstSmsCustomer(){
+      const pickedNos = Array.from(selectedCustNos);
+      const show = pickedNos.slice(0,3).map(no => currentCustomers.find(c=>c.custNo===no)).filter(Boolean);
+      return show[0] ?? null;
+    }
+
+    function highlightTplRow(idx){
+      [...smsTplTbody.querySelectorAll("tr")].forEach(tr=>{
+        tr.classList.toggle("rowPick", Number(tr.dataset.idx) === idx);
+      });
+    }
+    function clearTplHighlight(){
+      [...smsTplTbody.querySelectorAll("tr")].forEach(tr=>tr.classList.remove("rowPick"));
+    }
+
+    function renderSmsTemplates(){
+      smsTplTbody.innerHTML = "";
+      SMS_TEMPLATES.forEach((t, idx)=>{
+        const tr = document.createElement("tr");
+        tr.dataset.idx = idx;
+        tr.innerHTML = `
+          <td><input class="chk smsTplChk" type="checkbox" data-idx="${idx}"/></td>
+          <td>${escapeHtml(t.name)}</td>
+          <td>${escapeHtml(t.purpose)}</td>
+          <td style="text-align:center;">${t.preview}</td>
+        `;
+        smsTplTbody.appendChild(tr);
+      });
+
+      smsTplTbody.querySelectorAll(".smsTplChk").forEach(cb=>{
+        cb.addEventListener("change", (e)=>{
+          const idx = Number(e.target.dataset.idx);
+          if(e.target.checked){
+            selectedTplIdx = idx;
+            smsTplTbody.querySelectorAll(".smsTplChk").forEach(x=>{
+              if(Number(x.dataset.idx) !== idx) x.checked = false;
+            });
+            highlightTplRow(idx);
+
+            const anyCust = getFirstSmsCustomer();
+            const custName = anyCust?.custName ?? "고객";
+            const tpl = SMS_TEMPLATES[idx];
+            smsPreviewBox.textContent = makeSmsCopy({custName, product: tpl.product, kw: tpl.kw});
+          } else {
+            selectedTplIdx = null;
+            clearTplHighlight();
+            smsPreviewBox.textContent = "템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.";
+          }
+          updateSmsSendButton();
+        });
+      });
+    }
+
+    function renderSmsCustomers(){
+      smsCustList.innerHTML = "";
+      const pickedNos = Array.from(selectedCustNos);
+      const show = pickedNos.slice(0,3).map(no => currentCustomers.find(c=>c.custNo===no)).filter(Boolean);
+
+      show.forEach((c, idx)=>{
+        const wrap = document.createElement("div");
+        wrap.innerHTML = `
+          <label style="display:flex;gap:8px;align-items:center; font-size:12px;">
+            <input class="chk smsCustChk" type="checkbox" data-cust="${c.custNo}" ${idx===0 ? "checked" : ""}/>
+            <span><b>${escapeHtml(c.custNo)}</b> &nbsp; ${escapeHtml(c.custName)} 고객</span>
+          </label>
+        `;
+        smsCustList.appendChild(wrap);
+      });
+
+      smsCustList.querySelectorAll(".smsCustChk").forEach(cb=>{
+        cb.addEventListener("change", ()=>{
+          if(selectedTplIdx !== null){
+            const tpl = SMS_TEMPLATES[selectedTplIdx];
+            const chosen = [...smsCustList.querySelectorAll(".smsCustChk")].find(x=>x.checked);
+            const cust = chosen ? currentCustomers.find(v=>v.custNo===chosen.dataset.cust) : null;
+            const custName = cust?.custName ?? "고객";
+            smsPreviewBox.textContent = makeSmsCopy({custName, product: tpl.product, kw: tpl.kw});
+          }
+          updateSmsSendButton();
+        });
+      });
+
+      updateSmsSendButton();
+    }
+
+    function updateSmsSendButton(){
+      const anyCust = [...smsCustList.querySelectorAll(".smsCustChk")].some(x=>x.checked);
+      btnSmsSend.disabled = !(selectedTplIdx !== null && anyCust);
+    }
+
+    function openSMSModal(){
+      closeOverlay(overlay1);
+      selectedTplIdx = null;
+      btnSmsSend.disabled = true;
+      smsPreviewBox.textContent = "템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.";
+
+      renderSmsTemplates();
+      renderSmsCustomers();
+      openOverlay(overlaySMS);
+    }
+
+    btnGoSMS.addEventListener("click", openSMSModal);
+    closeSMS.addEventListener("click", ()=>closeOverlay(overlaySMS));
+    overlaySMS.addEventListener("click", (e)=>{ if(e.target === overlaySMS) closeOverlay(overlaySMS); });
+
+    btnSmsSend.addEventListener("click", ()=>{
+      const tpl = SMS_TEMPLATES[selectedTplIdx];
+      const chosen = [...smsCustList.querySelectorAll(".smsCustChk")]
+        .filter(x=>x.checked)
+        .map(x=>x.dataset.cust);
+
+      const names = chosen.map(no=>{
+        const c = currentCustomers.find(v=>v.custNo===no);
+        return c ? `${c.custNo}(${c.custName})` : no;
+      });
+
+      alert(`문자 발송(시연)\n\n템플릿: ${tpl.name}\n대상: ${names.join(", ")}\n\n※ 운영 연동은 별도.`);
+      closeOverlay(overlaySMS);
+    });
+
+    /* =====================
+      18) 고객 브리핑 팝업(LLM 타이핑)
+    ====================== */
+    function openBriefingModal(cust){
+      if(!cust) return;
+
+      if(briefTimer) clearInterval(briefTimer);
+      briefText.textContent = "고객 브리핑을 생성 중입니다...";
+
+      const payload = buildBriefing(cust, selectedTaskName || "AI연계과제");
+
+      openOverlay(overlayBrief);
+
+      setTimeout(()=>{
+        if(briefTimer) clearInterval(briefTimer);
+        briefTimer = typewriter(briefText, payload, 6);
+      }, 250);
+    }
+
+    closeBrief.addEventListener("click", ()=>closeOverlay(overlayBrief));
+    overlayBrief.addEventListener("click", (e)=>{ if(e.target === overlayBrief) closeOverlay(overlayBrief); });
+
+    /* =====================
+      19) MyCare 바로가기 팝업
+    ====================== */
+    btnQuickMyCare.addEventListener("click", ()=>{
+      openOverlay(overlayMyCare);
+    });
+    closeMyCare.addEventListener("click", ()=>closeOverlay(overlayMyCare));
+    overlayMyCare.addEventListener("click", (e)=>{ if(e.target === overlayMyCare) closeOverlay(overlayMyCare); });
+
+    /* =====================
+      ✅ 20) Bottom Final Report 토글/드롭다운
+    ====================== */
+    function isFinalMode(){ return radioFinal && radioFinal.checked; }
+
+    function getTasksForFinalDropdown(dateKey){
+      // 기본: 선택 날짜의 AI 과제
+      const idxList = (DATE_TASK_MAP[dateKey]?.AI ?? []);
+      if(idxList.length === 0){
+        // fallback: AI 전체 제공
+        return TASKS_MASTER.AI.map((name, i)=>({ name, masterIdx:i }));
+      }
+      return idxList.map(masterIdx=>({ name: TASKS_MASTER.AI[masterIdx], masterIdx }));
+    }
+
+    function refreshFinalInlineDropdown(){
+      const list = getTasksForFinalDropdown(selectedDateKey);
+      finalInlineTaskSelect.innerHTML = "";
+      list.forEach(x=>{
+        const opt = document.createElement("option");
+        opt.value = x.name;
+        opt.textContent = x.name;
+        finalInlineTaskSelect.appendChild(opt);
+      });
+
+      // 우선 선택: 현재 AI 선택 과제가 있으면 그걸로
+      const preferred = selectedTaskName && list.some(x=>x.name===selectedTaskName) ? selectedTaskName : list[0]?.name;
+      if(preferred){
+        finalInlineTaskSelect.value = preferred;
+        renderFinalInline(selectedDateKey, preferred);
+      } else {
+        renderFinalInline(selectedDateKey, "AI연계과제");
+      }
+    }
+
+    function showBottomCust(){
+      custArea.style.display = "block";
+      finalInlineArea.style.display = "none";
+    }
+
+    function showBottomFinal(){
+      custArea.style.display = "none";
+      finalInlineArea.style.display = "flex";
+      refreshFinalInlineDropdown();
+    }
+
+    finalInlineTaskSelect.addEventListener("change", ()=>{
+      renderFinalInline(selectedDateKey, finalInlineTaskSelect.value);
+    });
+
+    if(radioFinal && radioCust){
+      radioFinal.addEventListener("change", ()=>{
+        if(radioFinal.checked) showBottomFinal();
+      });
+      radioCust.addEventListener("change", ()=>{
+        if(radioCust.checked) showBottomCust();
+      });
     }
 
     /* =====================
-      8) Utils
+      21) Utils + Init
     ====================== */
     function escapeHtml(str){
       return String(str)
@@ -797,38 +1885,24 @@
         .replaceAll("'","&#039;");
     }
 
-    /* =====================
-      9) Events
-    ====================== */
-    btnRun.addEventListener("click", openModal1);
-    btnClear.addEventListener("click", ()=>{
-      selectedCustNos.clear();
-      custTbody.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.checked=false);
-      updateRunButton();
-      custHint.textContent = `선택 과제: ${TASK_NAMES[selectedTaskIdx]} (고객 ${currentCustomers.length}명)`;
-    });
+    function selectDefault(){
+      buildDateTaskMap();
 
-    // 1차 팝업
-    close1.addEventListener("click", ()=>closeOverlay(overlay1));
-    overlay1.addEventListener("click", (e)=>{ if(e.target === overlay1) closeOverlay(overlay1); });
+      currentTasksForDate = DATE_TASK_MAP[selectedDateKey];
 
-    btnGoTM.addEventListener("click", openTMModal);
+      updateBigDate(selectedDateKey);
+      buildCalendar();
 
-    // 문자(추후 구현) - 현재는 안내만
-    btnGoSMS.addEventListener("click", ()=>{
-      alert("문자 적합 고객 화면은 다음 단계에서 동일 구조(별도 2차 팝업)로 추가합니다.");
-    });
+      updateHeaderCounts();
 
-    // TM 2차 팝업
-    closeTM.addEventListener("click", ()=>closeOverlay(overlayTM));
-    overlayTM.addEventListener("click", (e)=>{ if(e.target === overlayTM) closeOverlay(overlayTM); });
+      renderTasksForSelectedDateAndCategory();
 
-    btnGenTM.addEventListener("click", generateTM);
-    btnTmExec.addEventListener("click", execTM);
+      selectCategory("AI");
+      showBottomCust(); // 초기에는 고객현황
+    }
 
-    // init
-    renderTasks();
-    selectTask(0);
+    /* 초기 실행 */
+    selectDefault();
   </script>
 </body>
 </html>
