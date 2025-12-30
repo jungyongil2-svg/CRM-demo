@@ -3,640 +3,281 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CRM 메인화면 시연 목업 (캡쳐 유사)</title>
+  <title>CRM 메인화면 데모 (AI연계과제 → 채널선택 → TM 실행)</title>
   <style>
     :root{
-      --bg:#f3f4f6;
-      --panel:#ffffff;
-      --line:#cfd6df;
-      --line2:#e6ebf2;
-      --text:#1f2937;
-      --muted:#6b7280;
-
-      /* 캡쳐 톤에 맞춘 블루 계열 */
-      --navy:#0f2f63;
-      --blue:#1f5aa6;
-      --blue2:#2f6fbf;
-      --sky:#e6f0ff;
-
-      --leftbar:#2d3a4a;
-      --leftbar2:#213040;
-
-      --btn:#eef3fb;
-      --btnLine:#aebad0;
-
-      --tab:#f2f6fb;
-      --tabLine:#bfcbe0;
-
-      --accent:#6c4ee6; /* 좌측 날짜 패널 보라 */
-      --accent2:#8a6bff;
-
+      --bg:#f3f4f6; --panel:#fff; --line:#cfd6df; --line2:#e6ebf2;
+      --text:#1f2937; --muted:#6b7280;
+      --navy:#0f2f63; --blue:#3a78c7;
+      --leftbar:#2d3a4a; --leftbar2:#213040;
+      --btn:#eef3fb; --btnLine:#aebad0;
+      --tab:#f2f6fb; --tabLine:#bfcbe0;
+      --accent:#6c4ee6; --accent2:#8a6bff;
+      --purple:#5b48d8;
       --shadow: 0 6px 16px rgba(16,24,40,.10);
       --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     }
-
     *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:var(--bg);
-      color:var(--text);
-    }
+    body{ margin:0; font-family:var(--font); background:var(--bg); color:var(--text); }
 
-    /* ======= Top area (캡쳐 유사 2단 헤더) ======= */
-    .top{
-      position:sticky; top:0; z-index:20;
-      box-shadow: var(--shadow);
-    }
+    /* ======= Top ======= */
+    .top{ position:sticky; top:0; z-index:20; box-shadow: var(--shadow); }
     .top1{
-      height:42px;
-      background:var(--navy);
-      color:#fff;
-      display:flex;
-      align-items:center;
-      padding:0 12px;
-      gap:10px;
+      height:42px; background:var(--navy); color:#fff;
+      display:flex; align-items:center; padding:0 12px; gap:10px;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:800;
-      letter-spacing:.2px;
-      white-space:nowrap;
-    }
-    .brand .next{
-      display:flex; align-items:flex-end; gap:6px;
-      font-size:18px;
-      line-height:1;
-    }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:800; white-space:nowrap; }
+    .brand .next{ display:flex; align-items:flex-end; gap:6px; line-height:1; }
     .brand .next .the{ font-size:10px; opacity:.9; margin-bottom:2px; }
     .brand .next .word{ font-size:22px; font-weight:900; }
     .brand .title{ font-size:18px; font-weight:900; margin-left:2px; }
 
-    .searchbar{
-      flex:1;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      max-width:860px;
-      margin-left:8px;
-    }
+    .searchbar{ flex:1; display:flex; align-items:center; gap:8px; max-width:860px; margin-left:8px; }
     .searchbar .select{
-      background:#ffffff;
-      border:1px solid rgba(255,255,255,.0);
-      height:28px;
-      border-radius:4px;
-      padding:0 8px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      color:#111827;
-      font-size:12px;
-      min-width:96px;
+      background:#fff; height:28px; border-radius:4px; padding:0 8px;
+      display:flex; align-items:center; gap:6px; color:#111827; font-size:12px; min-width:96px;
     }
-    .searchbar input{
-      flex:1;
-      height:28px;
-      border-radius:4px;
-      border:none;
-      outline:none;
-      padding:0 10px;
-      font-size:12px;
-    }
+    .searchbar input{ flex:1; height:28px; border-radius:4px; border:none; outline:none; padding:0 10px; font-size:12px; }
     .searchbar .go{
-      height:28px;
-      padding:0 10px;
-      border-radius:4px;
-      border:1px solid rgba(255,255,255,.35);
-      background: rgba(255,255,255,.12);
-      color:#fff;
-      font-size:12px;
-      cursor:pointer;
+      height:28px; padding:0 10px; border-radius:4px; border:1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.12); color:#fff; font-size:12px; cursor:pointer;
     }
-    .top1-right{
-      display:flex; align-items:center; gap:8px;
-      white-space:nowrap;
-      font-size:12px;
-      opacity:.95;
-    }
-    .chip{
-      background: rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.22);
-      border-radius:999px;
-      padding:6px 10px;
-    }
+    .top1-right{ display:flex; align-items:center; gap:8px; white-space:nowrap; font-size:12px; opacity:.95; }
+    .chip{ background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:6px 10px; }
 
     .top2{
-      height:34px;
-      background:#3a78c7;
-      display:flex;
-      align-items:center;
-      padding:0 10px;
-      gap:10px;
-      color:#fff;
-      font-size:12px;
+      height:34px; background:var(--blue); display:flex; align-items:center; padding:0 10px; gap:10px; color:#fff; font-size:12px;
     }
-    .tabs{
-      display:flex; align-items:center; gap:6px;
-    }
-    .tab{
-      padding:6px 10px;
-      border-radius:4px 4px 0 0;
-      background: rgba(255,255,255,.16);
-      border:1px solid rgba(255,255,255,.22);
-      cursor:pointer;
-    }
-    .tab.active{
-      background:#e9f1ff;
-      color:#0f2f63;
-      border-color:#e9f1ff;
-      font-weight:800;
-    }
+    .tabs{ display:flex; align-items:center; gap:6px; }
+    .tab{ padding:6px 10px; border-radius:4px 4px 0 0; background: rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.22); cursor:pointer; }
+    .tab.active{ background:#e9f1ff; color:#0f2f63; border-color:#e9f1ff; font-weight:800; }
     .top2 .spacer{ flex:1; }
-    .top2 .mini-btn{
-      background: rgba(255,255,255,.18);
-      border:1px solid rgba(255,255,255,.25);
-      color:#fff;
-      border-radius:4px;
-      padding:6px 10px;
-      cursor:pointer;
-    }
+    .top2 .mini-btn{ background: rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:4px; padding:6px 10px; cursor:pointer; }
 
-    /* ======= App Layout ======= */
-    .wrap{
-      display:grid;
-      grid-template-columns: 44px 260px 1fr;
-      height: calc(100vh - 76px);
-    }
-
-    /* Left vertical icon bar (캡쳐 유사) */
+    /* ======= Layout ======= */
+    .wrap{ display:grid; grid-template-columns: 44px 260px 1fr; height: calc(100vh - 76px); }
     .vbar{
       background: linear-gradient(180deg, var(--leftbar), var(--leftbar2));
-      border-right:1px solid #1a2531;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding:8px 0;
-      gap:10px;
+      border-right:1px solid #1a2531; display:flex; flex-direction:column; align-items:center; padding:8px 0; gap:10px;
     }
-    .vico{
-      width:28px; height:28px;
-      border-radius:6px;
-      background: rgba(255,255,255,.10);
-      border:1px solid rgba(255,255,255,.12);
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:14px;
-      user-select:none;
+    .vico{ width:28px; height:28px; border-radius:6px; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12);
+      color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; user-select:none;
     }
     .vico.dim{ opacity:.7; }
 
-    /* Left side panel */
-    .left{
-      background:#f7f8fb;
-      border-right:1px solid var(--line);
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-    }
-    .left-head{
-      padding:10px;
-      background:#ffffff;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
+    .left{ background:#f7f8fb; border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+    .left-head{ padding:10px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; }
     .left-head .btn{
-      height:24px;
-      padding:0 10px;
-      border-radius:3px;
-      border:1px solid var(--btnLine);
-      background: var(--btn);
-      font-size:12px;
-      cursor:pointer;
+      height:24px; padding:0 10px; border-radius:3px; border:1px solid var(--btnLine);
+      background: var(--btn); font-size:12px; cursor:pointer;
     }
-    .left-card{
-      padding:10px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      overflow:auto;
-    }
-    .box{
-      background:#ffffff;
-      border:1px solid var(--line);
-      border-radius:4px;
-      padding:8px;
-    }
-    .box .title{
-      font-weight:800;
-      font-size:12px;
-      margin-bottom:8px;
-      display:flex; justify-content:space-between; align-items:center;
-    }
-    .fields{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:6px;
-    }
-    .field{
-      display:grid;
-      grid-template-columns: 72px 1fr;
-      gap:6px;
-      align-items:center;
-      font-size:12px;
-    }
-    .field input{
-      height:22px;
-      border:1px solid var(--line);
-      border-radius:2px;
-      padding:0 6px;
-      background:#fff;
-      outline:none;
-      font-size:12px;
-    }
-    .mini-grid{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap:6px;
-      margin-top:6px;
-    }
+    .left-card{ padding:10px; display:flex; flex-direction:column; gap:10px; overflow:auto; }
+    .box{ background:#fff; border:1px solid var(--line); border-radius:4px; padding:8px; }
+    .box .title{ font-weight:800; font-size:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+    .fields{ display:grid; grid-template-columns: 1fr; gap:6px; }
+    .field{ display:grid; grid-template-columns: 72px 1fr; gap:6px; align-items:center; font-size:12px; }
+    .field input{ height:22px; border:1px solid var(--line); border-radius:2px; padding:0 6px; background:#fff; outline:none; font-size:12px; }
+    .mini-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:6px; }
     .mini-tile{
-      background:#2ea6b4;
-      border:1px solid #1c8894;
-      color:#fff;
-      height:26px;
-      border-radius:3px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:12px;
-      font-weight:800;
-      user-select:none;
+      background:#2ea6b4; border:1px solid #1c8894; color:#fff; height:26px; border-radius:3px;
+      display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; user-select:none;
     }
 
-    /* Main area */
-    .main{
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-      padding:10px;
-      gap:10px;
-    }
-
+    .main{ display:flex; flex-direction:column; min-height:0; padding:10px; gap:10px; }
     .content-top{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:4px;
-      padding:8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
+      background:#fff; border:1px solid var(--line); border-radius:4px; padding:8px; display:flex; align-items:center; justify-content:space-between;
     }
-    .content-top .path{
-      font-size:12px;
-      color:var(--muted);
-    }
-    .content-top .actions{
-      display:flex; gap:6px;
-    }
+    .content-top .path{ font-size:12px; color:var(--muted); }
+    .content-top .actions{ display:flex; gap:6px; }
     .content-top .actions button{
-      height:24px;
-      padding:0 10px;
-      border-radius:999px;
-      border:1px solid var(--btnLine);
-      background:var(--btn);
-      font-size:12px;
-      cursor:pointer;
+      height:24px; padding:0 10px; border-radius:999px; border:1px solid var(--btnLine);
+      background:var(--btn); font-size:12px; cursor:pointer;
     }
 
-    /* 3-column middle: date tile + calendar + right tasks */
     .mid{
-      display:grid;
-      grid-template-columns: 138px 1fr 420px;
-      gap:10px;
-      min-height:0;
-      flex:1;
+      display:grid; grid-template-columns: 138px 1fr 520px; gap:10px;
+      min-height:0; flex:1;
     }
 
+    /* Date tile */
     .dateTile{
       background: linear-gradient(180deg, var(--accent), var(--accent2));
-      border-radius:4px;
-      border:1px solid rgba(0,0,0,.05);
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      padding:10px;
-      min-height:0;
+      border-radius:4px; border:1px solid rgba(0,0,0,.05); color:#fff;
+      display:flex; flex-direction:column; justify-content:space-between; padding:10px; min-height:0;
     }
-    .dateTile .ym{
-      font-weight:800;
-      font-size:12px;
-      opacity:.95;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .dateTile .big{
-      text-align:center;
-      margin-top:4px;
-    }
-    .dateTile .big .d{
-      font-size:40px;
-      font-weight:900;
-      line-height:1;
-    }
-    .dateTile .big .dow{
-      font-size:12px;
-      font-weight:800;
-      opacity:.95;
-      margin-top:4px;
-      letter-spacing:.3px;
-    }
-    .dateTile .ar{
-      display:flex; justify-content:space-between; align-items:center;
-      font-size:18px;
-      opacity:.9;
-      user-select:none;
-    }
+    .dateTile .ym{ font-weight:800; font-size:12px; opacity:.95; display:flex; justify-content:space-between; align-items:center; }
+    .dateTile .big{ text-align:center; margin-top:4px; }
+    .dateTile .big .d{ font-size:40px; font-weight:900; line-height:1; }
+    .dateTile .big .dow{ font-size:12px; font-weight:800; opacity:.95; margin-top:4px; letter-spacing:.3px; }
+    .dateTile .ar{ display:flex; justify-content:space-between; align-items:center; font-size:18px; opacity:.9; user-select:none; }
 
     .calendarPanel, .taskPanel{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:4px;
-      min-height:0;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
+      background:#fff; border:1px solid var(--line); border-radius:4px;
+      min-height:0; overflow:hidden; display:flex; flex-direction:column;
     }
 
-    /* Top icon row (캡쳐처럼 원형 아이콘) */
-    .iconRow{
-      padding:10px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      gap:18px;
-      justify-content:center;
-      align-items:center;
-      background:#fff;
-    }
-    .round{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:6px;
-      cursor:pointer;
-      user-select:none;
-    }
+    .iconRow{ padding:10px; border-bottom:1px solid var(--line); display:flex; gap:18px; justify-content:center; align-items:center; background:#fff; }
+    .round{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; user-select:none; }
     .round .circle{
-      width:44px; height:44px;
-      border-radius:999px;
-      background:#f1f5ff;
-      border:1px solid #d7e2ff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      color:#2f6fbf;
-      position:relative;
+      width:44px; height:44px; border-radius:999px; background:#f1f5ff; border:1px solid #d7e2ff;
+      display:flex; align-items:center; justify-content:center; font-weight:900; color:#2f6fbf; position:relative;
     }
-    .round .circle .dot{
-      position:absolute;
-      right:6px; bottom:6px;
-      width:10px; height:10px;
-      border-radius:999px;
-      background:#ff8a00;
-      border:2px solid #fff;
-      display:none;
-    }
-    .round.active .circle{
-      background:#e6f0ff;
-      border-color:#9fbaf0;
-      box-shadow: inset 0 0 0 2px rgba(47,111,191,.10);
-    }
+    .round .circle .dot{ position:absolute; right:6px; bottom:6px; width:10px; height:10px; border-radius:999px; background:#ff8a00; border:2px solid #fff; display:none; }
+    .round.active .circle{ background:#e6f0ff; border-color:#9fbaf0; box-shadow: inset 0 0 0 2px rgba(47,111,191,.10); }
     .round.active .circle .dot{ display:block; }
-    .round .label{
-      font-size:12px;
-      font-weight:800;
-      color:#1f2937;
-    }
-    .round .label span{
-      color:#2f6fbf;
-      font-weight:900;
-    }
+    .round .label{ font-size:12px; font-weight:800; color:#1f2937; }
+    .round .label span{ color:#2f6fbf; font-weight:900; }
 
-    /* Calendar grid (캡쳐 유사) */
-    .calBody{
-      padding:10px;
-      overflow:auto;
-    }
-    .calHeader{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:6px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .calGrid{
-      border:1px solid var(--line);
-      border-radius:4px;
-      overflow:hidden;
-    }
-    .calWeek{
-      display:grid;
-      grid-template-columns: repeat(7, 1fr);
-      background:#f7fafc;
-      border-bottom:1px solid var(--line);
-      font-size:12px;
-      font-weight:800;
-      color:#374151;
-    }
-    .calWeek div{
-      padding:8px;
-      border-right:1px solid var(--line);
-      text-align:center;
-    }
+    .calBody{ padding:10px; overflow:auto; }
+    .calHeader{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; font-size:12px; color:var(--muted); }
+    .calGrid{ border:1px solid var(--line); border-radius:4px; overflow:hidden; }
+    .calWeek{ display:grid; grid-template-columns: repeat(7, 1fr); background:#f7fafc; border-bottom:1px solid var(--line); font-size:12px; font-weight:800; color:#374151; }
+    .calWeek div{ padding:8px; border-right:1px solid var(--line); text-align:center; }
     .calWeek div:last-child{ border-right:none; }
-
-    .calDays{
-      display:grid;
-      grid-template-columns: repeat(7, 1fr);
-    }
-    .cell{
-      height:88px;
-      border-right:1px solid var(--line2);
-      border-bottom:1px solid var(--line2);
-      padding:6px 8px;
-      position:relative;
-      font-size:12px;
-      background:#fff;
-    }
+    .calDays{ display:grid; grid-template-columns: repeat(7, 1fr); }
+    .cell{ height:88px; border-right:1px solid var(--line2); border-bottom:1px solid var(--line2); padding:6px 8px; font-size:12px; background:#fff; }
     .cell:nth-child(7n){ border-right:none; }
-    .num{
-      font-weight:800;
-      color:#111827;
-    }
+    .num{ font-weight:800; color:#111827; }
     .num.sun{ color:#e11d48; }
     .num.sat{ color:#2563eb; }
-    .marks{
-      margin-top:6px;
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-      color:#111827;
-      font-size:11px;
-      opacity:.9;
-    }
-    .m{
-      display:flex; gap:4px; align-items:center;
-    }
-    .sq{
-      width:5px;height:5px;background:#f59e0b;border-radius:1px;
-      display:inline-block;
-    }
-    .sq.b{ background:#3b82f6; }
-    .cell.selected{
-      background:#eaf5ff;
-      outline:2px solid rgba(47,111,191,.35);
-      outline-offset:-2px;
-    }
+    .cell.selected{ background:#eaf5ff; outline:2px solid rgba(47,111,191,.35); outline-offset:-2px; }
 
-    /* Task panel right: 탭 + 표 */
-    .taskTabs{
-      display:flex;
-      gap:2px;
-      border-bottom:1px solid var(--line);
-      background:#f7fafc;
-      padding:6px 6px 0 6px;
-    }
+    /* Right task panel */
+    .taskTabs{ display:flex; gap:2px; border-bottom:1px solid var(--line); background:#f7fafc; padding:6px 6px 0 6px; }
     .taskTabs .t{
-      padding:6px 10px;
-      border:1px solid var(--tabLine);
-      border-bottom:none;
-      border-radius:4px 4px 0 0;
-      background:var(--tab);
-      font-size:12px;
-      cursor:pointer;
-      user-select:none;
+      padding:6px 10px; border:1px solid var(--tabLine); border-bottom:none;
+      border-radius:4px 4px 0 0; background:var(--tab); font-size:12px; cursor:pointer; user-select:none;
     }
-    .taskTabs .t.active{
-      background:#fff;
-      font-weight:900;
-      color:#1f5aa6;
-      border-color:#9fbaf0;
-    }
+    .taskTabs .t.active{ background:#fff; font-weight:900; color:#1f5aa6; border-color:#9fbaf0; }
 
-    .taskTableWrap{
-      padding:8px;
-      overflow:auto;
-      flex:1;
-    }
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:12px;
-    }
-    thead th{
-      background:#f3f7ff;
-      border:1px solid var(--line);
-      padding:8px 8px;
-      text-align:left;
-      white-space:nowrap;
-    }
-    tbody td{
-      border:1px solid var(--line2);
-      padding:8px 8px;
-      white-space:nowrap;
-      background:#fff;
-    }
+    table{ width:100%; border-collapse:collapse; font-size:12px; }
+    thead th{ background:#f3f7ff; border:1px solid var(--line); padding:8px 8px; text-align:left; white-space:nowrap; }
+    tbody td{ border:1px solid var(--line2); padding:8px 8px; white-space:nowrap; background:#fff; }
     tbody tr:hover td{ background:#f8fbff; }
-    tbody tr.active td{
-      background:#fff4d6;
-      border-color:#f2d08a;
-    }
-    .chk{
-      width:14px; height:14px;
-      accent-color:#1f5aa6;
-    }
+    tbody tr.active td{ background:#fff4d6; border-color:#f2d08a; }
+    .taskTableWrap{ padding:8px; overflow:auto; flex:1; }
+    .hint{ padding:10px; font-size:12px; color:var(--muted); }
+    .chk{ width:14px; height:14px; accent-color:#1f5aa6; }
 
-    /* Bottom customers table (캡쳐처럼 하단 박스) */
+    /* Bottom customers */
     .bottom{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:4px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      height:220px;
-      min-height:220px;
+      background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden;
+      display:flex; flex-direction:column; height:240px; min-height:240px;
     }
     .bottomHead{
-      padding:8px 10px;
-      border-bottom:1px solid var(--line);
-      background:#f7fafc;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
+      padding:8px 10px; border-bottom:1px solid var(--line); background:#f7fafc;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    .bottomHead .title{
-      font-weight:900;
-      font-size:12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-    .radio{
-      display:flex; align-items:center; gap:10px;
-      font-size:12px;
-      color:#374151;
-      font-weight:700;
-    }
+    .bottomHead .title{ font-weight:900; font-size:12px; display:flex; align-items:center; gap:10px; }
+    .radio{ display:flex; align-items:center; gap:10px; font-size:12px; color:#374151; font-weight:700; }
     .bottomHead button{
-      height:24px;
-      padding:0 10px;
-      border-radius:3px;
-      border:1px solid var(--btnLine);
-      background:var(--btn);
-      cursor:pointer;
-      font-size:12px;
-      white-space:nowrap;
+      height:24px; padding:0 10px; border-radius:3px; border:1px solid var(--btnLine);
+      background:var(--btn); cursor:pointer; font-size:12px; white-space:nowrap;
     }
-    .bottomBody{
-      overflow:auto;
-      flex:1;
+    .bottomBody{ overflow:auto; flex:1; }
+    .pill-btn{
+      background: var(--purple); color:#fff; border:none; border-radius:6px;
+      padding:10px 14px; font-weight:800; cursor:pointer; min-width:170px;
+    }
+    .pill-btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+    /* ======= Modals ======= */
+    .overlay{
+      position:fixed; inset:0; background: rgba(0,0,0,.35);
+      display:none; align-items:center; justify-content:center; z-index:50;
+    }
+    .modal{
+      background:#fff; border-radius:10px; overflow:hidden;
+      box-shadow: 0 14px 40px rgba(0,0,0,.25);
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .modalTop{
+      background:#f2f4f7; padding:10px 12px;
+      display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #d7dde6;
+    }
+    .modalTop .mtitle{ font-weight:900; font-size:13px; }
+    .modalTop button{
+      height:26px; padding:0 10px; border-radius:6px;
+      border:1px solid #cfd6df; background:#fff; cursor:pointer; font-size:12px;
     }
 
-    .hint{
-      padding:10px;
-      font-size:12px;
-      color:var(--muted);
+    /* 1차 팝업(채널선택) */
+    .modal1{ width:720px; max-width:calc(100vw - 24px); }
+    .modal1Body{ padding:14px; }
+    .agentBox{ border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff; }
+    .agentTitle{ font-weight:900; margin-bottom:10px; border-bottom:2px solid #e9edf5; padding-bottom:8px; }
+    .agentRow{ display:flex; gap:12px; align-items:flex-start; }
+    .agentText{ flex:1; font-size:13px; color:#374151; line-height:1.55; white-space:pre-line; }
+    .btnCol{ display:flex; flex-direction:column; gap:12px; min-width: 210px; }
+    .btnBig{
+      width:100%; background: var(--purple); color:#fff; border:none;
+      border-radius:6px; padding:10px 12px; font-weight:900; cursor:pointer; text-align:center;
+    }
+    .btnBig.secondary{ background:#6c6f7a; }
+
+    /* 2차 팝업(T M 전용 - 크게) */
+    .modal2{ width:1120px; max-width:calc(100vw - 24px); }
+    .modal2Body{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:12px;
+      padding:14px;
+      min-height: 620px;
+    }
+    .scriptPanel{
+      border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff;
+      display:flex; flex-direction:column; gap:10px;
+      min-height: 560px;
+    }
+    .scriptPanel .h{ font-weight:900; font-size:13px; }
+    .scriptBox{
+      border:1px solid #dfe6ef; border-radius:10px; padding:12px; background:#fbfcff;
+      font-size:12px; color:#111827; line-height:1.65;
+      flex:1; overflow:auto; white-space:pre-wrap;
     }
 
-    /* Responsive */
-    @media (max-width: 1280px){
+    .tmSide{
+      border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff;
+      display:flex; flex-direction:column; gap:10px;
+      min-height: 560px;
+    }
+    .tmSide .h{ font-weight:900; font-size:13px; }
+    .tmPickList{ display:flex; flex-direction:column; gap:8px; }
+    .custPickItem{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 10px; border:1px solid #e1e7ef; border-radius:10px; background:#fff; font-size:12px;
+    }
+    .tmExec{
+      background: var(--purple); color:#fff; border:none; border-radius:8px;
+      padding:12px 12px; font-weight:900; cursor:pointer; width:100%;
+      margin-top:auto;
+    }
+    .tmExec:disabled{ opacity:.6; cursor:not-allowed; }
+
+    @media (max-width: 1320px){
       .mid{ grid-template-columns: 138px 1fr; }
       .taskPanel{ display:none; }
+    }
+    @media (max-width: 980px){
+      .modal2Body{ grid-template-columns: 1fr; }
+      .tmSide{ min-height:auto; }
     }
   </style>
 </head>
 
 <body>
+  <!-- TOP -->
   <div class="top">
     <div class="top1">
       <div class="brand">
         <div class="next"><span class="the">THE</span><span class="word">next</span></div>
         <div class="title">대면1차</div>
       </div>
-
       <div class="searchbar">
         <div class="select">통합검색 ▾</div>
         <input placeholder="화면번호 또는 화면명을 검색하세요." />
         <button class="go">검색</button>
       </div>
-
       <div class="top1-right">
         <div class="chip">워크플로우</div>
         <div class="chip">신규 과장</div>
@@ -644,7 +285,6 @@
         <div class="chip">도움말</div>
       </div>
     </div>
-
     <div class="top2">
       <div class="tabs">
         <div class="tab">개별조회</div>
@@ -659,8 +299,8 @@
   </div>
 
   <div class="wrap">
-    <!-- Left vertical bar -->
-    <aside class="vbar" aria-label="좌측 아이콘 바">
+    <!-- VBAR -->
+    <aside class="vbar">
       <div class="vico">≡</div>
       <div class="vico dim">⌂</div>
       <div class="vico dim">★</div>
@@ -672,14 +312,13 @@
       <div class="vico dim">⏻</div>
     </aside>
 
-    <!-- Left panel -->
+    <!-- LEFT -->
     <section class="left">
       <div class="left-head">
         <button class="btn">초기화</button>
         <button class="btn">조회</button>
         <button class="btn">고객종합정보</button>
       </div>
-
       <div class="left-card">
         <div class="box">
           <div class="title">조회 조건 <span style="font-weight:700;color:var(--muted);font-size:11px;">(목업)</span></div>
@@ -692,7 +331,6 @@
             <div class="field"><div>자택전화</div><input/></div>
           </div>
         </div>
-
         <div class="box">
           <div class="title">채널 바로가기</div>
           <div class="mini-grid">
@@ -702,7 +340,6 @@
             <div class="mini-tile">URL</div>
           </div>
         </div>
-
         <div class="box">
           <div class="title">과제상황 바로가기</div>
           <div class="fields" style="gap:4px;">
@@ -714,7 +351,7 @@
       </div>
     </section>
 
-    <!-- Main -->
+    <!-- MAIN -->
     <section class="main">
       <div class="content-top">
         <div class="path">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
@@ -726,55 +363,22 @@
       </div>
 
       <div class="mid">
-        <!-- Date tile -->
         <div class="dateTile">
-          <div class="ym">
-            <span>2025-12</span>
-            <span style="opacity:.95;font-weight:900;">▦</span>
-          </div>
-          <div class="big">
-            <div class="d">17</div>
-            <div class="dow">WEDNESDAY</div>
-          </div>
-          <div class="ar">
-            <span>‹</span>
-            <span>›</span>
-          </div>
+          <div class="ym"><span>2025-12</span><span style="opacity:.95;font-weight:900;">▦</span></div>
+          <div class="big"><div class="d">17</div><div class="dow">WEDNESDAY</div></div>
+          <div class="ar"><span>‹</span><span>›</span></div>
         </div>
 
-        <!-- Calendar + top icons -->
         <div class="calendarPanel">
           <div class="iconRow">
-            <div id="icoAi" class="round" role="button" tabindex="0" aria-label="AI연계과제">
-              <div class="circle">👤<span class="dot"></span></div>
-              <div class="label">AI연계과제<span>(3)</span></div>
-            </div>
-            <div class="round">
-              <div class="circle">🧩</div>
-              <div class="label">필수케어<span>(5)</span></div>
-            </div>
-            <div class="round">
-              <div class="circle">📎</div>
-              <div class="label">밀착케어<span>(0)</span></div>
-            </div>
-            <div class="round">
-              <div class="circle">📋</div>
-              <div class="label">일정정보<span>(0)</span></div>
-            </div>
-            <div class="round">
-              <div class="circle">📊</div>
-              <div class="label">브랜치싱글뷰</div>
-            </div>
-            <div class="round">
-              <div class="circle">🎯</div>
-              <div class="label">스마일콜<span>(0)</span></div>
-            </div>
-            <div class="round">
-              <div class="circle">🎯</div>
-              <div class="label">비대면 필수<span>(0)</span></div>
-            </div>
+            <div class="round active"><div class="circle">👤<span class="dot"></span></div><div class="label">AI연계과제<span>(12)</span></div></div>
+            <div class="round"><div class="circle">🧩</div><div class="label">필수케어<span>(5)</span></div></div>
+            <div class="round"><div class="circle">📎</div><div class="label">밀착케어<span>(0)</span></div></div>
+            <div class="round"><div class="circle">📋</div><div class="label">일정정보<span>(0)</span></div></div>
+            <div class="round"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+            <div class="round"><div class="circle">🎯</div><div class="label">스마일콜<span>(0)</span></div></div>
+            <div class="round"><div class="circle">🎯</div><div class="label">비대면 필수<span>(0)</span></div></div>
           </div>
-
           <div class="calBody">
             <div class="calHeader">
               <div>일정정보</div>
@@ -783,91 +387,56 @@
                 <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">일정추가</button>
               </div>
             </div>
-
-            <div class="calGrid" aria-label="캘린더">
+            <div class="calGrid">
               <div class="calWeek">
                 <div style="color:#e11d48;">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div style="color:#2563eb;">토</div>
               </div>
-
               <div class="calDays">
-                <!-- 1주차 -->
-                <div class="cell"><div class="num sun">30</div><div class="marks"><div class="m"><span class="sq"></span>133</div></div></div>
-                <div class="cell"><div class="num">01</div><div class="marks"><div class="m"><span class="sq"></span>133</div></div></div>
-                <div class="cell"><div class="num">02</div><div class="marks"><div class="m"><span class="sq"></span>195</div></div></div>
-                <div class="cell"><div class="num">03</div><div class="marks"><div class="m"><span class="sq"></span>192</div><div class="m"><span class="sq"></span>129</div><div class="m"><span class="sq"></span>222</div></div></div>
-                <div class="cell"><div class="num">04</div><div class="marks"><div class="m"><span class="sq"></span>125</div><div class="m"><span class="sq"></span>372</div></div></div>
-                <div class="cell"><div class="num">05</div><div class="marks"><div class="m"><span class="sq"></span>147</div><div class="m"><span class="sq"></span>978</div></div></div>
+                <div class="cell"><div class="num sun">30</div></div>
+                <div class="cell"><div class="num">01</div></div>
+                <div class="cell"><div class="num">02</div></div>
+                <div class="cell"><div class="num">03</div></div>
+                <div class="cell"><div class="num">04</div></div>
+                <div class="cell"><div class="num">05</div></div>
                 <div class="cell"><div class="num sat">06</div></div>
 
-                <!-- 2주차 -->
                 <div class="cell"><div class="num sun">07</div></div>
-                <div class="cell"><div class="num">08</div><div class="marks"><div class="m"><span class="sq"></span>104</div><div class="m"><span class="sq"></span>211</div></div></div>
-                <div class="cell"><div class="num">09</div><div class="marks"><div class="m"><span class="sq"></span>200</div><div class="m"><span class="sq"></span>127</div></div></div>
-                <div class="cell"><div class="num">10</div><div class="marks"><div class="m"><span class="sq"></span>94</div><div class="m"><span class="sq"></span>100</div></div></div>
-                <div class="cell"><div class="num">11</div><div class="marks"><div class="m"><span class="sq b"></span>4</div><div class="m"><span class="sq"></span>104</div><div class="m"><span class="sq"></span>126</div></div></div>
-                <div class="cell"><div class="num">12</div><div class="marks"><div class="m"><span class="sq b"></span>61</div><div class="m"><span class="sq"></span>167</div><div class="m"><span class="sq"></span>131</div></div></div>
+                <div class="cell"><div class="num">08</div></div>
+                <div class="cell"><div class="num">09</div></div>
+                <div class="cell"><div class="num">10</div></div>
+                <div class="cell"><div class="num">11</div></div>
+                <div class="cell"><div class="num">12</div></div>
                 <div class="cell"><div class="num sat">13</div></div>
 
-                <!-- 3주차 -->
                 <div class="cell"><div class="num sun">14</div></div>
-                <div class="cell"><div class="num">15</div><div class="marks"><div class="m"><span class="sq"></span>18</div><div class="m"><span class="sq"></span>197</div></div></div>
-                <div class="cell"><div class="num">16</div><div class="marks"><div class="m"><span class="sq"></span>259</div><div class="m"><span class="sq"></span>150</div><div class="m"><span class="sq"></span>222</div></div></div>
-                <div class="cell selected"><div class="num">17</div><div class="marks"><div class="m"><span class="sq b"></span>5</div><div class="m"><span class="sq b"></span>3</div></div></div>
-                <div class="cell"><div class="num">18</div><div class="marks"><div class="m"><span class="sq b"></span>1</div></div></div>
+                <div class="cell"><div class="num">15</div></div>
+                <div class="cell"><div class="num">16</div></div>
+                <div class="cell selected"><div class="num">17</div></div>
+                <div class="cell"><div class="num">18</div></div>
                 <div class="cell"><div class="num">19</div></div>
                 <div class="cell"><div class="num sat">20</div></div>
-
-                <!-- 4주차 -->
-                <div class="cell"><div class="num sun">21</div></div>
-                <div class="cell"><div class="num">22</div></div>
-                <div class="cell"><div class="num">23</div></div>
-                <div class="cell"><div class="num">24</div></div>
-                <div class="cell"><div class="num sun">25</div></div>
-                <div class="cell"><div class="num">26</div></div>
-                <div class="cell"><div class="num sat">27</div></div>
-
-                <!-- 5주차 -->
-                <div class="cell"><div class="num sun">28</div></div>
-                <div class="cell"><div class="num">29</div></div>
-                <div class="cell"><div class="num">30</div></div>
-                <div class="cell"><div class="num">31</div><div class="marks"><div class="m"><span class="sq"></span>5560</div></div></div>
-                <div class="cell"><div class="num sun" style="opacity:.35;">01</div></div>
-                <div class="cell"><div class="num" style="opacity:.35;">02</div></div>
-                <div class="cell"><div class="num sat" style="opacity:.35;">03</div></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right task panel -->
         <div class="taskPanel">
           <div class="taskTabs">
-            <div id="tabAi" class="t active">AI연계과제</div>
+            <div class="t active">AI연계과제</div>
             <div class="t">필수케어</div>
             <div class="t">밀착케어</div>
             <div class="t">일정관리</div>
           </div>
-
           <div class="taskTableWrap">
-            <table aria-label="과제 일정 관리">
-              <thead>
-                <tr>
-                  <th style="width:36px;"></th>
-                  <th>과제명</th>
-                </tr>
-              </thead>
-              <tbody id="taskTbody">
-                <!-- JS로 렌더 -->
-              </tbody>
+            <table>
+              <thead><tr><th style="width:56px;">No</th><th>과제명</th></tr></thead>
+              <tbody id="taskTbody"></tbody>
             </table>
-            <div class="hint" style="padding-top:8px;">
-              * 상단 ‘AI연계과제’ 아이콘 클릭 또는 우측 과제 클릭 시 하단 고객 리스트가 표시됩니다.
-            </div>
+            <div class="hint">* 과제를 클릭하면 하단 고객 명단이 바뀝니다. 고객 선택 후 [실행]을 누르세요.</div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom customer list -->
       <div class="bottom">
         <div class="bottomHead">
           <div class="title">
@@ -879,22 +448,21 @@
           </div>
           <div style="display:flex;gap:6px;align-items:center;">
             <button id="btnClear">초기화</button>
-            <button id="btnRun">실행</button>
+            <button id="btnRun" class="pill-btn" disabled>실행</button>
           </div>
         </div>
         <div class="bottomBody">
-          <div id="custHint" class="hint">과제를 선택하면 고객 리스트가 표시됩니다.</div>
+          <div id="custHint" class="hint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
           <table id="custTable" style="display:none;">
             <thead>
               <tr>
-                <th style="width:72px;"></th>
+                <th style="width:60px;"></th>
                 <th style="width:86px;">실시여부</th>
                 <th style="width:110px;">고객번호</th>
                 <th style="width:90px;">고객명</th>
                 <th style="width:110px;">심의시작일</th>
                 <th style="width:110px;">심의종료일</th>
                 <th>추천사유</th>
-                <th style="width:120px;">전고객번호</th>
                 <th style="width:90px;">우선순위</th>
               </tr>
             </thead>
@@ -905,50 +473,323 @@
     </section>
   </div>
 
+  <!-- =========================
+      1차 팝업: 채널 선택(첨부2)
+  ========================== -->
+  <div id="overlay1" class="overlay">
+    <div class="modal modal1">
+      <div class="modalTop">
+        <div class="mtitle">AI Agent 과제 수행</div>
+        <button id="close1">닫기</button>
+      </div>
+      <div class="modal1Body">
+        <div class="agentBox">
+          <div class="agentTitle">AI Agent 과제 수행</div>
+          <div class="agentRow">
+            <div class="agentText" id="agentIntro">
+안녕하세요! AI CRM 아이참이에요~
+선택된 고객을 기반으로
+적합 채널과 스크립트를 추천해 드릴게요.
+            </div>
+            <div class="btnCol">
+              <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">2</span>명)</button>
+              <button id="btnGoSMS" class="btnBig secondary">문자 적합 고객 (3명)</button>
+            </div>
+          </div>
+          <div class="hint" style="padding:10px 0 0 0;">
+            * TM을 누르면 스크립트 생성/실행 화면이 별도로 열립니다. (문자는 추후 동일 방식으로 확장)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+      2차 팝업: TM 스크립트 생성/실행(크게)
+  ========================== -->
+  <div id="overlayTM" class="overlay">
+    <div class="modal modal2">
+      <div class="modalTop">
+        <div class="mtitle">TM 실행 하기</div>
+        <button id="closeTM">닫기</button>
+      </div>
+
+      <div class="modal2Body">
+        <!-- left big script -->
+        <div class="scriptPanel">
+          <div class="h">AI-Generated TM 스크립트</div>
+          <div id="scriptBox" class="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <button id="btnGenTM" class="btnBig" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
+          </div>
+        </div>
+
+        <!-- right pick + execute -->
+        <div class="tmSide">
+          <div class="h">고객 선택</div>
+          <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
+          <div id="tmPickList" class="tmPickList"></div>
+          <button id="btnTmExec" class="tmExec" disabled>TM 실행</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // ===== Demo data (캡쳐 형태에 맞춘 1~3개 과제 + 고객목록) =====
-    const TASKS = [
-      {
-        id:"T-001",
-        name:"★[성공] 신한카드 단말환경계정고객 담당자지정",
-        customers:[
-          {done:"N", custNo:"619384476", custName:"박상수", start:"20251126", end:"20251223", reason:"단말환경계정 미지정 고객", prev:"37600200", prio:"가임"},
-          {done:"N", custNo:"636620435", custName:"김수진", start:"20251120", end:"20251221", reason:"계정 지정 필요(업무이력)", prev:"115579700", prio:"가임"},
-          {done:"N", custNo:"640493572", custName:"정민수", start:"20251127", end:"20251224", reason:"업무 처리 지연 리스크", prev:"19972620", prio:"가임"},
-          {done:"N", custNo:"650104019", custName:"성현수", start:"20251201", end:"20251229", reason:"담당자 재지정 필요", prev:"27658550", prio:"가임"},
-          {done:"N", custNo:"645343377", custName:"김소진", start:"20251120", end:"20251217", reason:"지정 누락 점검 대상", prev:"11117300", prio:"가임"},
-        ]
-      },
-      {
-        id:"T-002",
-        name:"[점검] AI연계과제 대상 고객 정보 최신화",
-        customers:[
-          {done:"N", custNo:"612000111", custName:"이도현", start:"20251203", end:"20251231", reason:"연락처/직장정보 최신화 필요", prev:"-", prio:"나임"},
-          {done:"Y", custNo:"612000222", custName:"최은지", start:"20251205", end:"20251231", reason:"정보 최신화 완료", prev:"-", prio:"나임"},
-        ]
-      },
-      {
-        id:"T-003",
-        name:"[확인] 과제 누락/중복 이력 탐지 결과 확인",
-        customers:[
-          {done:"N", custNo:"699000333", custName:"홍길동", start:"20251210", end:"20251231", reason:"중복 과제 이력 확인 필요", prev:"-", prio:"다임"},
-        ]
-      }
+    /* =====================
+      1) 과제 리스트
+    ====================== */
+    const TASK_NAMES = [
+      "[예적금] 타행적금 만기도래",
+      "[예적금] 타행예금 만기도래",
+      "[예적금] 재형저축 만기도래",
+      "[예적금] 만기해지 후 미신규",
+      "[예적금] 가계대출 예적금 우대금리 미적용",
+      "[예적금] 전일자 중도해지",
+      "[예적금] 급여증가고객",
+      "[자산증대] 전일자 거액입금",
+      "[자산증대] 고자산가망고객",
+      "[공통] 비대면상품관심",
+      "[결제계좌] 타행결제계좌",
+      "[급여가계대출] 급여 우대금리 미적용"
     ];
 
+    function buildCustomersForTask(taskIdx){
+      const base = 600000000 + (taskIdx * 10000);
+      const names = ["박상수","김수진","정민수","성현수","김소진","이도현","최은지","홍길동","윤지아","한서준"];
+      const reasons = [
+        "만기 도래 사전 안내 및 재가입 유도",
+        "우대금리 조건 미충족(급여/결제계좌) 점검 필요",
+        "최근 대량 유입 자금 탐지(관계형성 기회)",
+        "타행 상품 보유/관심도 기반 전환 가능성",
+        "중도해지/이탈 신호 탐지"
+      ];
+      const prios = ["가","나","다","라","마"];
+      const n = 6 + (taskIdx % 3);
+      const list = [];
+      for(let i=0;i<n;i++){
+        const custNo = String(base + (i*37) + 123);
+        const custName = names[(taskIdx + i) % names.length];
+        const done = (i===0 && taskIdx%4===0) ? "Y" : "N";
+        const start = "202512" + String(10 + ((taskIdx+i)%15)).padStart(2,"0");
+        const end   = "202512" + String(20 + ((taskIdx+i)%10)).padStart(2,"0");
+        list.push({ done, custNo, custName, start, end, reason: reasons[(taskIdx+i)%reasons.length], prio: prios[(taskIdx+i)%prios.length] });
+      }
+      return list;
+    }
+
+    /* =====================
+      2) LLM 타이핑 스크립트
+    ====================== */
+    const SCRIPT_TM = `✨ AI-Generated TM 스크립트
+
+1. [점검사유 제시]
+- 고객님, 현재 보유 중인 상품/거래 현황을 점검해보니 우대금리 조건 적용이 누락될 수 있는 구간이 확인되어 안내드립니다.
+
+2. [개인화된 현황 요약]
+- 최근 거래 패턴 기준으로 ‘결제계좌/급여이체/잔액 유지’ 조건 중 일부가 미충족될 가능성이 있습니다.
+- 조건 충족 시 우대금리 적용으로 이자 혜택이 개선될 수 있습니다.
+
+3. [필요 조치 안내]
+- (1) 결제계좌를 당행으로 지정
+- (2) 급여이체 등록 여부 확인
+- (3) 일정 기간 평균잔액 유지
+
+4. [고객 설득 멘트 예시]
+- “고객님, 지금 조건만 정리해두시면 자동으로 우대가 적용되어 추가 혜택을 받으실 수 있습니다.”
+- “제가 체크리스트만 간단히 안내드릴 테니, 고객님 상황에 맞춰 가장 쉬운 방법으로 진행하시면 됩니다.”
+
+5. [마무리]
+- 지금 안내드린 사항 중 원하시는 방식으로 한 가지만 선택해 진행 도와드리겠습니다.
+`;
+
+    function typewriter(el, text, speed=10){
+      el.textContent = "";
+      let i = 0;
+      const timer = setInterval(()=>{
+        el.textContent += text[i] ?? "";
+        i++;
+        el.scrollTop = el.scrollHeight;
+        if(i >= text.length) clearInterval(timer);
+      }, speed);
+      return timer;
+    }
+
+    /* =====================
+      3) DOM
+    ====================== */
     const taskTbody = document.getElementById("taskTbody");
+    const custHint  = document.getElementById("custHint");
     const custTable = document.getElementById("custTable");
     const custTbody = document.getElementById("custTbody");
-    const custHint  = document.getElementById("custHint");
+    const btnClear  = document.getElementById("btnClear");
+    const btnRun    = document.getElementById("btnRun");
 
-    const icoAi = document.getElementById("icoAi");
-    const tabAi = document.getElementById("tabAi");
-    const btnClear = document.getElementById("btnClear");
+    // 1차 팝업
+    const overlay1  = document.getElementById("overlay1");
+    const close1    = document.getElementById("close1");
+    const btnGoTM   = document.getElementById("btnGoTM");
+    const btnGoSMS  = document.getElementById("btnGoSMS");
+    const tmCnt     = document.getElementById("tmCnt");
 
-    let selectedTaskId = null;
+    // 2차 TM 팝업
+    const overlayTM = document.getElementById("overlayTM");
+    const closeTM   = document.getElementById("closeTM");
+    const scriptBox = document.getElementById("scriptBox");
+    const btnGenTM  = document.getElementById("btnGenTM");
+    const tmPickList= document.getElementById("tmPickList");
+    const btnTmExec = document.getElementById("btnTmExec");
 
-    function esc(s){
-      return String(s)
+    let selectedTaskIdx = 0;
+    let currentCustomers = [];
+    let selectedCustNos = new Set();
+    let typingTimer = null;
+
+    /* =====================
+      4) Render tasks
+    ====================== */
+    function renderTasks(){
+      taskTbody.innerHTML = "";
+      TASK_NAMES.forEach((name, idx)=>{
+        const tr = document.createElement("tr");
+        tr.dataset.idx = idx;
+        tr.innerHTML = `<td>${idx+1}</td><td>${escapeHtml(name)}</td>`;
+        tr.addEventListener("click", ()=>selectTask(idx));
+        if(idx===0) tr.classList.add("active");
+        taskTbody.appendChild(tr);
+      });
+    }
+
+    function selectTask(idx){
+      selectedTaskIdx = idx;
+      [...taskTbody.querySelectorAll("tr")].forEach(tr=>{
+        tr.classList.toggle("active", Number(tr.dataset.idx) === idx);
+      });
+
+      currentCustomers = buildCustomersForTask(idx);
+      selectedCustNos.clear();
+      renderCustomers();
+      updateRunButton();
+      custHint.textContent = `선택 과제: ${TASK_NAMES[idx]} (고객 ${currentCustomers.length}명)`;
+      custTable.style.display = "table";
+    }
+
+    /* =====================
+      5) Render customers (bottom)
+    ====================== */
+    function renderCustomers(){
+      custTbody.innerHTML = "";
+      currentCustomers.forEach((c)=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input class="chk" type="checkbox" data-cust="${c.custNo}"/></td>
+          <td>${escapeHtml(c.done)}</td>
+          <td>${escapeHtml(c.custNo)}</td>
+          <td>${escapeHtml(c.custName)}</td>
+          <td>${escapeHtml(c.start)}</td>
+          <td>${escapeHtml(c.end)}</td>
+          <td style="white-space:normal;">${escapeHtml(c.reason)}</td>
+          <td>${escapeHtml(c.prio)}</td>
+        `;
+        custTbody.appendChild(tr);
+      });
+
+      custTbody.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+        cb.addEventListener("change", (e)=>{
+          const custNo = e.target.dataset.cust;
+          if(e.target.checked) selectedCustNos.add(custNo);
+          else selectedCustNos.delete(custNo);
+          updateRunButton();
+        });
+      });
+    }
+
+    function updateRunButton(){
+      btnRun.disabled = selectedCustNos.size === 0;
+    }
+
+    /* =====================
+      6) Popup control
+    ====================== */
+    function openOverlay(el){ el.style.display = "flex"; }
+    function closeOverlay(el){ el.style.display = "none"; }
+
+    function openModal1(){
+      const picked = Array.from(selectedCustNos);
+      tmCnt.textContent = Math.min(2, picked.length); // 시연용
+      openOverlay(overlay1);
+    }
+
+    function resetTMModal(){
+      if(typingTimer) clearInterval(typingTimer);
+      typingTimer = null;
+      scriptBox.textContent = "TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.";
+      tmPickList.innerHTML = "";
+      btnTmExec.disabled = true;
+    }
+
+    function openTMModal(){
+      // 1차 팝업은 닫고, 2차 TM 팝업을 연다
+      closeOverlay(overlay1);
+      resetTMModal();
+      renderTmPickList();
+      openOverlay(overlayTM);
+    }
+
+    /* =====================
+      7) TM pick list + exec
+    ====================== */
+    function renderTmPickList(){
+      tmPickList.innerHTML = "";
+      const pickedNos = Array.from(selectedCustNos);
+      const show = pickedNos.slice(0,2).map(no => currentCustomers.find(c=>c.custNo===no)).filter(Boolean);
+
+      show.forEach((c, idx)=>{
+        const el = document.createElement("div");
+        el.className = "custPickItem";
+        el.innerHTML = `
+          <label style="display:flex;gap:8px;align-items:center;">
+            <input class="chk tmPick" type="checkbox" data-cust="${c.custNo}" ${idx===0 ? "checked" : ""}/>
+            <span><b>${escapeHtml(c.custNo)}</b> &nbsp; ${escapeHtml(c.custName)} 고객</span>
+          </label>
+        `;
+        tmPickList.appendChild(el);
+      });
+
+      btnTmExec.disabled = show.length === 0;
+
+      tmPickList.querySelectorAll(".tmPick").forEach(cb=>{
+        cb.addEventListener("change", ()=>{
+          const any = [...tmPickList.querySelectorAll(".tmPick")].some(x=>x.checked);
+          btnTmExec.disabled = !any;
+        });
+      });
+    }
+
+    function generateTM(){
+      if(typingTimer) clearInterval(typingTimer);
+      typingTimer = typewriter(scriptBox, SCRIPT_TM, 9);
+    }
+
+    function execTM(){
+      const chosen = [...tmPickList.querySelectorAll(".tmPick")]
+        .filter(x=>x.checked)
+        .map(x=>x.dataset.cust);
+
+      const names = chosen.map(no=>{
+        const c = currentCustomers.find(v=>v.custNo===no);
+        return c ? `${c.custNo}(${c.custName})` : no;
+      });
+
+      alert(`TM 실행(시연):\n${names.join(", ")}\n\n※ 실제 운영에서는 여기서 TM 콜/업무처리로 연동됩니다.`);
+      closeOverlay(overlayTM);
+    }
+
+    /* =====================
+      8) Utils
+    ====================== */
+    function escapeHtml(str){
+      return String(str)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -956,76 +797,38 @@
         .replaceAll("'","&#039;");
     }
 
-    function renderTaskList(){
-      taskTbody.innerHTML = "";
-      TASKS.forEach((t, idx) => {
-        const tr = document.createElement("tr");
-        tr.dataset.taskId = t.id;
-        tr.innerHTML = `
-          <td><input class="chk" type="checkbox" ${idx===0 ? "checked" : ""} onclick="event.stopPropagation();"/></td>
-          <td>${esc(t.name)}</td>
-        `;
-        tr.addEventListener("click", () => selectTask(t.id));
-        taskTbody.appendChild(tr);
-      });
-    }
+    /* =====================
+      9) Events
+    ====================== */
+    btnRun.addEventListener("click", openModal1);
+    btnClear.addEventListener("click", ()=>{
+      selectedCustNos.clear();
+      custTbody.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.checked=false);
+      updateRunButton();
+      custHint.textContent = `선택 과제: ${TASK_NAMES[selectedTaskIdx]} (고객 ${currentCustomers.length}명)`;
+    });
 
-    function selectTask(taskId){
-      selectedTaskId = taskId;
+    // 1차 팝업
+    close1.addEventListener("click", ()=>closeOverlay(overlay1));
+    overlay1.addEventListener("click", (e)=>{ if(e.target === overlay1) closeOverlay(overlay1); });
 
-      [...taskTbody.querySelectorAll("tr")].forEach(tr=>{
-        tr.classList.toggle("active", tr.dataset.taskId === taskId);
-      });
+    btnGoTM.addEventListener("click", openTMModal);
 
-      const t = TASKS.find(x=>x.id===taskId);
-      if(!t) return;
+    // 문자(추후 구현) - 현재는 안내만
+    btnGoSMS.addEventListener("click", ()=>{
+      alert("문자 적합 고객 화면은 다음 단계에서 동일 구조(별도 2차 팝업)로 추가합니다.");
+    });
 
-      // 고객 테이블 렌더
-      custTbody.innerHTML = "";
-      t.customers.forEach(c=>{
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><input class="chk" type="checkbox"/></td>
-          <td>${esc(c.done)}</td>
-          <td>${esc(c.custNo)}</td>
-          <td>${esc(c.custName)}</td>
-          <td>${esc(c.start)}</td>
-          <td>${esc(c.end)}</td>
-          <td>${esc(c.reason)}</td>
-          <td>${esc(c.prev)}</td>
-          <td>${esc(c.prio)}</td>
-        `;
-        custTbody.appendChild(tr);
-      });
+    // TM 2차 팝업
+    closeTM.addEventListener("click", ()=>closeOverlay(overlayTM));
+    overlayTM.addEventListener("click", (e)=>{ if(e.target === overlayTM) closeOverlay(overlayTM); });
 
-      custHint.textContent = `선택 과제: ${t.name} (고객 ${t.customers.length}명)`;
-      custTable.style.display = "table";
-    }
+    btnGenTM.addEventListener("click", generateTM);
+    btnTmExec.addEventListener("click", execTM);
 
-    function clearSelection(){
-      selectedTaskId = null;
-      custTbody.innerHTML = "";
-      custTable.style.display = "none";
-      custHint.textContent = "과제를 선택하면 고객 리스트가 표시됩니다.";
-      [...taskTbody.querySelectorAll("tr")].forEach(tr=>tr.classList.remove("active"));
-      icoAi.classList.remove("active");
-    }
-
-    // 상단 아이콘(AI연계과제) 클릭 시: 우측 탭 활성 + 과제 리스트 표시(이미 표시 중이지만, 시연용으로 동작 부여)
-    function activateAi(){
-      icoAi.classList.add("active");
-      tabAi.classList.add("active");
-      // 기본으로 첫 과제 선택(원하시면 제거 가능)
-      if(!selectedTaskId) selectTask(TASKS[0].id);
-    }
-
-    icoAi.addEventListener("click", activateAi);
-    icoAi.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); activateAi(); }});
-    btnClear.addEventListener("click", clearSelection);
-
-    // initial
-    renderTaskList();
-    clearSelection();
+    // init
+    renderTasks();
+    selectTask(0);
   </script>
 </body>
 </html>
