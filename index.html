@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CRM 메인화면 시연 목업 (캡쳐 유사)</title>
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --panel:#ffffff;
+      --line:#cfd6df;
+      --line2:#e6ebf2;
+      --text:#1f2937;
+      --muted:#6b7280;
+
+      /* 캡쳐 톤에 맞춘 블루 계열 */
+      --navy:#0f2f63;
+      --blue:#1f5aa6;
+      --blue2:#2f6fbf;
+      --sky:#e6f0ff;
+
+      --leftbar:#2d3a4a;
+      --leftbar2:#213040;
+
+      --btn:#eef3fb;
+      --btnLine:#aebad0;
+
+      --tab:#f2f6fb;
+      --tabLine:#bfcbe0;
+
+      --accent:#6c4ee6; /* 좌측 날짜 패널 보라 */
+      --accent2:#8a6bff;
+
+      --shadow: 0 6px 16px rgba(16,24,40,.10);
+      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* ======= Top area (캡쳐 유사 2단 헤더) ======= */
+    .top{
+      position:sticky; top:0; z-index:20;
+      box-shadow: var(--shadow);
+    }
+    .top1{
+      height:42px;
+      background:var(--navy);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      padding:0 12px;
+      gap:10px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+    .brand .next{
+      display:flex; align-items:flex-end; gap:6px;
+      font-size:18px;
+      line-height:1;
+    }
+    .brand .next .the{ font-size:10px; opacity:.9; margin-bottom:2px; }
+    .brand .next .word{ font-size:22px; font-weight:900; }
+    .brand .title{ font-size:18px; font-weight:900; margin-left:2px; }
+
+    .searchbar{
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      max-width:860px;
+      margin-left:8px;
+    }
+    .searchbar .select{
+      background:#ffffff;
+      border:1px solid rgba(255,255,255,.0);
+      height:28px;
+      border-radius:4px;
+      padding:0 8px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      color:#111827;
+      font-size:12px;
+      min-width:96px;
+    }
+    .searchbar input{
+      flex:1;
+      height:28px;
+      border-radius:4px;
+      border:none;
+      outline:none;
+      padding:0 10px;
+      font-size:12px;
+    }
+    .searchbar .go{
+      height:28px;
+      padding:0 10px;
+      border-radius:4px;
+      border:1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.12);
+      color:#fff;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .top1-right{
+      display:flex; align-items:center; gap:8px;
+      white-space:nowrap;
+      font-size:12px;
+      opacity:.95;
+    }
+    .chip{
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px;
+      padding:6px 10px;
+    }
+
+    .top2{
+      height:34px;
+      background:#3a78c7;
+      display:flex;
+      align-items:center;
+      padding:0 10px;
+      gap:10px;
+      color:#fff;
+      font-size:12px;
+    }
+    .tabs{
+      display:flex; align-items:center; gap:6px;
+    }
+    .tab{
+      padding:6px 10px;
+      border-radius:4px 4px 0 0;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      cursor:pointer;
+    }
+    .tab.active{
+      background:#e9f1ff;
+      color:#0f2f63;
+      border-color:#e9f1ff;
+      font-weight:800;
+    }
+    .top2 .spacer{ flex:1; }
+    .top2 .mini-btn{
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.25);
+      color:#fff;
+      border-radius:4px;
+      padding:6px 10px;
+      cursor:pointer;
+    }
+
+    /* ======= App Layout ======= */
+    .wrap{
+      display:grid;
+      grid-template-columns: 44px 260px 1fr;
+      height: calc(100vh - 76px);
+    }
+
+    /* Left vertical icon bar (캡쳐 유사) */
+    .vbar{
+      background: linear-gradient(180deg, var(--leftbar), var(--leftbar2));
+      border-right:1px solid #1a2531;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:8px 0;
+      gap:10px;
+    }
+    .vico{
+      width:28px; height:28px;
+      border-radius:6px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      user-select:none;
+    }
+    .vico.dim{ opacity:.7; }
+
+    /* Left side panel */
+    .left{
+      background:#f7f8fb;
+      border-right:1px solid var(--line);
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+    }
+    .left-head{
+      padding:10px;
+      background:#ffffff;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .left-head .btn{
+      height:24px;
+      padding:0 10px;
+      border-radius:3px;
+      border:1px solid var(--btnLine);
+      background: var(--btn);
+      font-size:12px;
+      cursor:pointer;
+    }
+    .left-card{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      overflow:auto;
+    }
+    .box{
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:4px;
+      padding:8px;
+    }
+    .box .title{
+      font-weight:800;
+      font-size:12px;
+      margin-bottom:8px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .fields{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:6px;
+    }
+    .field{
+      display:grid;
+      grid-template-columns: 72px 1fr;
+      gap:6px;
+      align-items:center;
+      font-size:12px;
+    }
+    .field input{
+      height:22px;
+      border:1px solid var(--line);
+      border-radius:2px;
+      padding:0 6px;
+      background:#fff;
+      outline:none;
+      font-size:12px;
+    }
+    .mini-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:6px;
+      margin-top:6px;
+    }
+    .mini-tile{
+      background:#2ea6b4;
+      border:1px solid #1c8894;
+      color:#fff;
+      height:26px;
+      border-radius:3px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px;
+      font-weight:800;
+      user-select:none;
+    }
+
+    /* Main area */
+    .main{
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      padding:10px;
+      gap:10px;
+    }
+
+    .content-top{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:4px;
+      padding:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .content-top .path{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .content-top .actions{
+      display:flex; gap:6px;
+    }
+    .content-top .actions button{
+      height:24px;
+      padding:0 10px;
+      border-radius:999px;
+      border:1px solid var(--btnLine);
+      background:var(--btn);
+      font-size:12px;
+      cursor:pointer;
+    }
+
+    /* 3-column middle: date tile + calendar + right tasks */
+    .mid{
+      display:grid;
+      grid-template-columns: 138px 1fr 420px;
+      gap:10px;
+      min-height:0;
+      flex:1;
+    }
+
+    .dateTile{
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border-radius:4px;
+      border:1px solid rgba(0,0,0,.05);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:10px;
+      min-height:0;
+    }
+    .dateTile .ym{
+      font-weight:800;
+      font-size:12px;
+      opacity:.95;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .dateTile .big{
+      text-align:center;
+      margin-top:4px;
+    }
+    .dateTile .big .d{
+      font-size:40px;
+      font-weight:900;
+      line-height:1;
+    }
+    .dateTile .big .dow{
+      font-size:12px;
+      font-weight:800;
+      opacity:.95;
+      margin-top:4px;
+      letter-spacing:.3px;
+    }
+    .dateTile .ar{
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:18px;
+      opacity:.9;
+      user-select:none;
+    }
+
+    .calendarPanel, .taskPanel{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:4px;
+      min-height:0;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Top icon row (캡쳐처럼 원형 아이콘) */
+    .iconRow{
+      padding:10px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      gap:18px;
+      justify-content:center;
+      align-items:center;
+      background:#fff;
+    }
+    .round{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .round .circle{
+      width:44px; height:44px;
+      border-radius:999px;
+      background:#f1f5ff;
+      border:1px solid #d7e2ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      color:#2f6fbf;
+      position:relative;
+    }
+    .round .circle .dot{
+      position:absolute;
+      right:6px; bottom:6px;
+      width:10px; height:10px;
+      border-radius:999px;
+      background:#ff8a00;
+      border:2px solid #fff;
+      display:none;
+    }
+    .round.active .circle{
+      background:#e6f0ff;
+      border-color:#9fbaf0;
+      box-shadow: inset 0 0 0 2px rgba(47,111,191,.10);
+    }
+    .round.active .circle .dot{ display:block; }
+    .round .label{
+      font-size:12px;
+      font-weight:800;
+      color:#1f2937;
+    }
+    .round .label span{
+      color:#2f6fbf;
+      font-weight:900;
+    }
+
+    /* Calendar grid (캡쳐 유사) */
+    .calBody{
+      padding:10px;
+      overflow:auto;
+    }
+    .calHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:6px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .calGrid{
+      border:1px solid var(--line);
+      border-radius:4px;
+      overflow:hidden;
+    }
+    .calWeek{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      background:#f7fafc;
+      border-bottom:1px solid var(--line);
+      font-size:12px;
+      font-weight:800;
+      color:#374151;
+    }
+    .calWeek div{
+      padding:8px;
+      border-right:1px solid var(--line);
+      text-align:center;
+    }
+    .calWeek div:last-child{ border-right:none; }
+
+    .calDays{
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+    }
+    .cell{
+      height:88px;
+      border-right:1px solid var(--line2);
+      border-bottom:1px solid var(--line2);
+      padding:6px 8px;
+      position:relative;
+      font-size:12px;
+      background:#fff;
+    }
+    .cell:nth-child(7n){ border-right:none; }
+    .num{
+      font-weight:800;
+      color:#111827;
+    }
+    .num.sun{ color:#e11d48; }
+    .num.sat{ color:#2563eb; }
+    .marks{
+      margin-top:6px;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      color:#111827;
+      font-size:11px;
+      opacity:.9;
+    }
+    .m{
+      display:flex; gap:4px; align-items:center;
+    }
+    .sq{
+      width:5px;height:5px;background:#f59e0b;border-radius:1px;
+      display:inline-block;
+    }
+    .sq.b{ background:#3b82f6; }
+    .cell.selected{
+      background:#eaf5ff;
+      outline:2px solid rgba(47,111,191,.35);
+      outline-offset:-2px;
+    }
+
+    /* Task panel right: 탭 + 표 */
+    .taskTabs{
+      display:flex;
+      gap:2px;
+      border-bottom:1px solid var(--line);
+      background:#f7fafc;
+      padding:6px 6px 0 6px;
+    }
+    .taskTabs .t{
+      padding:6px 10px;
+      border:1px solid var(--tabLine);
+      border-bottom:none;
+      border-radius:4px 4px 0 0;
+      background:var(--tab);
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .taskTabs .t.active{
+      background:#fff;
+      font-weight:900;
+      color:#1f5aa6;
+      border-color:#9fbaf0;
+    }
+
+    .taskTableWrap{
+      padding:8px;
+      overflow:auto;
+      flex:1;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+    thead th{
+      background:#f3f7ff;
+      border:1px solid var(--line);
+      padding:8px 8px;
+      text-align:left;
+      white-space:nowrap;
+    }
+    tbody td{
+      border:1px solid var(--line2);
+      padding:8px 8px;
+      white-space:nowrap;
+      background:#fff;
+    }
+    tbody tr:hover td{ background:#f8fbff; }
+    tbody tr.active td{
+      background:#fff4d6;
+      border-color:#f2d08a;
+    }
+    .chk{
+      width:14px; height:14px;
+      accent-color:#1f5aa6;
+    }
+
+    /* Bottom customers table (캡쳐처럼 하단 박스) */
+    .bottom{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:4px;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      height:220px;
+      min-height:220px;
+    }
+    .bottomHead{
+      padding:8px 10px;
+      border-bottom:1px solid var(--line);
+      background:#f7fafc;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .bottomHead .title{
+      font-weight:900;
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .radio{
+      display:flex; align-items:center; gap:10px;
+      font-size:12px;
+      color:#374151;
+      font-weight:700;
+    }
+    .bottomHead button{
+      height:24px;
+      padding:0 10px;
+      border-radius:3px;
+      border:1px solid var(--btnLine);
+      background:var(--btn);
+      cursor:pointer;
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .bottomBody{
+      overflow:auto;
+      flex:1;
+    }
+
+    .hint{
+      padding:10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 1280px){
+      .mid{ grid-template-columns: 138px 1fr; }
+      .taskPanel{ display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top">
+    <div class="top1">
+      <div class="brand">
+        <div class="next"><span class="the">THE</span><span class="word">next</span></div>
+        <div class="title">대면1차</div>
+      </div>
+
+      <div class="searchbar">
+        <div class="select">통합검색 ▾</div>
+        <input placeholder="화면번호 또는 화면명을 검색하세요." />
+        <button class="go">검색</button>
+      </div>
+
+      <div class="top1-right">
+        <div class="chip">워크플로우</div>
+        <div class="chip">신규 과장</div>
+        <div class="chip">개인정보</div>
+        <div class="chip">도움말</div>
+      </div>
+    </div>
+
+    <div class="top2">
+      <div class="tabs">
+        <div class="tab">개별조회</div>
+        <div class="tab">일괄조회</div>
+        <div class="tab active">[351182] 오늘의일정</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="mini-btn">◀</button>
+      <button class="mini-btn">▶</button>
+      <button class="mini-btn">⤢</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Left vertical bar -->
+    <aside class="vbar" aria-label="좌측 아이콘 바">
+      <div class="vico">≡</div>
+      <div class="vico dim">⌂</div>
+      <div class="vico dim">★</div>
+      <div class="vico dim">⎙</div>
+      <div class="vico dim">↺</div>
+      <div class="vico dim">?</div>
+      <div style="flex:1"></div>
+      <div class="vico dim">⚙</div>
+      <div class="vico dim">⏻</div>
+    </aside>
+
+    <!-- Left panel -->
+    <section class="left">
+      <div class="left-head">
+        <button class="btn">초기화</button>
+        <button class="btn">조회</button>
+        <button class="btn">고객종합정보</button>
+      </div>
+
+      <div class="left-card">
+        <div class="box">
+          <div class="title">조회 조건 <span style="font-weight:700;color:var(--muted);font-size:11px;">(목업)</span></div>
+          <div class="fields">
+            <div class="field"><div>고객번호</div><input/></div>
+            <div class="field"><div>실명번호</div><input/></div>
+            <div class="field"><div>계좌번호</div><input/></div>
+            <div class="field"><div>휴대폰</div><input/></div>
+            <div class="field"><div>직장전화</div><input/></div>
+            <div class="field"><div>자택전화</div><input/></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="title">채널 바로가기</div>
+          <div class="mini-grid">
+            <div class="mini-tile">DM</div>
+            <div class="mini-tile">SMS</div>
+            <div class="mini-tile">MOB</div>
+            <div class="mini-tile">URL</div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="title">과제상황 바로가기</div>
+          <div class="fields" style="gap:4px;">
+            <div class="field"><div>방카</div><input placeholder="—"/></div>
+            <div class="field"><div>대출</div><input placeholder="—"/></div>
+            <div class="field"><div>연금</div><input placeholder="—"/></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main -->
+    <section class="main">
+      <div class="content-top">
+        <div class="path">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
+        <div class="actions">
+          <button>초기화</button>
+          <button>조회</button>
+          <button>닫기</button>
+        </div>
+      </div>
+
+      <div class="mid">
+        <!-- Date tile -->
+        <div class="dateTile">
+          <div class="ym">
+            <span>2025-12</span>
+            <span style="opacity:.95;font-weight:900;">▦</span>
+          </div>
+          <div class="big">
+            <div class="d">17</div>
+            <div class="dow">WEDNESDAY</div>
+          </div>
+          <div class="ar">
+            <span>‹</span>
+            <span>›</span>
+          </div>
+        </div>
+
+        <!-- Calendar + top icons -->
+        <div class="calendarPanel">
+          <div class="iconRow">
+            <div id="icoAi" class="round" role="button" tabindex="0" aria-label="AI연계과제">
+              <div class="circle">👤<span class="dot"></span></div>
+              <div class="label">AI연계과제<span>(3)</span></div>
+            </div>
+            <div class="round">
+              <div class="circle">🧩</div>
+              <div class="label">필수케어<span>(5)</span></div>
+            </div>
+            <div class="round">
+              <div class="circle">📎</div>
+              <div class="label">밀착케어<span>(0)</span></div>
+            </div>
+            <div class="round">
+              <div class="circle">📋</div>
+              <div class="label">일정정보<span>(0)</span></div>
+            </div>
+            <div class="round">
+              <div class="circle">📊</div>
+              <div class="label">브랜치싱글뷰</div>
+            </div>
+            <div class="round">
+              <div class="circle">🎯</div>
+              <div class="label">스마일콜<span>(0)</span></div>
+            </div>
+            <div class="round">
+              <div class="circle">🎯</div>
+              <div class="label">비대면 필수<span>(0)</span></div>
+            </div>
+          </div>
+
+          <div class="calBody">
+            <div class="calHeader">
+              <div>일정정보</div>
+              <div>
+                <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">월간일정</button>
+                <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">일정추가</button>
+              </div>
+            </div>
+
+            <div class="calGrid" aria-label="캘린더">
+              <div class="calWeek">
+                <div style="color:#e11d48;">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div style="color:#2563eb;">토</div>
+              </div>
+
+              <div class="calDays">
+                <!-- 1주차 -->
+                <div class="cell"><div class="num sun">30</div><div class="marks"><div class="m"><span class="sq"></span>133</div></div></div>
+                <div class="cell"><div class="num">01</div><div class="marks"><div class="m"><span class="sq"></span>133</div></div></div>
+                <div class="cell"><div class="num">02</div><div class="marks"><div class="m"><span class="sq"></span>195</div></div></div>
+                <div class="cell"><div class="num">03</div><div class="marks"><div class="m"><span class="sq"></span>192</div><div class="m"><span class="sq"></span>129</div><div class="m"><span class="sq"></span>222</div></div></div>
+                <div class="cell"><div class="num">04</div><div class="marks"><div class="m"><span class="sq"></span>125</div><div class="m"><span class="sq"></span>372</div></div></div>
+                <div class="cell"><div class="num">05</div><div class="marks"><div class="m"><span class="sq"></span>147</div><div class="m"><span class="sq"></span>978</div></div></div>
+                <div class="cell"><div class="num sat">06</div></div>
+
+                <!-- 2주차 -->
+                <div class="cell"><div class="num sun">07</div></div>
+                <div class="cell"><div class="num">08</div><div class="marks"><div class="m"><span class="sq"></span>104</div><div class="m"><span class="sq"></span>211</div></div></div>
+                <div class="cell"><div class="num">09</div><div class="marks"><div class="m"><span class="sq"></span>200</div><div class="m"><span class="sq"></span>127</div></div></div>
+                <div class="cell"><div class="num">10</div><div class="marks"><div class="m"><span class="sq"></span>94</div><div class="m"><span class="sq"></span>100</div></div></div>
+                <div class="cell"><div class="num">11</div><div class="marks"><div class="m"><span class="sq b"></span>4</div><div class="m"><span class="sq"></span>104</div><div class="m"><span class="sq"></span>126</div></div></div>
+                <div class="cell"><div class="num">12</div><div class="marks"><div class="m"><span class="sq b"></span>61</div><div class="m"><span class="sq"></span>167</div><div class="m"><span class="sq"></span>131</div></div></div>
+                <div class="cell"><div class="num sat">13</div></div>
+
+                <!-- 3주차 -->
+                <div class="cell"><div class="num sun">14</div></div>
+                <div class="cell"><div class="num">15</div><div class="marks"><div class="m"><span class="sq"></span>18</div><div class="m"><span class="sq"></span>197</div></div></div>
+                <div class="cell"><div class="num">16</div><div class="marks"><div class="m"><span class="sq"></span>259</div><div class="m"><span class="sq"></span>150</div><div class="m"><span class="sq"></span>222</div></div></div>
+                <div class="cell selected"><div class="num">17</div><div class="marks"><div class="m"><span class="sq b"></span>5</div><div class="m"><span class="sq b"></span>3</div></div></div>
+                <div class="cell"><div class="num">18</div><div class="marks"><div class="m"><span class="sq b"></span>1</div></div></div>
+                <div class="cell"><div class="num">19</div></div>
+                <div class="cell"><div class="num sat">20</div></div>
+
+                <!-- 4주차 -->
+                <div class="cell"><div class="num sun">21</div></div>
+                <div class="cell"><div class="num">22</div></div>
+                <div class="cell"><div class="num">23</div></div>
+                <div class="cell"><div class="num">24</div></div>
+                <div class="cell"><div class="num sun">25</div></div>
+                <div class="cell"><div class="num">26</div></div>
+                <div class="cell"><div class="num sat">27</div></div>
+
+                <!-- 5주차 -->
+                <div class="cell"><div class="num sun">28</div></div>
+                <div class="cell"><div class="num">29</div></div>
+                <div class="cell"><div class="num">30</div></div>
+                <div class="cell"><div class="num">31</div><div class="marks"><div class="m"><span class="sq"></span>5560</div></div></div>
+                <div class="cell"><div class="num sun" style="opacity:.35;">01</div></div>
+                <div class="cell"><div class="num" style="opacity:.35;">02</div></div>
+                <div class="cell"><div class="num sat" style="opacity:.35;">03</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right task panel -->
+        <div class="taskPanel">
+          <div class="taskTabs">
+            <div id="tabAi" class="t active">AI연계과제</div>
+            <div class="t">필수케어</div>
+            <div class="t">밀착케어</div>
+            <div class="t">일정관리</div>
+          </div>
+
+          <div class="taskTableWrap">
+            <table aria-label="과제 일정 관리">
+              <thead>
+                <tr>
+                  <th style="width:36px;"></th>
+                  <th>과제명</th>
+                </tr>
+              </thead>
+              <tbody id="taskTbody">
+                <!-- JS로 렌더 -->
+              </tbody>
+            </table>
+            <div class="hint" style="padding-top:8px;">
+              * 상단 ‘AI연계과제’ 아이콘 클릭 또는 우측 과제 클릭 시 하단 고객 리스트가 표시됩니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom customer list -->
+      <div class="bottom">
+        <div class="bottomHead">
+          <div class="title">
+            AI Agent 알림센터
+            <span class="radio">
+              <label><input type="radio" name="r" checked/> 고객 현황</label>
+              <label><input type="radio" name="r"/> Final Report</label>
+            </span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button id="btnClear">초기화</button>
+            <button id="btnRun">실행</button>
+          </div>
+        </div>
+        <div class="bottomBody">
+          <div id="custHint" class="hint">과제를 선택하면 고객 리스트가 표시됩니다.</div>
+          <table id="custTable" style="display:none;">
+            <thead>
+              <tr>
+                <th style="width:72px;"></th>
+                <th style="width:86px;">실시여부</th>
+                <th style="width:110px;">고객번호</th>
+                <th style="width:90px;">고객명</th>
+                <th style="width:110px;">심의시작일</th>
+                <th style="width:110px;">심의종료일</th>
+                <th>추천사유</th>
+                <th style="width:120px;">전고객번호</th>
+                <th style="width:90px;">우선순위</th>
+              </tr>
+            </thead>
+            <tbody id="custTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ===== Demo data (캡쳐 형태에 맞춘 1~3개 과제 + 고객목록) =====
+    const TASKS = [
+      {
+        id:"T-001",
+        name:"★[성공] 신한카드 단말환경계정고객 담당자지정",
+        customers:[
+          {done:"N", custNo:"619384476", custName:"박상수", start:"20251126", end:"20251223", reason:"단말환경계정 미지정 고객", prev:"37600200", prio:"가임"},
+          {done:"N", custNo:"636620435", custName:"김수진", start:"20251120", end:"20251221", reason:"계정 지정 필요(업무이력)", prev:"115579700", prio:"가임"},
+          {done:"N", custNo:"640493572", custName:"정민수", start:"20251127", end:"20251224", reason:"업무 처리 지연 리스크", prev:"19972620", prio:"가임"},
+          {done:"N", custNo:"650104019", custName:"성현수", start:"20251201", end:"20251229", reason:"담당자 재지정 필요", prev:"27658550", prio:"가임"},
+          {done:"N", custNo:"645343377", custName:"김소진", start:"20251120", end:"20251217", reason:"지정 누락 점검 대상", prev:"11117300", prio:"가임"},
+        ]
+      },
+      {
+        id:"T-002",
+        name:"[점검] AI연계과제 대상 고객 정보 최신화",
+        customers:[
+          {done:"N", custNo:"612000111", custName:"이도현", start:"20251203", end:"20251231", reason:"연락처/직장정보 최신화 필요", prev:"-", prio:"나임"},
+          {done:"Y", custNo:"612000222", custName:"최은지", start:"20251205", end:"20251231", reason:"정보 최신화 완료", prev:"-", prio:"나임"},
+        ]
+      },
+      {
+        id:"T-003",
+        name:"[확인] 과제 누락/중복 이력 탐지 결과 확인",
+        customers:[
+          {done:"N", custNo:"699000333", custName:"홍길동", start:"20251210", end:"20251231", reason:"중복 과제 이력 확인 필요", prev:"-", prio:"다임"},
+        ]
+      }
+    ];
+
+    const taskTbody = document.getElementById("taskTbody");
+    const custTable = document.getElementById("custTable");
+    const custTbody = document.getElementById("custTbody");
+    const custHint  = document.getElementById("custHint");
+
+    const icoAi = document.getElementById("icoAi");
+    const tabAi = document.getElementById("tabAi");
+    const btnClear = document.getElementById("btnClear");
+
+    let selectedTaskId = null;
+
+    function esc(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderTaskList(){
+      taskTbody.innerHTML = "";
+      TASKS.forEach((t, idx) => {
+        const tr = document.createElement("tr");
+        tr.dataset.taskId = t.id;
+        tr.innerHTML = `
+          <td><input class="chk" type="checkbox" ${idx===0 ? "checked" : ""} onclick="event.stopPropagation();"/></td>
+          <td>${esc(t.name)}</td>
+        `;
+        tr.addEventListener("click", () => selectTask(t.id));
+        taskTbody.appendChild(tr);
+      });
+    }
+
+    function selectTask(taskId){
+      selectedTaskId = taskId;
+
+      [...taskTbody.querySelectorAll("tr")].forEach(tr=>{
+        tr.classList.toggle("active", tr.dataset.taskId === taskId);
+      });
+
+      const t = TASKS.find(x=>x.id===taskId);
+      if(!t) return;
+
+      // 고객 테이블 렌더
+      custTbody.innerHTML = "";
+      t.customers.forEach(c=>{
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input class="chk" type="checkbox"/></td>
+          <td>${esc(c.done)}</td>
+          <td>${esc(c.custNo)}</td>
+          <td>${esc(c.custName)}</td>
+          <td>${esc(c.start)}</td>
+          <td>${esc(c.end)}</td>
+          <td>${esc(c.reason)}</td>
+          <td>${esc(c.prev)}</td>
+          <td>${esc(c.prio)}</td>
+        `;
+        custTbody.appendChild(tr);
+      });
+
+      custHint.textContent = `선택 과제: ${t.name} (고객 ${t.customers.length}명)`;
+      custTable.style.display = "table";
+    }
+
+    function clearSelection(){
+      selectedTaskId = null;
+      custTbody.innerHTML = "";
+      custTable.style.display = "none";
+      custHint.textContent = "과제를 선택하면 고객 리스트가 표시됩니다.";
+      [...taskTbody.querySelectorAll("tr")].forEach(tr=>tr.classList.remove("active"));
+      icoAi.classList.remove("active");
+    }
+
+    // 상단 아이콘(AI연계과제) 클릭 시: 우측 탭 활성 + 과제 리스트 표시(이미 표시 중이지만, 시연용으로 동작 부여)
+    function activateAi(){
+      icoAi.classList.add("active");
+      tabAi.classList.add("active");
+      // 기본으로 첫 과제 선택(원하시면 제거 가능)
+      if(!selectedTaskId) selectTask(TASKS[0].id);
+    }
+
+    icoAi.addEventListener("click", activateAi);
+    icoAi.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); activateAi(); }});
+    btnClear.addEventListener("click", clearSelection);
+
+    // initial
+    renderTaskList();
+    clearSelection();
+  </script>
+</body>
+</html>
