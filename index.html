@@ -22,6 +22,9 @@
 
       --shadow: 0 6px 16px rgba(16,24,40,.10);
       --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+      /* ✅ 추가: 우측 iconRow 높이 동기화용(초기값) */
+      --iconRowH: 86px;
     }
     *{ box-sizing:border-box; }
     body{ margin:0; font-family:var(--font); background:var(--bg); color:var(--text); }
@@ -109,17 +112,28 @@
       min-height:0; flex:1;
     }
 
-    /* Date tile */
+    /* ==========================
+       ✅ Date tile (수정)
+       - 우측 iconRow 높이와 동일하게 맞춤
+    =========================== */
     .dateTile{
       background: linear-gradient(180deg, var(--accent), var(--accent2));
       border-radius:4px; border:1px solid rgba(0,0,0,.05); color:#fff;
-      display:flex; flex-direction:column; justify-content:space-between; padding:10px; min-height:0;
+
+      /* ✅ 핵심: 우측 iconRow 높이와 동일 */
+      height: var(--iconRowH);
+
+      display:flex;
+      flex-direction:column;
+      justify-content:center;   /* 기존 space-between → 중앙정렬 */
+      padding:10px;
+      min-height:0;
     }
     .dateTile .ym{ font-weight:800; font-size:12px; opacity:.95; display:flex; justify-content:space-between; align-items:center; }
-    .dateTile .big{ text-align:center; margin-top:4px; }
-    .dateTile .big .d{ font-size:40px; font-weight:900; line-height:1; }
-    .dateTile .big .dow{ font-size:12px; font-weight:800; opacity:.95; margin-top:4px; letter-spacing:.3px; }
-    .dateTile .ar{ display:flex; justify-content:space-between; align-items:center; font-size:18px; opacity:.9; user-select:none; }
+    .dateTile .big{ text-align:center; margin-top:2px; }
+    .dateTile .big .d{ font-size:28px; font-weight:900; line-height:1; }     /* 40 → 28 */
+    .dateTile .big .dow{ font-size:11px; font-weight:800; opacity:.95; margin-top:3px; letter-spacing:.2px; }
+    .dateTile .ar{ display:flex; justify-content:space-between; align-items:center; font-size:16px; opacity:.9; user-select:none; margin-top:4px; }
 
     .calendarPanel, .taskPanel{
       background:#fff; border:1px solid var(--line); border-radius:4px;
@@ -140,31 +154,62 @@
     .round .label{ font-size:12px; font-weight:800; color:#1f2937; }
     .round .label span{ color:#2f6fbf; font-weight:900; }
 
-    .calBody{ padding:10px; overflow:auto; }
-    .calHeader{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; font-size:12px; color:var(--muted); }
-    .calGrid{ border:1px solid var(--line); border-radius:4px; overflow:hidden; }
-    .calWeek{ display:grid; grid-template-columns: repeat(7, 1fr); background:#f7fafc; border-bottom:1px solid var(--line); font-size:12px; font-weight:800; color:#374151; }
-    .calWeek div{ padding:8px; border-right:1px solid var(--line); text-align:center; }
-    .calWeek div:last-child{ border-right:none; }
-    .calDays{ display:grid; grid-template-columns: repeat(7, 1fr); }
-    .cell{
-      height:92px; border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);
-      padding:6px 8px; font-size:12px; background:#fff; cursor:pointer;
+    /* ======= ✅ Weekly view (simple) ======= */
+    .weekBody{ padding:10px; overflow:auto; }
+    .weekHeader{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:10px; gap:10px;
+      font-size:12px; color:var(--muted);
     }
-    .cell:nth-child(7n){ border-right:none; }
-    .num{ font-weight:800; color:#111827; }
-    .num.sun{ color:#e11d48; }
-    .num.sat{ color:#2563eb; }
-    .cell.dim{ background:#fafafa; color:#9ca3af; }
-    .cell.selected{ background:#eaf5ff; outline:2px solid rgba(47,111,191,.35); outline-offset:-2px; }
-    .badges{ margin-top:6px; display:flex; flex-direction:column; gap:4px; }
-    .badgeRow{ display:flex; align-items:center; gap:6px; font-weight:800; }
-    .sq{ width:10px; height:10px; border-radius:2px; }
-    .sq.ai{ background:var(--cal-ai); }
-    .sq.req{ background:var(--cal-req); }
-    .sq.close{ background:var(--cal-close); }
-    .sq.sched{ background:var(--cal-sched); }
-    .badgeRow .n{ font-size:11px; color:#111827; }
+    .weekHeader .leftGroup{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .weekHeader .wkTitle{ font-weight:900; color:#0f2f63; }
+    .weekHeader .btns{ display:flex; gap:6px; }
+    .wkBtn{
+      height:26px; padding:0 10px; border-radius:8px;
+      border:1px solid var(--btnLine); background:var(--btn);
+      cursor:pointer; font-size:12px; font-weight:900;
+    }
+    .weekList{
+      border:1px solid var(--line);
+      border-radius:10px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .weekRow{
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap:10px;
+      padding:10px 12px;
+      border-bottom:1px solid var(--line2);
+      cursor:pointer;
+      align-items:center;
+    }
+    .weekRow:last-child{ border-bottom:none; }
+    .weekRow:hover{ background:#f8fbff; }
+    .weekRow.active{ background:#eaf5ff; outline:2px solid rgba(47,111,191,.28); outline-offset:-2px; }
+    .weekDate{
+      display:flex; flex-direction:column; gap:2px;
+      font-weight:900; color:#111827;
+    }
+    .weekDate .sub{ font-size:11px; color:var(--muted); font-weight:800; }
+    .weekSummary{
+      font-size:12px; color:#111827; font-weight:800;
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .wkTag{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #e1e7ef;
+      background:#fbfcff;
+      white-space:nowrap;
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; }
+    .dot.ai{ background:var(--cal-ai); }
+    .dot.req{ background:var(--cal-req); }
+    .dot.close{ background:var(--cal-close); }
+    .dot.sch{ background:var(--cal-sched); }
+    .wkEmpty{ color:var(--muted); font-weight:800; }
 
     /* Right task panel */
     .taskTabs{ display:flex; gap:2px; border-bottom:1px solid var(--line); background:#f7fafc; padding:6px 6px 0 6px; }
@@ -362,8 +407,7 @@
     }
 
     /* ==========================
-       ✅ Bottom Final Report (첨부 이미지 간략 형태)
-       - "고객리스트 영역" 안에서 구현
+       Bottom Final Report
     =========================== */
     .finalInline{
       padding:10px;
@@ -443,6 +487,7 @@
       flex:0 0 auto;
     }
     .tick.on{ background:#e6f0ff; border-color:#9fbaf0; }
+
     @media (max-width: 1320px){
       .mid{ grid-template-columns: 138px 1fr; }
       .taskPanel{ display:none; }
@@ -453,6 +498,7 @@
       .smsGrid{ grid-template-columns: 1fr; }
       .finalKpiRow{ grid-template-columns: 1fr; }
       .finalInlineTop select{ min-width: 240px; }
+      .weekRow{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -543,7 +589,6 @@
         </div>
       </div>
 
-      <!-- 기본 화면 영역(캘린더 + 과제패널) -->
       <div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
         <div class="mid">
           <div class="dateTile">
@@ -563,22 +608,22 @@
               <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">비대면 필수</div></div>
             </div>
 
-            <div class="calBody">
-              <div class="calHeader">
-                <div>일정정보 (2026-01)</div>
-                <div>
-                  <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">월간일정</button>
-                  <button style="height:22px;border:1px solid var(--btnLine);background:var(--btn);border-radius:3px;cursor:pointer;font-size:12px;">일정추가</button>
+            <!-- ✅ 월간 캘린더 제거 → 주단위 리스트 -->
+            <div class="weekBody">
+              <div class="weekHeader">
+                <div class="leftGroup">
+                  <div class="wkTitle" id="wkTitle">주간 일정</div>
+                  <div id="wkRange">-</div>
+                </div>
+                <div class="btns">
+                  <button class="wkBtn" id="btnPrevWeek">이전 주</button>
+                  <button class="wkBtn" id="btnThisWeek">선택일 주</button>
+                  <button class="wkBtn" id="btnNextWeek">다음 주</button>
                 </div>
               </div>
 
-              <div class="calGrid">
-                <div class="calWeek">
-                  <div style="color:#e11d48;">일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div style="color:#2563eb;">토</div>
-                </div>
-                <div class="calDays" id="calDays"></div>
-              </div>
-              <div class="hint">* 날짜를 선택하면 우측 과제 리스트/상단 카운트가 선택 날짜 기준으로 동적으로 변경됩니다.</div>
+              <div class="weekList" id="weekList"></div>
+              <div class="hint">* 날짜는 주(week) 단위로 표시되며, 각 날짜별 과제 건수는 텍스트로만 제공합니다.</div>
             </div>
           </div>
 
@@ -649,7 +694,7 @@
               </table>
             </div>
 
-            <!-- ✅ Final Report (하단 영역에 “간략” 구현) -->
+            <!-- Final Report -->
             <div id="finalInlineArea" class="finalInline" style="display:none;">
               <div class="finalInlineTop">
                 <div class="l">
@@ -816,7 +861,7 @@
     </div>
   </div>
 
-  <!-- ✅ MyCare 바로가기 팝업 -->
+  <!-- MyCare 바로가기 팝업 -->
   <div id="overlayMyCare" class="overlay">
     <div class="modal modalMyCare">
       <div class="modalTop">
@@ -883,9 +928,22 @@
     const DATE_TASK_MAP = {}; // { "YYYY-MM-DD": { AI:[idx], REQ:[idx], CLOSE:[idx], SCH:[idx] } }
 
     function ymd(y,m,d){ return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
+    function dayOfWeekKor(dow){
+      return ["일","월","화","수","목","금","토"][dow];
+    }
     function dayOfWeekStr(y,m,d){
       const w = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
       return w[new Date(y,m-1,d).getDay()];
+    }
+    function parseDateKey(key){
+      const [y,m,d] = key.split("-").map(Number);
+      return new Date(y, m-1, d);
+    }
+    function formatDateKey(dt){
+      return ymd(dt.getFullYear(), dt.getMonth()+1, dt.getDate());
+    }
+    function isInMonth(key){
+      return key.startsWith("2026-01-");
     }
 
     function seededPickIndices(total, count, seed){
@@ -938,6 +996,101 @@
       const target = 20 + (seed % 180);
       const done = Math.min(target, Math.floor(target * (0.25 + ((seed % 50) / 100))));
       return { target, done };
+    }
+
+    /* =====================
+      ✅ 1-2) Weekly view 렌더
+    ====================== */
+    function getWeekStartSunday(dateKey){
+      const dt = parseDateKey(dateKey);
+      const dow = dt.getDay(); // 0=Sun
+      const start = new Date(dt);
+      start.setDate(dt.getDate() - dow);
+      return start;
+    }
+
+    function addDays(dateObj, days){
+      const d = new Date(dateObj);
+      d.setDate(d.getDate() + days);
+      return d;
+    }
+
+    function buildSummaryTags(c){
+      const tags = [];
+      if(c.AI>0) tags.push(`<span class="wkTag"><span class="dot ai"></span>AI연계과제 ${c.AI}건</span>`);
+      if(c.REQ>0) tags.push(`<span class="wkTag"><span class="dot req"></span>필수케어 ${c.REQ}건</span>`);
+      if(c.CLOSE>0) tags.push(`<span class="wkTag"><span class="dot close"></span>밀착케어 ${c.CLOSE}건</span>`);
+      if(c.SCH>0) tags.push(`<span class="wkTag"><span class="dot sch"></span>일정정보 ${c.SCH}건</span>`);
+      if(tags.length===0) return `<span class="wkEmpty">등록 과제 없음</span>`;
+      return tags.join("");
+    }
+
+    function renderWeek(dateKey){
+      const weekList = document.getElementById("weekList");
+      const wkRange = document.getElementById("wkRange");
+
+      const start = getWeekStartSunday(dateKey);
+      const end = addDays(start, 6);
+
+      const inRangeText = `${formatDateKey(start)} ~ ${formatDateKey(end)}`;
+      wkRange.textContent = inRangeText;
+
+      weekList.innerHTML = "";
+
+      for(let i=0;i<7;i++){
+        const dt = addDays(start, i);
+        const key = formatDateKey(dt);
+
+        const row = document.createElement("div");
+        row.className = "weekRow";
+        if(key === selectedDateKey) row.classList.add("active");
+
+        const showKey = `${String(dt.getMonth()+1).padStart(2,"0")}.${String(dt.getDate()).padStart(2,"0")}`;
+        const dowKor = dayOfWeekKor(dt.getDay());
+
+        let summaryHtml = `<span class="wkEmpty">해당 월 범위 외</span>`;
+        if(isInMonth(key)){
+          const counts = getCountsForDate(key);
+          summaryHtml = buildSummaryTags(counts);
+        }
+
+        row.innerHTML = `
+          <div class="weekDate">
+            <div>${showKey} (${dowKor})</div>
+            <div class="sub">${isInMonth(key) ? key : "월 외"}</div>
+          </div>
+          <div class="weekSummary">${summaryHtml}</div>
+        `;
+
+        row.addEventListener("click", ()=>{
+          if(!isInMonth(key)) return;
+          selectDate(key);
+        });
+
+        weekList.appendChild(row);
+      }
+    }
+
+    function moveWeek(delta){
+      const dt = parseDateKey(selectedDateKey);
+      dt.setDate(dt.getDate() + delta);
+      const key = formatDateKey(dt);
+
+      // 데모는 2026-01만 허용. 월 밖이면 막음.
+      if(!isInMonth(key)) return;
+      selectDate(key);
+    }
+
+    /* =====================
+      ✅ 1-3) DateTile 높이 동기화 (추가)
+      - 우측 iconRow 높이와 동일하게 맞춤
+    ====================== */
+    function syncDateTileHeightToIconRow(){
+      const iconRowEl = document.getElementById("iconRow");
+      if(!iconRowEl) return;
+
+      const h = Math.ceil(iconRowEl.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--iconRowH", h + "px");
     }
 
     /* =====================
@@ -1005,76 +1158,7 @@ ${product} 관련 ${kw} 안내드립니다.
     }));
 
     /* =====================
-      4) TM 스크립트 타이핑
-    ====================== */
-    const SCRIPT_TM = `✨ AI-Generated TM 스크립트
-
-1. [점검사유 제시]
-- 고객님, 현재 보유 중인 상품/거래 현황을 점검해보니 우대금리 조건 적용이 누락될 수 있는 구간이 확인되어 안내드립니다.
-
-2. [개인화된 현황 요약]
-- 최근 거래 패턴 기준으로 ‘결제계좌/급여이체/잔액 유지’ 조건 중 일부가 미충족될 가능성이 있습니다.
-- 조건 충족 시 우대금리 적용으로 이자 혜택이 개선될 수 있습니다.
-
-3. [필요 조치 안내]
-- (1) 결제계좌를 당행으로 지정
-- (2) 급여이체 등록 여부 확인
-- (3) 일정 기간 평균잔액 유지
-
-4. [고객 설득 멘트 예시]
-- “고객님, 지금 조건만 정리해두시면 자동으로 우대가 적용되어 추가 혜택을 받으실 수 있습니다.”
-- “제가 체크리스트만 간단히 안내드릴 테니, 고객님 상황에 맞춰 가장 쉬운 방법으로 진행하시면 됩니다.”
-
-5. [마무리]
-- 지금 안내드린 사항 중 원하시는 방식으로 한 가지만 선택해 진행 도와드리겠습니다.
-`;
-
-    function typewriter(el, text, speed=9){
-      el.textContent = "";
-      let i = 0;
-      const timer = setInterval(()=>{
-        el.textContent += text[i] ?? "";
-        i++;
-        el.scrollTop = el.scrollHeight;
-        if(i >= text.length) clearInterval(timer);
-      }, speed);
-      return timer;
-    }
-
-    /* =====================
-      5) 고객 브리핑(타이핑 출력)
-    ====================== */
-    function buildBriefing(cust, taskName){
-      const today = "2026.01.19";
-      const maturity = "2050.06.15";
-      const balance = (295_851_504).toLocaleString();
-      const rateMax = "0.10%";
-      const rateNow = "3.97%";
-      const savedInterest = (24_879).toLocaleString();
-
-      return `【고객상황 및 접촉 전략】
-- 상품명: ${taskName} (관련 가망 고객)
-- 잔액: ${balance}원
-- 약정시작일자: 2020.06.15
-- 만기일자: ${maturity}
-- 가입/상품유형: 예적금/정기예금/적금(더미)
-- 최대금리경로: ${rateMax}
-- 현재금리: ${rateNow}
-- 우대금리 적용 시 예상 절감(이자): ${savedInterest}원 (더미)
-
-【최적 접촉 정보】
-- 집/회사/실거주지 주소(신한)와 영업점 주소(인천) 일치(더미)
-- 전화 최적 시간대: 10:00
-- 전일 콜 시도: 1건
-- 마케팅 동의 여부: 미기재(더미)
-- 전략: “조건 충족 1개만 선택” 방식으로 부담 최소화 및 즉시 행동 유도 권장
-
-※ 본 브리핑은 LLM이 고객 데이터/과제 맥락을 요약해 생성한 시연용 더미입니다.
-생성기준일: ${today}`;
-    }
-
-    /* =====================
-      ✅ 6) Bottom Final Report 더미 성과 (첨부 이미지형 간략)
+      ✅ 4) 고객별 브리핑/스크립트 seed 유틸
     ====================== */
     function hashSeed(str){
       let h = 2166136261;
@@ -1089,29 +1173,172 @@ ${product} 관련 ${kw} 안내드립니다.
       x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
       return (x >>> 0) / 4294967295;
     }
+    function pick(arr, r){
+      return arr[Math.floor(r * arr.length)];
+    }
 
+    /* =====================
+      5) TM 스크립트 타이핑 (✅ 고객별로 다르게)
+    ====================== */
+    function buildTMScriptByCustomer(cust, taskName, dateKey){
+      const seed = hashSeed(`${dateKey}|${taskName}|${cust.custNo}|TM`);
+      const r1 = rand01(seed+11), r2 = rand01(seed+37), r3 = rand01(seed+71), r4 = rand01(seed+101);
+
+      const painPoints = [
+        "우대금리 조건 누락 가능성",
+        "만기 도래/재가입 공백",
+        "결제계좌/급여이체 미연동",
+        "평균잔액 유지 조건 미충족",
+        "타행 이동 징후(거래 감소)"
+      ];
+      const actions = [
+        "결제계좌를 당행으로 지정",
+        "급여이체 등록 여부 확인",
+        "모바일 전자통지 등록",
+        "우대조건 1개만 즉시 충족",
+        "만기 리마인드 + 재예치 안내"
+      ];
+      const closing = [
+        "오늘은 부담 없이 ‘가능한 것 1개’만 골라서 진행해보시죠.",
+        "제가 체크리스트만 정리해드리고, 고객님은 한 가지만 선택하시면 됩니다.",
+        "지금 바로 확인만 하셔도 손해 보는 구간을 줄일 수 있습니다."
+      ];
+
+      const pt = pick(painPoints, r1);
+      const act1 = pick(actions, r2);
+      const act2 = pick(actions, r3);
+      const closeMent = pick(closing, r4);
+
+      const callTime = (9 + Math.floor(r2*4)) + ":00";
+      const benefit = (10 + Math.floor(r3*40)) + "bp";
+      const est = Math.floor((r4*80_000) + 12_000).toLocaleString();
+
+      return `✨ AI-Generated TM 스크립트 (고객별 맞춤)
+
+[대상] ${cust.custNo} / ${cust.custName} 고객님
+[과제] ${taskName}
+[권장 콜 타임] ${callTime}
+
+1) 오프닝
+- “${cust.custName} 고객님, 신한은행입니다. 잠시 안내드려도 괜찮으실까요?”
+
+2) 점검 사유 (개인화)
+- “최근 거래/상품 상태를 점검해보니 '${pt}' 구간이 보여 안내드립니다.”
+- “조건만 정리하시면 우대 적용 가능성이 있어, 체감 혜택은 최대 약 ${benefit} 수준 개선 여지가 있습니다. (더미)”
+
+3) 핵심 제안 (고객 부담 최소화)
+- “오늘은 복잡하게 하지 않고, 아래 중 ‘한 가지만’ 선택하시면 됩니다.”
+  (1) ${act1}
+  (2) ${act2}
+
+4) 예상효과 (짧게)
+- “조건이 맞으면 고객님 기준 예상 이자/혜택 개선이 약 ${est}원 수준으로 추정됩니다. (더미)”
+
+5) 마무리/동의 유도
+- “${closeMent}”
+`;
+    }
+
+    function typewriter(el, text, speed=9){
+      el.textContent = "";
+      let i = 0;
+      const timer = setInterval(()=>{
+        el.textContent += text[i] ?? "";
+        i++;
+        el.scrollTop = el.scrollHeight;
+        if(i >= text.length) clearInterval(timer);
+      }, speed);
+      return timer;
+    }
+
+    /* =====================
+      6) 고객 브리핑(✅ 고객별로 다르게)
+    ====================== */
+    function buildBriefing(cust, taskName, dateKey){
+      const seed = hashSeed(`${dateKey}|${taskName}|${cust.custNo}|BRIEF`);
+      const r1 = rand01(seed+11), r2 = rand01(seed+37), r3 = rand01(seed+71), r4 = rand01(seed+101), r5 = rand01(seed+151);
+
+      const balance = Math.floor(10_000_000 + r1*490_000_000).toLocaleString();
+      const avgBal = Math.floor(5_000_000 + r2*120_000_000).toLocaleString();
+      const lastContact = `${String(1+Math.floor(r3*18)).padStart(2,"0")}일 전`;
+      const bestTime = `${9+Math.floor(r4*7)}:${(r5>0.6? "30":"00")}`;
+      const maturityY = 2026 + Math.floor(r2*4);
+      const maturityM = 1 + Math.floor(r3*12);
+      const maturityD = 1 + Math.floor(r4*28);
+      const maturity = `${maturityY}.${String(maturityM).padStart(2,"0")}.${String(maturityD).padStart(2,"0")}`;
+
+      const segments = ["생활금융형", "자산증대 가망형", "만기 민감형", "혜택 민감형", "디지털 선호형"];
+      const seg = pick(segments, r1);
+
+      const keySignals = [
+        "최근 타행 이체 비중 증가(더미)",
+        "만기 이후 재가입 공백 가능성(더미)",
+        "우대조건 1~2개 미충족 추정(더미)",
+        "급여/결제 연결 약화 신호(더미)",
+        "최근 잔액 변동성 확대(더미)"
+      ];
+
+      const nextBest = [
+        "‘한 가지 조건’만 즉시 충족시키는 방향으로 안내",
+        "만기 리마인드 후 재예치/재가입 옵션 제시",
+        "결제계좌/급여이체 중 쉬운 것부터 연결",
+        "모바일 전자통지 등록으로 관계 유지 비용 절감",
+        "고객 관심사(우대/혜택) 중심으로 짧게 제시"
+      ];
+
+      const signal1 = pick(keySignals, r2);
+      const signal2 = pick(keySignals, r3);
+      const nbo = pick(nextBest, r4);
+
+      const est = Math.floor(5_000 + r5*95_000).toLocaleString();
+      const today = `${dateKey.replaceAll("-",".")}`;
+
+      return `【고객상황 및 접촉 전략 (고객별 맞춤)】
+
+[기본정보]
+- 고객: ${cust.custNo} / ${cust.custName}
+- 세그(더미): ${seg}
+- 과제: ${taskName}
+- 기준일: ${today}
+
+[핵심 지표(더미)]
+- 현재 잔액: ${balance}원
+- 최근 3개월 평균잔액: ${avgBal}원
+- 마지막 접촉: ${lastContact}
+- 최적 콜 시간: ${bestTime}
+- 만기/변동 주의 구간: ${maturity}
+
+[관찰 신호(더미)]
+- ${signal1}
+- ${signal2}
+
+[추천 액션]
+- ${nbo}
+- 예상 혜택/절감: 약 ${est}원 수준 개선 여지 (더미)
+
+※ 본 브리핑은 데모용 가상 데이터 기반으로, 고객/과제/날짜에 따라 내용이 달라지도록 생성됩니다.
+`;
+    }
+
+    /* =====================
+      7) Bottom Final Report 더미
+    ====================== */
     function buildFinalInlineMetrics(dateKey, taskName){
       const seed = hashSeed(`${dateKey}|${taskName}|INLINE`);
       const r1 = rand01(seed + 11);
       const r2 = rand01(seed + 37);
       const r3 = rand01(seed + 71);
 
-      // 첨부 이미지 느낌: 완료대상/완료/미완료
-      const total = 100 + Math.floor(r1 * 900);               // 100~999
-      const done = Math.floor(total * (0.15 + r2 * 0.35));     // 15%~50%
+      const total = 100 + Math.floor(r1 * 900);
+      const done = Math.floor(total * (0.15 + r2 * 0.35));
       const notDone = Math.max(0, total - done);
+      const touched = Math.floor(done * (0.6 + r3 * 0.35));
 
-      // 완료건수(접촉)도 간단 지표로 사용
-      const touched = Math.floor(done * (0.6 + r3 * 0.35));    // done 중 60%~95% 정도
-
-      // 체크리스트 문구(첨부 이미지 스타일 단순)
       const lines = [
         `접촉 완료 ${done.toLocaleString()}명 중 적립식 상품 신규 1건 / ${Math.floor(rand01(seed+201)*80_000_000+5_000_000).toLocaleString()}원 완료`,
         `접촉 완료 ${done.toLocaleString()}명 중 거치식 상품 신규 2건 / ${Math.floor(rand01(seed+301)*120_000_000+10_000_000).toLocaleString()}원 완료`,
         `영업점 접근 고객과제 성과 확인 요망입니다.`
       ];
-
-      // 체크 여부도 더미로 일부 on
       const checks = [
         rand01(seed+501) > 0.25,
         rand01(seed+601) > 0.35,
@@ -1144,9 +1371,8 @@ ${product} 관련 ${kw} 안내드립니다.
     }
 
     /* =====================
-      7) DOM
+      8) DOM
     ====================== */
-    const calDays = document.getElementById("calDays");
     const bigDay = document.getElementById("bigDay");
     const bigDow = document.getElementById("bigDow");
 
@@ -1170,12 +1396,17 @@ ${product} 관련 ${kw} 안내드립니다.
     const cntCLOSE = document.getElementById("cntCLOSE");
     const cntSCH   = document.getElementById("cntSCH");
 
-    /* ✅ Bottom Final Inline */
+    /* Bottom Final Inline */
     const radioCust = document.getElementById("radioCust");
     const radioFinal = document.getElementById("radioFinal");
     const custArea = document.getElementById("custArea");
     const finalInlineArea = document.getElementById("finalInlineArea");
     const finalInlineTaskSelect = document.getElementById("finalInlineTaskSelect");
+
+    /* Weekly buttons */
+    const btnPrevWeek = document.getElementById("btnPrevWeek");
+    const btnNextWeek = document.getElementById("btnNextWeek");
+    const btnThisWeek = document.getElementById("btnThisWeek");
 
     /* SMS */
     const overlaySMS = document.getElementById("overlaySMS");
@@ -1212,11 +1443,11 @@ ${product} 관련 ${kw} 안내드립니다.
     const overlayMyCare = document.getElementById("overlayMyCare");
     const closeMyCare = document.getElementById("closeMyCare");
 
-    /* 헤더 전체선택 체크박스 */
+    /* 헤더 전체선택 */
     const chkAllCustomers = document.getElementById("chkAllCustomers");
 
     /* =====================
-      8) 상태
+      9) 상태
     ====================== */
     let selectedCategory = "AI";
     let selectedDateKey = "2026-01-19";
@@ -1230,87 +1461,14 @@ ${product} 관련 ${kw} 안내드립니다.
     let selectedTaskName = "";
 
     /* =====================
-      9) 캘린더 렌더
+      10) UI helper
     ====================== */
-    function buildCalendar(){
-      calDays.innerHTML = "";
-
-      const first = new Date(CAL_YEAR, CAL_MONTH-1, 1);
-      const firstDow = first.getDay();
-      const lastDate = new Date(CAL_YEAR, CAL_MONTH, 0).getDate();
-
-      const prevLast = new Date(CAL_YEAR, CAL_MONTH-1, 0).getDate();
-      const totalCells = 42;
-      let dayNum = 1;
-
-      for(let i=0;i<totalCells;i++){
-        const cell = document.createElement("div");
-        cell.className = "cell";
-
-        let dObj, showNum, isDim=false;
-
-        if(i < firstDow){
-          isDim = true;
-          showNum = (prevLast - (firstDow-1 - i));
-          dObj = new Date(CAL_YEAR, CAL_MONTH-2, showNum);
-        } else if(dayNum <= lastDate){
-          showNum = dayNum;
-          dObj = new Date(CAL_YEAR, CAL_MONTH-1, showNum);
-          dayNum++;
-        } else {
-          isDim = true;
-          showNum = (dayNum - lastDate);
-          dObj = new Date(CAL_YEAR, CAL_MONTH, showNum);
-          dayNum++;
-        }
-
-        const dow = dObj.getDay();
-        const isSun = dow===0, isSat = dow===6;
-        const numClass = isSun ? "num sun" : (isSat ? "num sat" : "num");
-
-        if(isDim) cell.classList.add("dim");
-
-        const key = ymd(dObj.getFullYear(), dObj.getMonth()+1, dObj.getDate());
-
-        const showBadges = (key.startsWith("2026-01-"));
-        const counts = showBadges ? getCountsForDate(key) : null;
-
-        cell.innerHTML = `
-          <div class="${numClass}">${showNum}</div>
-          ${counts && (counts.AI+counts.REQ+counts.CLOSE+counts.SCH>0) ? `
-            <div class="badges">
-              ${counts.AI>0 ? `<div class="badgeRow"><span class="sq ai"></span><span class="n">${counts.AI}</span></div>` : ``}
-              ${counts.REQ>0 ? `<div class="badgeRow"><span class="sq req"></span><span class="n">${counts.REQ}</span></div>` : ``}
-              ${counts.CLOSE>0 ? `<div class="badgeRow"><span class="sq close"></span><span class="n">${counts.CLOSE}</span></div>` : ``}
-              ${counts.SCH>0 ? `<div class="badgeRow"><span class="sq sched"></span><span class="n">${counts.SCH}</span></div>` : ``}
-            </div>
-          ` : ``}
-        `;
-
-        if(key === selectedDateKey) cell.classList.add("selected");
-
-        cell.addEventListener("click", ()=>{
-          if(!key.startsWith("2026-01-")) return;
-          selectDate(key);
-        });
-
-        calDays.appendChild(cell);
-      }
-    }
-
     function updateBigDate(dateKey){
       const d = Number(dateKey.split("-")[2]);
       bigDay.textContent = String(d);
       bigDow.textContent = dayOfWeekStr(CAL_YEAR, CAL_MONTH, d);
     }
 
-    function refreshSelectedCell(){
-      buildCalendar();
-    }
-
-    /* =====================
-      10) 카테고리/탭 전환 + 카운트 갱신
-    ====================== */
     function setActiveIcons(cat){
       [...iconRow.querySelectorAll(".round")].forEach(r=>{
         r.classList.toggle("active", r.dataset.cat === cat);
@@ -1330,6 +1488,9 @@ ${product} 관련 ${kw} 안내드립니다.
       cntSCH.textContent   = `(${c.SCH})`;
     }
 
+    /* =====================
+      11) 카테고리 전환
+    ====================== */
     function selectCategory(cat){
       if(["ETC1","ETC2","ETC3"].includes(cat)){
         alert("해당 아이콘은 별도 화면으로 이동하는 영역입니다. (데모에서는 화면 전환만 구현)");
@@ -1355,6 +1516,9 @@ ${product} 관련 ${kw} 안내드립니다.
       } else {
         bottomPanel.style.display = "none";
       }
+
+      /* ✅ iconRow 높이 변화 가능성 대응 */
+      syncDateTileHeightToIconRow();
     }
 
     iconRow.querySelectorAll(".round").forEach(el=>{
@@ -1365,7 +1529,7 @@ ${product} 관련 ${kw} 안내드립니다.
     });
 
     /* =====================
-      11) 날짜 선택
+      12) 날짜 선택
     ====================== */
     function selectDate(dateKey){
       selectedDateKey = dateKey;
@@ -1375,11 +1539,11 @@ ${product} 관련 ${kw} 안내드립니다.
       currentTasksForDate = DATE_TASK_MAP[dateKey] || {AI:[],REQ:[],CLOSE:[],SCH:[]};
 
       renderTasksForSelectedDateAndCategory();
-      refreshSelectedCell();
+      renderWeek(selectedDateKey);
 
-      // ✅ Final Report 모드면: 하단 리포트 재렌더
       if(isFinalMode()){
         refreshFinalInlineDropdown();
+        syncDateTileHeightToIconRow();
         return;
       }
 
@@ -1394,10 +1558,13 @@ ${product} 관련 ${kw} 안내드립니다.
           selectTaskAI(0);
         }
       }
+
+      /* ✅ 날짜 변경 시에도 재동기화 */
+      syncDateTileHeightToIconRow();
     }
 
     /* =====================
-      12) 우측 과제 리스트 렌더
+      13) 우측 과제 리스트 렌더
     ====================== */
     function setTaskTableHeaderForCategory(cat){
       if(cat === "REQ" || cat === "CLOSE"){
@@ -1425,7 +1592,6 @@ ${product} 관련 ${kw} 안내드립니다.
         taskTable.style.display = "none";
         return;
       }
-      taskEmpty.style.display = "block";
       taskEmpty.style.display = "none";
       taskTable.style.display = "table";
 
@@ -1461,7 +1627,7 @@ ${product} 관련 ${kw} 안내드립니다.
     }
 
     /* =====================
-      13) AI 과제 선택 → 고객 리스트
+      14) AI 과제 선택 → 고객 리스트
     ====================== */
     function selectTaskAI(idxWithinDate){
       selectedTaskIdxWithinDate = idxWithinDate;
@@ -1482,7 +1648,6 @@ ${product} 관련 ${kw} 안내드립니다.
       custHint.textContent = `선택 과제: ${selectedTaskName} (고객 ${currentCustomers.length}명)`;
       custTable.style.display = "table";
 
-      // ✅ Final 모드면: 드롭다운 우선 선택 갱신 + 리포트 재렌더
       if(isFinalMode()){
         refreshFinalInlineDropdown();
       }
@@ -1574,13 +1739,13 @@ ${product} 관련 ${kw} 안내드립니다.
     });
 
     /* =====================
-      14) 팝업 공통
+      15) 팝업 공통
     ====================== */
     function openOverlay(el){ el.style.display = "flex"; }
     function closeOverlay(el){ el.style.display = "none"; }
 
     /* =====================
-      15) 1차 팝업(채널 선택)
+      16) 1차 팝업(채널 선택)
     ====================== */
     function openModal1(){
       const picked = Array.from(selectedCustNos);
@@ -1593,7 +1758,7 @@ ${product} 관련 ${kw} 안내드립니다.
     overlay1.addEventListener("click", (e)=>{ if(e.target === overlay1) closeOverlay(overlay1); });
 
     /* =====================
-      16) TM 팝업
+      17) TM 팝업 (✅ 고객별 스크립트 생성)
     ====================== */
     function resetTMModal(){
       if(typingTimer) clearInterval(typingTimer);
@@ -1641,9 +1806,18 @@ ${product} 관련 ${kw} 안내드립니다.
     closeTM.addEventListener("click", ()=>closeOverlay(overlayTM));
     overlayTM.addEventListener("click", (e)=>{ if(e.target === overlayTM) closeOverlay(overlayTM); });
 
+    function getSelectedTmCustomer(){
+      const chosen = [...tmPickList.querySelectorAll(".tmPick")].find(x=>x.checked);
+      if(!chosen) return null;
+      return currentCustomers.find(v=>v.custNo === chosen.dataset.cust) ?? null;
+    }
+
     btnGenTM.addEventListener("click", ()=>{
+      const cust = getSelectedTmCustomer();
+      const tn = selectedTaskName || "AI연계과제";
+      const payload = cust ? buildTMScriptByCustomer(cust, tn, selectedDateKey) : "선택된 고객이 없습니다.";
       if(typingTimer) clearInterval(typingTimer);
-      typingTimer = typewriter(scriptBox, SCRIPT_TM, 9);
+      typingTimer = typewriter(scriptBox, payload, 7);
     });
 
     btnTmExec.addEventListener("click", ()=>{
@@ -1661,7 +1835,7 @@ ${product} 관련 ${kw} 안내드립니다.
     });
 
     /* =====================
-      17) SMS 팝업
+      18) SMS 팝업
     ====================== */
     function getFirstSmsCustomer(){
       const pickedNos = Array.from(selectedCustNos);
@@ -1784,7 +1958,7 @@ ${product} 관련 ${kw} 안내드립니다.
     });
 
     /* =====================
-      18) 고객 브리핑 팝업(LLM 타이핑)
+      19) 고객 브리핑 팝업(✅ 고객별)
     ====================== */
     function openBriefingModal(cust){
       if(!cust) return;
@@ -1792,21 +1966,21 @@ ${product} 관련 ${kw} 안내드립니다.
       if(briefTimer) clearInterval(briefTimer);
       briefText.textContent = "고객 브리핑을 생성 중입니다...";
 
-      const payload = buildBriefing(cust, selectedTaskName || "AI연계과제");
+      const payload = buildBriefing(cust, selectedTaskName || "AI연계과제", selectedDateKey);
 
       openOverlay(overlayBrief);
 
       setTimeout(()=>{
         if(briefTimer) clearInterval(briefTimer);
         briefTimer = typewriter(briefText, payload, 6);
-      }, 250);
+      }, 220);
     }
 
     closeBrief.addEventListener("click", ()=>closeOverlay(overlayBrief));
     overlayBrief.addEventListener("click", (e)=>{ if(e.target === overlayBrief) closeOverlay(overlayBrief); });
 
     /* =====================
-      19) MyCare 바로가기 팝업
+      20) MyCare 바로가기 팝업
     ====================== */
     btnQuickMyCare.addEventListener("click", ()=>{
       openOverlay(overlayMyCare);
@@ -1815,15 +1989,13 @@ ${product} 관련 ${kw} 안내드립니다.
     overlayMyCare.addEventListener("click", (e)=>{ if(e.target === overlayMyCare) closeOverlay(overlayMyCare); });
 
     /* =====================
-      ✅ 20) Bottom Final Report 토글/드롭다운
+      21) Bottom Final Report 토글/드롭다운
     ====================== */
     function isFinalMode(){ return radioFinal && radioFinal.checked; }
 
     function getTasksForFinalDropdown(dateKey){
-      // 기본: 선택 날짜의 AI 과제
       const idxList = (DATE_TASK_MAP[dateKey]?.AI ?? []);
       if(idxList.length === 0){
-        // fallback: AI 전체 제공
         return TASKS_MASTER.AI.map((name, i)=>({ name, masterIdx:i }));
       }
       return idxList.map(masterIdx=>({ name: TASKS_MASTER.AI[masterIdx], masterIdx }));
@@ -1839,7 +2011,6 @@ ${product} 관련 ${kw} 안내드립니다.
         finalInlineTaskSelect.appendChild(opt);
       });
 
-      // 우선 선택: 현재 AI 선택 과제가 있으면 그걸로
       const preferred = selectedTaskName && list.some(x=>x.name===selectedTaskName) ? selectedTaskName : list[0]?.name;
       if(preferred){
         finalInlineTaskSelect.value = preferred;
@@ -1874,7 +2045,14 @@ ${product} 관련 ${kw} 안내드립니다.
     }
 
     /* =====================
-      21) Utils + Init
+      22) Weekly buttons
+    ====================== */
+    btnPrevWeek.addEventListener("click", ()=>moveWeek(-7));
+    btnNextWeek.addEventListener("click", ()=>moveWeek(7));
+    btnThisWeek.addEventListener("click", ()=>renderWeek(selectedDateKey));
+
+    /* =====================1
+      23) Utils + Init
     ====================== */
     function escapeHtml(str){
       return String(str)
@@ -1891,18 +2069,24 @@ ${product} 관련 ${kw} 안내드립니다.
       currentTasksForDate = DATE_TASK_MAP[selectedDateKey];
 
       updateBigDate(selectedDateKey);
-      buildCalendar();
-
       updateHeaderCounts();
 
+      renderWeek(selectedDateKey);
       renderTasksForSelectedDateAndCategory();
 
       selectCategory("AI");
-      showBottomCust(); // 초기에는 고객현황
+      showBottomCust();
+
+      /* ✅ 최초 렌더 직후 높이 동기화(레이아웃 확정 후) */
+      requestAnimationFrame(()=>syncDateTileHeightToIconRow());
+      setTimeout(syncDateTileHeightToIconRow, 0);
     }
 
     /* 초기 실행 */
     selectDefault();
+
+    /* ✅ 리사이즈 시에도 지속 동기화 */
+    window.addEventListener("resize", syncDateTileHeightToIconRow);
   </script>
 </body>
 </html>
