@@ -21,10 +21,8 @@
       --cal-sched:#7c3aed;
 
       --shadow: 0 6px 16px rgba(16,24,40,.10);
-      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-
-      /* ✅ 추가: 우측 iconRow 높이 동기화용(초기값) */
-      --iconRowH: 86px;
+      --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR",
+              "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     }
     *{ box-sizing:border-box; }
     body{ margin:0; font-family:var(--font); background:var(--bg); color:var(--text); }
@@ -40,242 +38,414 @@
     .brand .next .the{ font-size:10px; opacity:.9; margin-bottom:2px; }
     .brand .next .word{ font-size:22px; font-weight:900; }
     .brand .title{ font-size:18px; font-weight:900; margin-left:2px; }
-
-    .searchbar{ flex:1; display:flex; align-items:center; gap:8px; max-width:860px; margin-left:8px; }
+    .searchbar{
+      flex:1; display:flex; align-items:center; gap:8px;
+      max-width:860px; margin-left:8px;
+    }
     .searchbar .select{
       background:#fff; height:28px; border-radius:4px; padding:0 8px;
       display:flex; align-items:center; gap:6px; color:#111827; font-size:12px; min-width:96px;
     }
-    .searchbar input{ flex:1; height:28px; border-radius:4px; border:none; outline:none; padding:0 10px; font-size:12px; }
+    .searchbar input{
+      flex:1; height:28px; border-radius:4px; border:none; outline:none; padding:0 10px; font-size:12px;
+    }
     .searchbar .go{
-      height:28px; padding:0 10px; border-radius:4px; border:1px solid rgba(255,255,255,.35);
-      background: rgba(255,255,255,.12); color:#fff; font-size:12px; cursor:pointer;
+      height:28px; padding:0 10px; border-radius:4px;
+      border:1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.12);
+      color:#fff; font-size:12px; cursor:pointer;
     }
     .top1-right{ display:flex; align-items:center; gap:8px; white-space:nowrap; font-size:12px; opacity:.95; }
-    .chip{ background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:6px 10px; }
-
+    .chip{
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:999px; padding:6px 10px;
+    }
     .top2{
-      height:34px; background:var(--blue); display:flex; align-items:center; padding:0 10px; gap:10px; color:#fff; font-size:12px;
+      height:34px; background:var(--blue);
+      display:flex; align-items:center; padding:0 10px; gap:10px;
+      color:#fff; font-size:12px;
     }
     .tabs{ display:flex; align-items:center; gap:6px; }
-    .tab{ padding:6px 10px; border-radius:4px 4px 0 0; background: rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.22); cursor:pointer; }
+    .tab{
+      padding:6px 10px; border-radius:4px 4px 0 0;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      cursor:pointer;
+    }
     .tab.active{ background:#e9f1ff; color:#0f2f63; border-color:#e9f1ff; font-weight:800; }
     .top2 .spacer{ flex:1; }
-    .top2 .mini-btn{ background: rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:4px; padding:6px 10px; cursor:pointer; }
+    .top2 .mini-btn{
+      background: rgba(255,255,255,.18);
+      border:1px solid rgba(255,255,255,.25);
+      color:#fff; border-radius:4px; padding:6px 10px; cursor:pointer;
+    }
 
     /* ======= Layout ======= */
-    .wrap{ display:grid; grid-template-columns: 44px 200px 1fr; height: calc(100vh - 76px); }
+    /* ✅ 화면 높이 계산을 안정화: top(42+34=76) 제외 */
+    .wrap{
+      display:grid;
+      grid-template-columns: 44px 200px 1fr;
+      height: calc(100vh - 76px);
+      min-height: 0;
+    }
     .vbar{
       background: linear-gradient(180deg, var(--leftbar), var(--leftbar2));
-      border-right:1px solid #1a2531; display:flex; flex-direction:column; align-items:center; padding:8px 0; gap:10px;
+      border-right:1px solid #1a2531;
+      display:flex; flex-direction:column; align-items:center;
+      padding:8px 0; gap:10px;
     }
-    .vico{ width:28px; height:28px; border-radius:6px; background: rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.12);
-      color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; user-select:none;
+    .vico{
+      width:28px; height:28px; border-radius:6px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-size:14px; user-select:none;
     }
     .vico.dim{ opacity:.7; }
 
-    .left{ background:#f7f8fb; border-right:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
+    .left{
+      background:#f7f8fb;
+      border-right:1px solid var(--line);
+      display:flex; flex-direction:column;
+      min-height:0;
+    }
     .left-head{
-      padding:8px; background:#fff; border-bottom:1px solid var(--line);
+      padding:8px; background:#fff;
+      border-bottom:1px solid var(--line);
       display:flex; align-items:center; gap:4px;
+      flex: 0 0 auto;
     }
     .left-head .btn{
       height:24px; padding:0 6px; border-radius:3px;
-      border:1px solid var(--btnLine); background: var(--btn);
+      border:1px solid var(--btnLine);
+      background: var(--btn);
       font-size:11px; cursor:pointer; white-space:nowrap;
     }
-    .left-card{ padding:8px; display:flex; flex-direction:column; gap:8px; overflow:auto; }
+    .left-card{
+      padding:8px;
+      display:flex; flex-direction:column; gap:8px;
+      overflow:auto; min-height:0;
+    }
     .box{ background:#fff; border:1px solid var(--line); border-radius:4px; padding:8px; }
-    .box .title{ font-weight:800; font-size:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+    .box .title{
+      font-weight:800; font-size:12px; margin-bottom:8px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
     .fields{ display:grid; grid-template-columns: 1fr; gap:6px; }
     .field{ display:grid; grid-template-columns: 64px 1fr; gap:6px; align-items:center; font-size:12px; }
     .field input{ height:22px; border:1px solid var(--line); border-radius:2px; padding:0 6px; background:#fff; outline:none; font-size:12px; }
     .mini-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:6px; }
     .mini-tile{
-      background:#2ea6b4; border:1px solid #1c8894; color:#fff; height:26px; border-radius:3px;
-      display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; user-select:none;
+      background:#2ea6b4; border:1px solid #1c8894; color:#fff;
+      height:26px; border-radius:3px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:800; user-select:none;
     }
 
-    .main{ display:flex; flex-direction:column; min-height:0; padding:10px; gap:10px; }
+    .main{
+      display:flex; flex-direction:column;
+      min-height:0;
+      padding:10px; gap:10px;
+    }
     .content-top{
-      background:#fff; border:1px solid var(--line); border-radius:4px; padding:8px; display:flex; align-items:center; justify-content:space-between;
+      background:#fff; border:1px solid var(--line); border-radius:4px;
+      padding:8px; display:flex; align-items:center; justify-content:space-between;
+      flex: 0 0 auto;
     }
     .content-top .path{ font-size:12px; color:var(--muted); }
     .content-top .actions{ display:flex; gap:6px; }
     .content-top .actions button{
-      height:24px; padding:0 10px; border-radius:999px; border:1px solid var(--btnLine);
-      background:var(--btn); font-size:12px; cursor:pointer;
+      height:24px; padding:0 10px; border-radius:999px;
+      border:1px solid var(--btnLine);
+      background:var(--btn);
+      font-size:12px; cursor:pointer;
     }
 
+    /* ✅ mid: 캘린더/우측 패널 */
     .mid{
-      display:grid; grid-template-columns: 138px 1fr 520px; gap:10px;
-      min-height:0; flex:1;
-    }
-
-    /* ==========================
-       ✅ Date tile (수정)
-       - 우측 iconRow 높이와 동일하게 맞춤
-    =========================== */
-    .dateTile{
-      background: linear-gradient(180deg, var(--accent), var(--accent2));
-      border-radius:4px; border:1px solid rgba(0,0,0,.05); color:#fff;
-
-      /* ✅ 핵심: 우측 iconRow 높이와 동일 */
-      height: var(--iconRowH);
-
-      display:flex;
-      flex-direction:column;
-      justify-content:center;   /* 기존 space-between → 중앙정렬 */
-      padding:10px;
+      display:grid;
+      grid-template-columns: 1fr 520px;
+      gap:10px;
       min-height:0;
+      flex:1;
     }
-    .dateTile .ym{ font-weight:800; font-size:12px; opacity:.95; display:flex; justify-content:space-between; align-items:center; }
-    .dateTile .big{ text-align:center; margin-top:2px; }
-    .dateTile .big .d{ font-size:28px; font-weight:900; line-height:1; }     /* 40 → 28 */
-    .dateTile .big .dow{ font-size:11px; font-weight:800; opacity:.95; margin-top:3px; letter-spacing:.2px; }
-    .dateTile .ar{ display:flex; justify-content:space-between; align-items:center; font-size:16px; opacity:.9; user-select:none; margin-top:4px; }
-
     .calendarPanel, .taskPanel{
       background:#fff; border:1px solid var(--line); border-radius:4px;
-      min-height:0; overflow:hidden; display:flex; flex-direction:column;
+      min-height:0;
+      overflow:hidden;
+      display:flex; flex-direction:column;
     }
 
-    /* Icon row */
+    /* ✅ 캘린더 상단: 날짜 타일 + 이모티콘 라인 */
+    .calTopBar{
+      display:flex; gap:10px;
+      padding:10px;
+      border-bottom:1px solid var(--line);
+      align-items:center;
+      background:#fff;
+      flex: 0 0 auto;
+    }
+    .dateMini{
+      width:148px; min-width:148px;
+      border-radius:6px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color:#fff;
+      border:1px solid rgba(0,0,0,.05);
+      display:flex; flex-direction:column; overflow:hidden;
+    }
+    .dateMiniTop{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 10px; font-weight:900; font-size:12px; opacity:.98;
+    }
+    .dateMiniMid{ display:flex; align-items:center; justify-content:space-between; padding:8px 10px 10px 10px; }
+    .dateMiniMid .arr{
+      width:28px; height:28px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      cursor:pointer; user-select:none;
+      font-size:16px; font-weight:900;
+    }
+    .dateMiniMid .center{ display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; }
+    .dateMiniMid .center .d{ font-size:34px; font-weight:900; line-height:1; }
+    .dateMiniBottom{
+      padding:8px 10px; text-align:center;
+      font-weight:900; letter-spacing:.6px;
+      background: rgba(0,0,0,.10);
+    }
+
+    /* ✅ 이모티콘 row: 높이 고정/잘림 방지 */
     .iconRow{
-      padding:10px; border-bottom:1px solid var(--line); display:flex; gap:18px;
-      justify-content:center; align-items:center; background:#fff;
+      flex:1;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      background:#fff;
+      overflow:hidden;
+      min-width:0;
     }
-    .round{ display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; user-select:none; }
+    .round{
+      display:flex; flex-direction:column;
+      align-items:center; gap:6px;
+      cursor:pointer; user-select:none;
+      flex: 0 0 auto;
+    }
     .round .circle{
-      width:44px; height:44px; border-radius:999px; background:#f1f5ff; border:1px solid #d7e2ff;
-      display:flex; align-items:center; justify-content:center; font-weight:900; color:#2f6fbf; position:relative;
+      width:44px; height:44px; border-radius:999px;
+      background:#f1f5ff; border:1px solid #d7e2ff;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; color:#2f6fbf; position:relative;
     }
-    .round.active .circle{ background:#e6f0ff; border-color:#9fbaf0; box-shadow: inset 0 0 0 2px rgba(47,111,191,.10); }
-    .round .label{ font-size:12px; font-weight:800; color:#1f2937; }
-    .round .label span{ color:#2f6fbf; font-weight:900; }
+    .round.active .circle{
+      background:#e6f0ff; border-color:#9fbaf0;
+      box-shadow: inset 0 0 0 2px rgba(47,111,191,.10);
+    }
+    .round .label{
+      font-size:12px; font-weight:900; color:#111827;
+      display:flex; align-items:center; gap:6px;
+      white-space:nowrap;
+    }
+    .round .label .cnt{ color:#2f6fbf; font-weight:900; }
 
-    /* ======= ✅ Weekly view (simple) ======= */
-    .weekBody{ padding:10px; overflow:auto; }
+    /* ======= ✅ Weekly view: 화면 높이에 맞게 "잘리지 않도록" flex로 구성 ======= */
+    .weekBody{
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      min-height:0;
+      flex: 1 1 auto; /* ✅ 캘린더 패널 내에서 남은 영역을 점유 */
+    }
     .weekHeader{
       display:flex; align-items:center; justify-content:space-between;
       margin-bottom:10px; gap:10px;
       font-size:12px; color:var(--muted);
+      flex: 0 0 auto;
     }
     .weekHeader .leftGroup{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
     .weekHeader .wkTitle{ font-weight:900; color:#0f2f63; }
     .weekHeader .btns{ display:flex; gap:6px; }
     .wkBtn{
       height:26px; padding:0 10px; border-radius:8px;
-      border:1px solid var(--btnLine); background:var(--btn);
+      border:1px solid var(--btnLine);
+      background:var(--btn);
       cursor:pointer; font-size:12px; font-weight:900;
     }
-    .weekList{
+    .weekGrid{
       border:1px solid var(--line);
       border-radius:10px;
       overflow:hidden;
       background:#fff;
-    }
-    .weekRow{
       display:grid;
-      grid-template-columns: 120px 1fr;
-      gap:10px;
-      padding:10px 12px;
-      border-bottom:1px solid var(--line2);
+      grid-template-columns: repeat(7, 1fr);
+      flex: 1 1 auto;   /* ✅ 핵심: 그리드가 남은 높이를 채움 */
+      min-height: 0;    /* ✅ 잘림/overflow 방지 */
+    }
+    .weekCell{
+      min-height: 0; /* ✅ 기존 170px 제거 */
+      border-right:1px solid var(--line2);
+      display:flex;
+      flex-direction:column;
       cursor:pointer;
-      align-items:center;
+      overflow:hidden;
     }
-    .weekRow:last-child{ border-bottom:none; }
-    .weekRow:hover{ background:#f8fbff; }
-    .weekRow.active{ background:#eaf5ff; outline:2px solid rgba(47,111,191,.28); outline-offset:-2px; }
-    .weekDate{
-      display:flex; flex-direction:column; gap:2px;
-      font-weight:900; color:#111827;
+    .weekCell:last-child{ border-right:none; }
+    .weekCell.active{ outline:2px solid rgba(47,111,191,.28); outline-offset:-2px; background:#eaf5ff; }
+    .weekCellTop{
+      padding:8px 10px;
+      border-bottom:1px solid var(--line2);
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      background:#fbfcff;
+      flex: 0 0 auto;
     }
-    .weekDate .sub{ font-size:11px; color:var(--muted); font-weight:800; }
-    .weekSummary{
-      font-size:12px; color:#111827; font-weight:800;
-      display:flex; flex-wrap:wrap; gap:10px;
+    .weekCellTop .dow{ font-weight:900; color:#111827; }
+    .weekCellTop .ymd{ font-size:11px; color:var(--muted); font-weight:800; }
+    .weekCellMid{
+      padding:8px 10px;
+      display:flex; flex-direction:column; gap:8px;
+      flex: 1 1 auto;
+      min-height:0;
+      overflow:hidden;
     }
-    .wkTag{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:6px 10px;
+    .chips{ display:flex; flex-direction:column; gap:8px; }
+    .chipPill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
       border-radius:999px;
       border:1px solid #e1e7ef;
-      background:#fbfcff;
-      white-space:nowrap;
+      background:#fff;
+      font-size:12px; font-weight:900; color:#111827;
+      width:fit-content; max-width:100%;
     }
-    .dot{ width:8px; height:8px; border-radius:999px; }
+    .chipPill .dot{ width:8px; height:8px; border-radius:999px; }
     .dot.ai{ background:var(--cal-ai); }
     .dot.req{ background:var(--cal-req); }
     .dot.close{ background:var(--cal-close); }
     .dot.sch{ background:var(--cal-sched); }
-    .wkEmpty{ color:var(--muted); font-weight:800; }
+    .wkEmpty{ color:var(--muted); font-weight:800; font-size:12px; padding:6px 2px; }
+
+    .hint{
+      padding:8px 0 0 0;
+      font-size:12px; color:var(--muted);
+      flex: 0 0 auto;
+    }
 
     /* Right task panel */
-    .taskTabs{ display:flex; gap:2px; border-bottom:1px solid var(--line); background:#f7fafc; padding:6px 6px 0 6px; }
-    .taskTabs .t{
-      padding:6px 10px; border:1px solid var(--tabLine); border-bottom:none;
-      border-radius:4px 4px 0 0; background:var(--tab); font-size:12px; cursor:pointer; user-select:none;
+    .taskTabs{
+      display:flex; gap:2px;
+      border-bottom:1px solid var(--line);
+      background:#f7fafc;
+      padding:6px 6px 0 6px;
+      flex: 0 0 auto;
     }
-    .taskTabs .t.active{ background:#fff; font-weight:900; color:#1f5aa6; border-color:#9fbaf0; }
-
+    .taskTabs .t{
+      padding:6px 10px;
+      border:1px solid var(--tabLine);
+      border-bottom:none;
+      border-radius:4px 4px 0 0;
+      background:var(--tab);
+      font-size:12px; cursor:pointer; user-select:none;
+    }
+    .taskTabs .t.active{
+      background:#fff; font-weight:900;
+      color:#1f5aa6; border-color:#9fbaf0;
+    }
     table{ width:100%; border-collapse:collapse; font-size:12px; }
-    thead th{ background:#f3f7ff; border:1px solid var(--line); padding:8px 8px; text-align:left; white-space:nowrap; }
-    tbody td{ border:1px solid var(--line2); padding:8px 8px; white-space:nowrap; background:#fff; }
+    thead th{
+      background:#f3f7ff;
+      border:1px solid var(--line);
+      padding:8px 8px; text-align:left; white-space:nowrap;
+    }
+    tbody td{
+      border:1px solid var(--line2);
+      padding:8px 8px; white-space:nowrap; background:#fff;
+    }
     tbody tr:hover td{ background:#f8fbff; }
     tbody tr.active td{ background:#fff4d6; border-color:#f2d08a; }
-    .taskTableWrap{ padding:8px; overflow:auto; flex:1; display:flex; flex-direction:column; gap:8px; }
-    .taskTopBar{
-      display:flex; align-items:center; justify-content:flex-end; gap:8px;
+
+    .taskTableWrap{
+      padding:8px;
+      overflow:auto;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:0;
     }
+    .taskTopBar{ display:flex; align-items:center; justify-content:flex-end; gap:8px; }
     .quickLinkBtn{
-      height:26px; padding:0 10px; border-radius:8px;
-      border:1px solid #cfd6df; background:#fff; cursor:pointer; font-size:12px; font-weight:900;
+      height:26px; padding:0 10px;
+      border-radius:8px;
+      border:1px solid #cfd6df;
+      background:#fff;
+      cursor:pointer;
+      font-size:12px; font-weight:900;
     }
     .quickLinkBtn:hover{ background:#f3f7ff; }
-    .hint{ padding:10px; font-size:12px; color:var(--muted); }
-    .empty{ padding:12px; font-size:12px; color:var(--muted); border:1px dashed #d8e0ea; border-radius:8px; background:#fbfcff; }
+    .empty{
+      padding:12px; font-size:12px; color:var(--muted);
+      border:1px dashed #d8e0ea; border-radius:8px;
+      background:#fbfcff;
+    }
 
     /* Bottom customers */
+    /* ✅ 고정 240px → clamp로 전환: 작은 화면에서 mid가 잘리지 않도록 */
     .bottom{
-      background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden;
-      display:flex; flex-direction:column; height:240px; min-height:240px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:4px;
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      height: clamp(200px, 26vh, 260px);
+      min-height: 200px;
+      flex: 0 0 auto;
     }
     .bottomHead{
-      padding:8px 10px; border-bottom:1px solid var(--line); background:#f7fafc;
+      padding:8px 10px;
+      border-bottom:1px solid var(--line);
+      background:#f7fafc;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
+      flex: 0 0 auto;
     }
-    .bottomHead .title{ font-weight:900; font-size:12px; display:flex; align-items:center; gap:10px; }
-    .radio{ display:flex; align-items:center; gap:10px; font-size:12px; color:#374151; font-weight:700; }
-
+    .bottomHead .title{
+      font-weight:900; font-size:12px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .radio{
+      display:flex; align-items:center; gap:10px;
+      font-size:12px; color:#374151; font-weight:700;
+    }
     .run-btn{
-      background:#ff7a18;
-      color:#111827;
+      background:#ff7a18; color:#111827;
       border:none; border-radius:8px;
-      padding:10px 14px; font-weight:900; cursor:pointer; min-width:170px;
+      padding:10px 14px; font-weight:900;
+      cursor:pointer; min-width:170px;
       box-shadow: 0 10px 20px rgba(255,122,24,.22);
       text-shadow: 0 1px 0 rgba(255,255,255,.35);
     }
     .run-btn:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; text-shadow:none; }
-
     .bottomHead button{
-      height:24px; padding:0 10px; border-radius:3px; border:1px solid var(--btnLine);
-      background:var(--btn); cursor:pointer; font-size:12px; white-space:nowrap;
+      height:24px; padding:0 10px;
+      border-radius:3px; border:1px solid var(--btnLine);
+      background:var(--btn); cursor:pointer;
+      font-size:12px; white-space:nowrap;
     }
-    .bottomBody{ overflow:auto; flex:1; }
+    .bottomBody{ overflow:auto; flex:1; min-height:0; }
     .chk{ width:14px; height:14px; accent-color:#1f5aa6; }
-
     .mag-btn{
       width:28px; height:22px;
-      border:1px solid #cfd6df; background:#fff; border-radius:6px;
-      cursor:pointer; font-weight:900;
+      border:1px solid #cfd6df; background:#fff;
+      border-radius:6px; cursor:pointer; font-weight:900;
     }
     .mag-btn:hover{ background:#f3f7ff; }
 
     /* ======= Modals ======= */
     .overlay{
-      position:fixed; inset:0; background: rgba(0,0,0,.35);
-      display:none; align-items:center; justify-content:center; z-index:50;
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.35);
+      display:none;
+      align-items:center; justify-content:center;
+      z-index:50;
     }
     .modal{
       background:#fff; border-radius:10px; overflow:hidden;
@@ -284,14 +454,15 @@
     }
     .modalTop{
       background:#f2f4f7; padding:10px 12px;
-      display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #d7dde6;
+      display:flex; justify-content:space-between; align-items:center;
+      border-bottom:1px solid #d7dde6;
     }
     .modalTop .mtitle{ font-weight:900; font-size:13px; }
     .modalTop button{
       height:26px; padding:0 10px; border-radius:6px;
-      border:1px solid #cfd6df; background:#fff; cursor:pointer; font-size:12px;
+      border:1px solid #cfd6df; background:#fff; cursor:pointer;
+      font-size:12px;
     }
-
     .modal1{ width:720px; max-width:calc(100vw - 24px); }
     .modal1Body{ padding:14px; }
     .agentBox{ border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff; }
@@ -300,31 +471,37 @@
     .agentText{ flex:1; font-size:13px; color:#374151; line-height:1.55; white-space:pre-line; }
     .btnCol{ display:flex; flex-direction:column; gap:12px; min-width: 210px; }
     .btnBig{
-      width:100%; background: var(--purple); color:#fff; border:none;
-      border-radius:6px; padding:10px 12px; font-weight:900; cursor:pointer; text-align:center;
+      width:100%;
+      background: var(--purple);
+      color:#fff; border:none;
+      border-radius:6px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer; text-align:center;
     }
 
     .modal2{ width:1120px; max-width:calc(100vw - 24px); }
     .modal2Body{
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:12px;
-      padding:14px;
+      display:grid; grid-template-columns: 1fr 360px;
+      gap:12px; padding:14px;
       min-height: 620px;
     }
     .scriptPanel{
-      border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff;
+      border:1px solid #e1e7ef; border-radius:10px;
+      padding:12px; background:#fff;
       display:flex; flex-direction:column; gap:10px;
       min-height: 560px;
     }
     .scriptPanel .h{ font-weight:900; font-size:13px; }
     .scriptBox{
-      border:1px solid #dfe6ef; border-radius:10px; padding:12px; background:#fbfcff;
+      border:1px solid #dfe6ef; border-radius:10px;
+      padding:12px; background:#fbfcff;
       font-size:12px; color:#111827; line-height:1.65;
       flex:1; overflow:auto; white-space:pre-wrap;
     }
     .tmSide{
-      border:1px solid #e1e7ef; border-radius:10px; padding:12px; background:#fff;
+      border:1px solid #e1e7ef; border-radius:10px;
+      padding:12px; background:#fff;
       display:flex; flex-direction:column; gap:10px;
       min-height: 560px;
     }
@@ -332,51 +509,46 @@
     .tmPickList{ display:flex; flex-direction:column; gap:8px; }
     .custPickItem{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:10px 10px; border:1px solid #e1e7ef; border-radius:10px; background:#fff; font-size:12px;
+      padding:10px 10px; border:1px solid #e1e7ef;
+      border-radius:10px; background:#fff; font-size:12px;
     }
     .tmExec{
-      background: var(--purple); color:#fff; border:none; border-radius:8px;
-      padding:12px 12px; font-weight:900; cursor:pointer; width:100%;
-      margin-top:auto;
+      background: var(--purple); color:#fff; border:none;
+      border-radius:8px; padding:12px 12px;
+      font-weight:900; cursor:pointer;
+      width:100%; margin-top:auto;
     }
     .tmExec:disabled{ opacity:.6; cursor:not-allowed; }
 
     .modalSMS{ width:980px; max-width:calc(100vw - 24px); }
     .smsBody{ padding:14px; }
     .smsCard{ border:1px solid #e1e7ef; border-radius:10px; background:#fff; padding:12px; }
-    .smsTitle{
-      font-weight:900; font-size:16px; margin-bottom:10px;
-      border-bottom:2px solid #e9edf5; padding-bottom:8px;
-    }
-    .smsGrid{
-      display:grid;
-      grid-template-columns: 1fr 280px;
-      gap:14px;
-      align-items:start;
-    }
+    .smsTitle{ font-weight:900; font-size:16px; margin-bottom:10px; border-bottom:2px solid #e9edf5; padding-bottom:8px; }
+    .smsGrid{ display:grid; grid-template-columns: 1fr 280px; gap:14px; align-items:start; }
     .smsLeft{ display:flex; flex-direction:column; gap:10px; }
     .smsLeft .sub{ font-weight:900; }
     .smsTableWrap{ border:1px solid #dfe6ef; border-radius:10px; overflow:hidden; }
     .smsPreview{
-      border:1px solid #dfe6ef; border-radius:10px; padding:10px; background:#fbfcff;
-      min-height: 170px;
+      border:1px solid #dfe6ef; border-radius:10px;
+      padding:10px; background:#fbfcff; min-height: 170px;
       display:flex; flex-direction:column; gap:8px;
     }
     .smsPreview .ph{ font-weight:900; }
     .smsPreview .pbox{
-      flex:1; border:1px solid #e6ebf2; border-radius:10px; padding:10px; background:#fff;
-      font-size:12px; line-height:1.6; white-space:pre-wrap; color:#111827; overflow:auto;
+      flex:1; border:1px solid #e6ebf2; border-radius:10px;
+      padding:10px; background:#fff;
+      font-size:12px; line-height:1.6;
+      white-space:pre-wrap; color:#111827; overflow:auto;
     }
-
     .smsRight{ display:flex; flex-direction:column; gap:10px; }
     .smsCustBox{
-      border:1px solid #dfe6ef; border-radius:10px; padding:10px; background:#fbfcff;
-      display:flex; flex-direction:column; gap:8px;
-      min-height: 210px;
+      border:1px solid #dfe6ef; border-radius:10px;
+      padding:10px; background:#fbfcff;
+      display:flex; flex-direction:column; gap:8px; min-height: 210px;
     }
     .smsBtn{
-      background: var(--purple); color:#fff; border:none; border-radius:8px;
-      padding:12px; font-weight:900; cursor:pointer;
+      background: var(--purple); color:#fff; border:none;
+      border-radius:8px; padding:12px; font-weight:900; cursor:pointer;
     }
     .smsBtn:disabled{ opacity:.6; cursor:not-allowed; }
     .rowPick{ background:#eef2ff !important; }
@@ -384,113 +556,95 @@
     .modalBrief{ width:860px; max-width:calc(100vw - 24px); }
     .briefBody{ padding:12px; }
     .briefBox{
-      border:1px solid #e1e7ef; border-radius:10px; background:#fff; padding:10px;
-      min-height: 420px;
+      border:1px solid #e1e7ef; border-radius:10px;
+      background:#fff; padding:10px; min-height: 420px;
       display:flex; flex-direction:column; gap:8px;
     }
     .briefHeader{
-      display:flex; align-items:center; gap:10px; font-weight:900; color:#0f2f63;
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; color:#0f2f63;
       border-bottom:1px solid #e9edf5; padding-bottom:8px;
     }
     .briefScroll{
-      border:1px solid #dfe6ef; border-radius:10px; padding:12px; background:#fbfcff;
-      font-size:12px; line-height:1.7; color:#111827;
-      white-space:pre-wrap; overflow:auto; flex:1;
+      border:1px solid #dfe6ef; border-radius:10px;
+      padding:12px; background:#fbfcff;
+      font-size:12px; line-height:1.7;
+      color:#111827; white-space:pre-wrap;
+      overflow:auto; flex:1;
     }
 
-    /* MyCare 이동 팝업 */
     .modalMyCare{ width:520px; max-width:calc(100vw - 24px); }
     .mycareBody{ padding:16px; }
     .mycareBox{
-      border:1px solid #e1e7ef; border-radius:12px; padding:16px; background:#fbfcff;
+      border:1px solid #e1e7ef; border-radius:12px;
+      padding:16px; background:#fbfcff;
       font-size:14px; line-height:1.6; color:#111827;
     }
 
-    /* ==========================
-       Bottom Final Report
-    =========================== */
+    /* ========================== Bottom Final Report =========================== */
     .finalInline{
       padding:10px;
-      display:flex;
-      flex-direction:column;
+      display:flex; flex-direction:column;
       gap:10px;
       min-height:100%;
     }
     .finalInlineTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      border:1px solid #e1e7ef;
-      background:#fbfcff;
-      border-radius:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border:1px solid #e1e7ef; background:#fbfcff; border-radius:10px;
       padding:10px;
+      flex: 0 0 auto;
     }
-    .finalInlineTop .l{
-      display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    }
-    .finalInlineTop .ttl{
-      font-weight:900; color:#0f2f63;
-    }
+    .finalInlineTop .l{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .finalInlineTop .ttl{ font-weight:900; color:#0f2f63; }
     .finalInlineTop select{
-      height:28px; border:1px solid #cfd6df; border-radius:8px; padding:0 10px;
-      font-size:12px; background:#fff; outline:none; min-width: 420px;
-      max-width: 100%;
+      height:28px; border:1px solid #cfd6df; border-radius:8px;
+      padding:0 10px; font-size:12px; background:#fff; outline:none;
+      min-width: 420px; max-width: 100%;
     }
     .pill2{
       height:28px; padding:0 10px; border-radius:999px;
       border:1px solid #cfd6df; background:#fff;
-      display:flex; align-items:center; gap:8px; font-size:12px; font-weight:900; color:#374151;
-      white-space:nowrap;
+      display:flex; align-items:center; gap:8px;
+      font-size:12px; font-weight:900; color:#374151; white-space:nowrap;
     }
-
-    .finalKpiRow{
-      display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;
-    }
+    .finalKpiRow{ display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; flex: 0 0 auto; }
     .miniKpi{
       border:1px solid #e1e7ef; border-radius:10px; background:#fff;
-      padding:10px;
-      display:flex; flex-direction:column; gap:4px;
+      padding:10px; display:flex; flex-direction:column; gap:4px;
     }
     .miniKpi .k{ font-size:12px; font-weight:900; color:#374151; }
     .miniKpi .v{ font-size:16px; font-weight:900; color:#111827; }
     .miniKpi .s{ font-size:11px; color:#6b7280; }
-
     .finalChecklist{
-      border:1px solid #e1e7ef;
-      border-radius:10px;
-      background:#fff;
-      padding:10px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+      border:1px solid #e1e7ef; border-radius:10px; background:#fff;
+      padding:10px; display:flex; flex-direction:column; gap:8px;
+      min-height:0; flex: 1 1 auto;
     }
     .finalChecklist .h{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       font-weight:900; color:#0f2f63; font-size:12px;
       padding-bottom:6px; border-bottom:1px solid #eef2f7;
+      flex: 0 0 auto;
     }
     .finalChecklist ul{
       margin:0; padding:0; list-style:none;
       display:flex; flex-direction:column; gap:6px;
       font-size:12px; color:#111827;
+      overflow:auto; flex:1; min-height:0;
     }
-    .finalChecklist li{
-      display:flex; align-items:flex-start; gap:8px;
-    }
+    .finalChecklist li{ display:flex; align-items:flex-start; gap:8px; }
     .tick{
       width:16px; height:16px; border-radius:4px;
       border:1px solid #cfd6df; background:#f7fafc;
       display:flex; align-items:center; justify-content:center;
-      font-size:12px;
-      margin-top:2px;
-      flex:0 0 auto;
+      font-size:12px; margin-top:2px; flex:0 0 auto;
     }
     .tick.on{ background:#e6f0ff; border-color:#9fbaf0; }
 
     @media (max-width: 1320px){
-      .mid{ grid-template-columns: 138px 1fr; }
+      .mid{ grid-template-columns: 1fr; }
       .taskPanel{ display:none; }
+      .iconRow{ justify-content:flex-start; }
     }
     @media (max-width: 980px){
       .modal2Body{ grid-template-columns: 1fr; }
@@ -498,7 +652,12 @@
       .smsGrid{ grid-template-columns: 1fr; }
       .finalKpiRow{ grid-template-columns: 1fr; }
       .finalInlineTop select{ min-width: 240px; }
-      .weekRow{ grid-template-columns: 1fr; }
+      .weekGrid{ grid-template-columns: 1fr; }
+      .weekCell{ border-right:none; border-bottom:1px solid var(--line2); }
+      .weekCell:last-child{ border-bottom:none; }
+      .calTopBar{ flex-direction:column; align-items:stretch; }
+      .dateMini{ width:100%; min-width:0; }
+      .iconRow{ justify-content:space-between; flex-wrap:wrap; gap:12px; }
     }
   </style>
 </head>
@@ -591,24 +750,48 @@
 
       <div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
         <div class="mid">
-          <div class="dateTile">
-            <div class="ym"><span>2026-01</span><span style="opacity:.95;font-weight:900;">▦</span></div>
-            <div class="big"><div class="d" id="bigDay">19</div><div class="dow" id="bigDow">MONDAY</div></div>
-            <div class="ar"><span>‹</span><span>›</span></div>
-          </div>
-
+          <!-- calendarPanel -->
           <div class="calendarPanel" id="calendarPanel">
-            <div class="iconRow" id="iconRow">
-              <div class="round active" data-cat="AI"><div class="circle">👤</div><div class="label">AI연계과제<span id="cntAI">(0)</span></div></div>
-              <div class="round" data-cat="REQ"><div class="circle">🧩</div><div class="label">필수케어<span id="cntREQ">(0)</span></div></div>
-              <div class="round" data-cat="CLOSE"><div class="circle">📎</div><div class="label">밀착케어<span id="cntCLOSE">(0)</span></div></div>
-              <div class="round" data-cat="SCH"><div class="circle">📋</div><div class="label">일정정보<span id="cntSCH">(0)</span></div></div>
-              <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
-              <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
-              <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">비대면 필수</div></div>
+            <div class="calTopBar">
+              <div class="dateMini">
+                <div class="dateMiniTop">
+                  <span id="miniYM">2026-01</span>
+                  <span style="opacity:.95;font-weight:900;">▦</span>
+                </div>
+                <div class="dateMiniMid">
+                  <div class="arr" id="btnPrevDay">‹</div>
+                  <div class="center">
+                    <div class="d" id="bigDay">19</div>
+                  </div>
+                  <div class="arr" id="btnNextDay">›</div>
+                </div>
+                <div class="dateMiniBottom" id="bigDow">MONDAY</div>
+              </div>
+
+              <div class="iconRow" id="iconRow">
+                <div class="round active" data-cat="AI">
+                  <div class="circle">👤</div>
+                  <div class="label">AI연계과제 <span class="cnt" id="cntAI">(0)</span></div>
+                </div>
+                <div class="round" data-cat="REQ">
+                  <div class="circle">🧩</div>
+                  <div class="label">필수케어 <span class="cnt" id="cntREQ">(0)</span></div>
+                </div>
+                <div class="round" data-cat="CLOSE">
+                  <div class="circle">📎</div>
+                  <div class="label">밀착케어 <span class="cnt" id="cntCLOSE">(0)</span></div>
+                </div>
+                <div class="round" data-cat="SCH">
+                  <div class="circle">📋</div>
+                  <div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
+                </div>
+                <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+                <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
+                <!-- ✅ 문구 변경: 비대면 필수 → 콜센터 연계 과제 -->
+                <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">콜센터 연계 과제</div></div>
+              </div>
             </div>
 
-            <!-- ✅ 월간 캘린더 제거 → 주단위 리스트 -->
             <div class="weekBody">
               <div class="weekHeader">
                 <div class="leftGroup">
@@ -622,11 +805,15 @@
                 </div>
               </div>
 
-              <div class="weekList" id="weekList"></div>
-              <div class="hint">* 날짜는 주(week) 단위로 표시되며, 각 날짜별 과제 건수는 텍스트로만 제공합니다.</div>
+              <div class="weekGrid" id="weekGrid"></div>
+
+              <div class="hint">
+                * 주간(7일)만 표시합니다. 날짜를 클릭하면 우측 과제 리스트/하단 패널이 갱신됩니다.
+              </div>
             </div>
           </div>
 
+          <!-- taskPanel -->
           <div class="taskPanel" id="taskPanel">
             <div class="taskTabs" id="taskTabs">
               <div class="t active" data-cat="AI">AI연계과제</div>
@@ -634,13 +821,13 @@
               <div class="t" data-cat="CLOSE">밀착케어</div>
               <div class="t" data-cat="SCH">일정관리</div>
             </div>
-
             <div class="taskTableWrap">
               <div class="taskTopBar">
                 <button id="btnQuickMyCare" class="quickLinkBtn" style="display:none;">바로가기</button>
               </div>
 
               <div id="taskEmpty" class="empty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
+
               <table id="taskTable">
                 <thead id="taskThead">
                   <tr><th style="width:56px;">No</th><th>과제명</th></tr>
@@ -733,7 +920,6 @@
           </div>
         </div>
       </div>
-
     </section>
   </div>
 
@@ -750,17 +936,14 @@
           <div class="agentRow">
             <div class="agentText">
 안녕하세요! AI CRM 아이참이에요~
-선택된 고객을 기반으로
-적합 채널과 스크립트를 추천해 드릴게요.
+선택된 고객을 기반으로 적합 채널과 스크립트를 추천해 드릴게요.
             </div>
             <div class="btnCol">
               <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
               <button id="btnGoSMS" class="btnBig">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
             </div>
           </div>
-          <div class="hint" style="padding:10px 0 0 0;">
-            * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다.
-          </div>
+          <div class="hint" style="padding:10px 0 0 0;"> * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다. </div>
         </div>
       </div>
     </div>
@@ -773,7 +956,6 @@
         <div class="mtitle">TM 실행 하기</div>
         <button id="closeTM">닫기</button>
       </div>
-
       <div class="modal2Body">
         <div class="scriptPanel">
           <div class="h">AI-Generated TM 스크립트</div>
@@ -782,7 +964,6 @@
             <button id="btnGenTM" class="btnBig" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
           </div>
         </div>
-
         <div class="tmSide">
           <div class="h">고객 선택</div>
           <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
@@ -800,11 +981,9 @@
         <div class="mtitle">문자 발송 하기</div>
         <button id="closeSMS">닫기</button>
       </div>
-
       <div class="smsBody">
         <div class="smsCard">
           <div class="smsTitle">문자 발송 하기</div>
-
           <div class="smsGrid">
             <div class="smsLeft">
               <div class="sub">맞춤 문자 List</div>
@@ -821,13 +1000,11 @@
                   <tbody id="smsTplTbody"></tbody>
                 </table>
               </div>
-
               <div class="smsPreview">
                 <div class="ph">미리보기</div>
                 <div id="smsPreviewBox" class="pbox">템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.</div>
               </div>
             </div>
-
             <div class="smsRight">
               <div class="smsCustBox">
                 <div style="font-weight:900;">발송 대상</div>
@@ -836,10 +1013,7 @@
               <button id="btnSmsSend" class="smsBtn" disabled>문자 발송</button>
             </div>
           </div>
-
-          <div class="hint" style="padding:10px 0 0 0;">
-            * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송
-          </div>
+          <div class="hint" style="padding:10px 0 0 0;"> * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송 </div>
         </div>
       </div>
     </div>
@@ -869,17 +1043,13 @@
         <button id="closeMyCare">닫기</button>
       </div>
       <div class="mycareBody">
-        <div class="mycareBox">
-          마이케어과제로 이동합니다. (시연용)
-        </div>
+        <div class="mycareBox">마이케어과제로 이동합니다. (시연용)</div>
       </div>
     </div>
   </div>
 
   <script>
-    /* =====================
-      0) 과제 마스터(전체 풀)
-    ====================== */
+    /* ===================== 0) 과제 마스터(전체 풀) ====================== */
     const TASKS_MASTER = {
       AI: [
         "[예적금] 타행적금 만기도래",
@@ -921,16 +1091,12 @@
       ]
     };
 
-    /* =====================
-      1) 날짜별 과제 할당(동적)
-    ====================== */
+    /* ===================== 1) 날짜별 과제 할당(동적) ====================== */
     const CAL_YEAR = 2026, CAL_MONTH = 1; // 2026-01
     const DATE_TASK_MAP = {}; // { "YYYY-MM-DD": { AI:[idx], REQ:[idx], CLOSE:[idx], SCH:[idx] } }
 
     function ymd(y,m,d){ return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
-    function dayOfWeekKor(dow){
-      return ["일","월","화","수","목","금","토"][dow];
-    }
+    function dayOfWeekKor(dow){ return ["일","월","화","수","목","금","토"][dow]; }
     function dayOfWeekStr(y,m,d){
       const w = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
       return w[new Date(y,m-1,d).getDay()];
@@ -942,9 +1108,7 @@
     function formatDateKey(dt){
       return ymd(dt.getFullYear(), dt.getMonth()+1, dt.getDate());
     }
-    function isInMonth(key){
-      return key.startsWith("2026-01-");
-    }
+    function isInMonth(key){ return key.startsWith("2026-01-"); }
 
     function seededPickIndices(total, count, seed){
       const set = new Set();
@@ -960,27 +1124,24 @@
       const lastDate = new Date(CAL_YEAR, CAL_MONTH, 0).getDate();
       for(let d=1; d<=lastDate; d++){
         const key = ymd(CAL_YEAR, CAL_MONTH, d);
-
-        const aiCnt    = (d % 3 === 0) ? 0 : (d % 2);
-        const reqCnt   = (d % 5 === 0) ? 0 : (d % 2 ? 1:0);
+        const aiCnt = (d % 3 === 0) ? 0 : (d % 2);
+        const reqCnt = (d % 5 === 0) ? 0 : (d % 2 ? 1:0);
         const closeCnt = (d % 7 === 0) ? 0 : 1;
-        const schCnt   = (d % 4 === 0) ? 0 : 1;
-
+        const schCnt = (d % 4 === 0) ? 0 : 1;
         DATE_TASK_MAP[key] = {
-          AI:    seededPickIndices(TASKS_MASTER.AI.length,    aiCnt,    d*11+3),
-          REQ:   seededPickIndices(TASKS_MASTER.REQ.length,   reqCnt,   d*17+5),
+          AI: seededPickIndices(TASKS_MASTER.AI.length, aiCnt, d*11+3),
+          REQ: seededPickIndices(TASKS_MASTER.REQ.length, reqCnt, d*17+5),
           CLOSE: seededPickIndices(TASKS_MASTER.CLOSE.length, closeCnt, d*19+7),
-          SCH:   seededPickIndices(TASKS_MASTER.SCH.length,   schCnt,   d*23+9),
+          SCH: seededPickIndices(TASKS_MASTER.SCH.length, schCnt, d*23+9),
         };
       }
-
       // 1/19은 “과제 많은 날” 유지
       const k = "2026-01-19";
       DATE_TASK_MAP[k] = {
-        AI:    Array.from({length: TASKS_MASTER.AI.length}, (_,i)=>i),
-        REQ:   Array.from({length: TASKS_MASTER.REQ.length}, (_,i)=>i).slice(0,5),
+        AI: Array.from({length: TASKS_MASTER.AI.length}, (_,i)=>i),
+        REQ: Array.from({length: TASKS_MASTER.REQ.length}, (_,i)=>i).slice(0,5),
         CLOSE: Array.from({length: TASKS_MASTER.CLOSE.length}, (_,i)=>i).slice(0,4),
-        SCH:   Array.from({length: TASKS_MASTER.SCH.length}, (_,i)=>i).slice(0,3),
+        SCH: Array.from({length: TASKS_MASTER.SCH.length}, (_,i)=>i).slice(0,3),
       };
     }
 
@@ -998,9 +1159,7 @@
       return { target, done };
     }
 
-    /* =====================
-      ✅ 1-2) Weekly view 렌더
-    ====================== */
+    /* ===================== ✅ Weekly view: 7일 그리드 렌더 ====================== */
     function getWeekStartSunday(dateKey){
       const dt = parseDateKey(dateKey);
       const dow = dt.getDay(); // 0=Sun
@@ -1008,66 +1167,58 @@
       start.setDate(dt.getDate() - dow);
       return start;
     }
-
     function addDays(dateObj, days){
       const d = new Date(dateObj);
       d.setDate(d.getDate() + days);
       return d;
     }
-
-    function buildSummaryTags(c){
-      const tags = [];
-      if(c.AI>0) tags.push(`<span class="wkTag"><span class="dot ai"></span>AI연계과제 ${c.AI}건</span>`);
-      if(c.REQ>0) tags.push(`<span class="wkTag"><span class="dot req"></span>필수케어 ${c.REQ}건</span>`);
-      if(c.CLOSE>0) tags.push(`<span class="wkTag"><span class="dot close"></span>밀착케어 ${c.CLOSE}건</span>`);
-      if(c.SCH>0) tags.push(`<span class="wkTag"><span class="dot sch"></span>일정정보 ${c.SCH}건</span>`);
-      if(tags.length===0) return `<span class="wkEmpty">등록 과제 없음</span>`;
-      return tags.join("");
+    function buildPillsForDate(key){
+      if(!isInMonth(key)) return `<div class="wkEmpty">해당 월 범위 외</div>`;
+      const c = getCountsForDate(key);
+      const pills = [];
+      if(c.AI>0) pills.push(`<div class="chipPill"><span class="dot ai"></span>AI ${c.AI}</div>`);
+      if(c.REQ>0) pills.push(`<div class="chipPill"><span class="dot req"></span>필수 ${c.REQ}</div>`);
+      if(c.CLOSE>0) pills.push(`<div class="chipPill"><span class="dot close"></span>밀착 ${c.CLOSE}</div>`);
+      if(c.SCH>0) pills.push(`<div class="chipPill"><span class="dot sch"></span>일정 ${c.SCH}</div>`);
+      if(pills.length===0) return `<div class="wkEmpty">등록 과제 없음</div>`;
+      return `<div class="chips">${pills.join("")}</div>`;
     }
 
     function renderWeek(dateKey){
-      const weekList = document.getElementById("weekList");
+      const weekGrid = document.getElementById("weekGrid");
       const wkRange = document.getElementById("wkRange");
-
       const start = getWeekStartSunday(dateKey);
       const end = addDays(start, 6);
-
-      const inRangeText = `${formatDateKey(start)} ~ ${formatDateKey(end)}`;
-      wkRange.textContent = inRangeText;
-
-      weekList.innerHTML = "";
+      wkRange.textContent = `${formatDateKey(start)} ~ ${formatDateKey(end)}`;
+      weekGrid.innerHTML = "";
 
       for(let i=0;i<7;i++){
         const dt = addDays(start, i);
         const key = formatDateKey(dt);
 
-        const row = document.createElement("div");
-        row.className = "weekRow";
-        if(key === selectedDateKey) row.classList.add("active");
+        const cell = document.createElement("div");
+        cell.className = "weekCell";
+        if(key === selectedDateKey) cell.classList.add("active");
 
-        const showKey = `${String(dt.getMonth()+1).padStart(2,"0")}.${String(dt.getDate()).padStart(2,"0")}`;
         const dowKor = dayOfWeekKor(dt.getDay());
+        const ymdStr = isInMonth(key) ? key : "월 외";
+        const pills = buildPillsForDate(key);
 
-        let summaryHtml = `<span class="wkEmpty">해당 월 범위 외</span>`;
-        if(isInMonth(key)){
-          const counts = getCountsForDate(key);
-          summaryHtml = buildSummaryTags(counts);
-        }
-
-        row.innerHTML = `
-          <div class="weekDate">
-            <div>${showKey} (${dowKor})</div>
-            <div class="sub">${isInMonth(key) ? key : "월 외"}</div>
+        cell.innerHTML = `
+          <div class="weekCellTop">
+            <div class="dow">${dowKor}</div>
+            <div class="ymd">${ymdStr}</div>
           </div>
-          <div class="weekSummary">${summaryHtml}</div>
+          <div class="weekCellMid">
+            ${pills}
+          </div>
         `;
 
-        row.addEventListener("click", ()=>{
+        cell.addEventListener("click", ()=>{
           if(!isInMonth(key)) return;
           selectDate(key);
         });
-
-        weekList.appendChild(row);
+        weekGrid.appendChild(cell);
       }
     }
 
@@ -1075,32 +1226,23 @@
       const dt = parseDateKey(selectedDateKey);
       dt.setDate(dt.getDate() + delta);
       const key = formatDateKey(dt);
-
-      // 데모는 2026-01만 허용. 월 밖이면 막음.
       if(!isInMonth(key)) return;
       selectDate(key);
     }
 
-    /* =====================
-      ✅ 1-3) DateTile 높이 동기화 (추가)
-      - 우측 iconRow 높이와 동일하게 맞춤
-    ====================== */
-    function syncDateTileHeightToIconRow(){
-      const iconRowEl = document.getElementById("iconRow");
-      if(!iconRowEl) return;
-
-      const h = Math.ceil(iconRowEl.getBoundingClientRect().height);
-      document.documentElement.style.setProperty("--iconRowH", h + "px");
+    function moveDay(delta){
+      const dt = parseDateKey(selectedDateKey);
+      dt.setDate(dt.getDate() + delta);
+      const key = formatDateKey(dt);
+      if(!isInMonth(key)) return;
+      selectDate(key);
     }
 
-    /* =====================
-      2) AI 고객리스트(선택된 과제 기준)
-    ====================== */
+    /* ===================== 2) AI 고객리스트(선택된 과제 기준) ====================== */
     function buildCustomersForTask(taskIdx){
       const base = 600000000 + (taskIdx * 10000);
       const names = ["박상수","김수진","정민수","성현수","김소진","이도현","최은지","홍길동","윤지아","한서준","정*일","곽*선","고*표"];
       const prios = ["1","2","3","4","5"];
-
       const n = 6 + (taskIdx % 3);
       const list = [];
       for(let i=0;i<n;i++){
@@ -1108,19 +1250,14 @@
         const custName = names[(taskIdx + i) % names.length];
         const done = (i===0 && taskIdx%4===0) ? "Y" : "N";
         const start = "202601" + String(10 + ((taskIdx+i)%15)).padStart(2,"0");
-        const end   = "202601" + String(20 + ((taskIdx+i)%10)).padStart(2,"0");
+        const end = "202601" + String(20 + ((taskIdx+i)%10)).padStart(2,"0");
         list.push({ done, custNo, custName, start, end, prio: prios[(taskIdx+i)%prios.length] });
       }
       return list;
     }
 
-    /* =====================
-      3) SMS 템플릿
-    ====================== */
-    const CONTENT_KEYWORDS = [
-      "우대금리 점검", "만기 리마인드", "급여이체 등록", "결제계좌 변경", "재가입 혜택", "이벤트 안내"
-    ];
-
+    /* ===================== 3) SMS 템플릿 ====================== */
+    const CONTENT_KEYWORDS = [ "우대금리 점검", "만기 리마인드", "급여이체 등록", "결제계좌 변경", "재가입 혜택", "이벤트 안내" ];
     function makeTplTitle(baseName, kw){
       const map = {
         "적립식": "적립식 적금 우대조건 안내",
@@ -1132,18 +1269,13 @@
       const body = map[baseName] || baseName;
       return `[${kw}] ${body}`;
     }
-
     function makeSmsCopy({custName, product, kw}){
-      return `[신한] ${custName} 고객님
-${product} 관련 ${kw} 안내드립니다.
-
+      return `[신한] ${custName} 고객님 ${product} 관련 ${kw} 안내드립니다.
 • 조건 충족 시 우대금리 적용 가능
 • 모바일에서 1분 확인/등록 가능
-
 지금 확인하기 ▶ https://shb.kr/ab12cd (더미)
 수신거부 080-000-0000`;
     }
-
     const SMS_TEMPLATES = [
       { base:"적립식", purpose:"상품안내", product:"적립식 적금" },
       { base:"적금 이벤트", purpose:"상품안내", product:"이벤트 적금" },
@@ -1157,9 +1289,7 @@ ${product} 관련 ${kw} 안내드립니다.
       preview: "🔍"
     }));
 
-    /* =====================
-      ✅ 4) 고객별 브리핑/스크립트 seed 유틸
-    ====================== */
+    /* ===================== 4) 고객별 브리핑/스크립트 seed 유틸 ====================== */
     function hashSeed(str){
       let h = 2166136261;
       for(let i=0;i<str.length;i++){
@@ -1173,17 +1303,12 @@ ${product} 관련 ${kw} 안내드립니다.
       x ^= x << 13; x ^= x >>> 17; x ^= x << 5;
       return (x >>> 0) / 4294967295;
     }
-    function pick(arr, r){
-      return arr[Math.floor(r * arr.length)];
-    }
+    function pick(arr, r){ return arr[Math.floor(r * arr.length)]; }
 
-    /* =====================
-      5) TM 스크립트 타이핑 (✅ 고객별로 다르게)
-    ====================== */
+    /* ===================== 5) TM 스크립트 타이핑 ====================== */
     function buildTMScriptByCustomer(cust, taskName, dateKey){
       const seed = hashSeed(`${dateKey}|${taskName}|${cust.custNo}|TM`);
       const r1 = rand01(seed+11), r2 = rand01(seed+37), r3 = rand01(seed+71), r4 = rand01(seed+101);
-
       const painPoints = [
         "우대금리 조건 누락 가능성",
         "만기 도래/재가입 공백",
@@ -1203,18 +1328,15 @@ ${product} 관련 ${kw} 안내드립니다.
         "제가 체크리스트만 정리해드리고, 고객님은 한 가지만 선택하시면 됩니다.",
         "지금 바로 확인만 하셔도 손해 보는 구간을 줄일 수 있습니다."
       ];
-
       const pt = pick(painPoints, r1);
       const act1 = pick(actions, r2);
       const act2 = pick(actions, r3);
       const closeMent = pick(closing, r4);
-
       const callTime = (9 + Math.floor(r2*4)) + ":00";
       const benefit = (10 + Math.floor(r3*40)) + "bp";
-      const est = Math.floor((r4*80_000) + 12_000).toLocaleString();
+      const est = Math.floor((r4*80000) + 12000).toLocaleString();
 
       return `✨ AI-Generated TM 스크립트 (고객별 맞춤)
-
 [대상] ${cust.custNo} / ${cust.custName} 고객님
 [과제] ${taskName}
 [권장 콜 타임] ${callTime}
@@ -1235,8 +1357,7 @@ ${product} 관련 ${kw} 안내드립니다.
 - “조건이 맞으면 고객님 기준 예상 이자/혜택 개선이 약 ${est}원 수준으로 추정됩니다. (더미)”
 
 5) 마무리/동의 유도
-- “${closeMent}”
-`;
+- “${closeMent}”`;
     }
 
     function typewriter(el, text, speed=9){
@@ -1251,25 +1372,20 @@ ${product} 관련 ${kw} 안내드립니다.
       return timer;
     }
 
-    /* =====================
-      6) 고객 브리핑(✅ 고객별로 다르게)
-    ====================== */
+    /* ===================== 6) 고객 브리핑 ====================== */
     function buildBriefing(cust, taskName, dateKey){
       const seed = hashSeed(`${dateKey}|${taskName}|${cust.custNo}|BRIEF`);
       const r1 = rand01(seed+11), r2 = rand01(seed+37), r3 = rand01(seed+71), r4 = rand01(seed+101), r5 = rand01(seed+151);
-
-      const balance = Math.floor(10_000_000 + r1*490_000_000).toLocaleString();
-      const avgBal = Math.floor(5_000_000 + r2*120_000_000).toLocaleString();
+      const balance = Math.floor(10000000 + r1*490000000).toLocaleString();
+      const avgBal = Math.floor(5000000 + r2*120000000).toLocaleString();
       const lastContact = `${String(1+Math.floor(r3*18)).padStart(2,"0")}일 전`;
       const bestTime = `${9+Math.floor(r4*7)}:${(r5>0.6? "30":"00")}`;
       const maturityY = 2026 + Math.floor(r2*4);
       const maturityM = 1 + Math.floor(r3*12);
       const maturityD = 1 + Math.floor(r4*28);
       const maturity = `${maturityY}.${String(maturityM).padStart(2,"0")}.${String(maturityD).padStart(2,"0")}`;
-
       const segments = ["생활금융형", "자산증대 가망형", "만기 민감형", "혜택 민감형", "디지털 선호형"];
       const seg = pick(segments, r1);
-
       const keySignals = [
         "최근 타행 이체 비중 증가(더미)",
         "만기 이후 재가입 공백 가능성(더미)",
@@ -1277,7 +1393,6 @@ ${product} 관련 ${kw} 안내드립니다.
         "급여/결제 연결 약화 신호(더미)",
         "최근 잔액 변동성 확대(더미)"
       ];
-
       const nextBest = [
         "‘한 가지 조건’만 즉시 충족시키는 방향으로 안내",
         "만기 리마인드 후 재예치/재가입 옵션 제시",
@@ -1285,16 +1400,13 @@ ${product} 관련 ${kw} 안내드립니다.
         "모바일 전자통지 등록으로 관계 유지 비용 절감",
         "고객 관심사(우대/혜택) 중심으로 짧게 제시"
       ];
-
       const signal1 = pick(keySignals, r2);
       const signal2 = pick(keySignals, r3);
       const nbo = pick(nextBest, r4);
-
-      const est = Math.floor(5_000 + r5*95_000).toLocaleString();
+      const est = Math.floor(5000 + r5*95000).toLocaleString();
       const today = `${dateKey.replaceAll("-",".")}`;
 
       return `【고객상황 및 접촉 전략 (고객별 맞춤)】
-
 [기본정보]
 - 고객: ${cust.custNo} / ${cust.custName}
 - 세그(더미): ${seg}
@@ -1316,27 +1428,22 @@ ${product} 관련 ${kw} 안내드립니다.
 - ${nbo}
 - 예상 혜택/절감: 약 ${est}원 수준 개선 여지 (더미)
 
-※ 본 브리핑은 데모용 가상 데이터 기반으로, 고객/과제/날짜에 따라 내용이 달라지도록 생성됩니다.
-`;
+※ 본 브리핑은 데모용 가상 데이터 기반으로, 고객/과제/날짜에 따라 내용이 달라지도록 생성됩니다.`;
     }
 
-    /* =====================
-      7) Bottom Final Report 더미
-    ====================== */
+    /* ===================== 7) Bottom Final Report 더미 ====================== */
     function buildFinalInlineMetrics(dateKey, taskName){
       const seed = hashSeed(`${dateKey}|${taskName}|INLINE`);
       const r1 = rand01(seed + 11);
       const r2 = rand01(seed + 37);
       const r3 = rand01(seed + 71);
-
       const total = 100 + Math.floor(r1 * 900);
       const done = Math.floor(total * (0.15 + r2 * 0.35));
       const notDone = Math.max(0, total - done);
       const touched = Math.floor(done * (0.6 + r3 * 0.35));
-
       const lines = [
-        `접촉 완료 ${done.toLocaleString()}명 중 적립식 상품 신규 1건 / ${Math.floor(rand01(seed+201)*80_000_000+5_000_000).toLocaleString()}원 완료`,
-        `접촉 완료 ${done.toLocaleString()}명 중 거치식 상품 신규 2건 / ${Math.floor(rand01(seed+301)*120_000_000+10_000_000).toLocaleString()}원 완료`,
+        `접촉 완료 ${done.toLocaleString()}명 중 적립식 상품 신규 1건 / ${Math.floor(rand01(seed+201)*80000000+5000000).toLocaleString()}원 완료`,
+        `접촉 완료 ${done.toLocaleString()}명 중 거치식 상품 신규 2건 / ${Math.floor(rand01(seed+301)*120000000+10000000).toLocaleString()}원 완료`,
         `영업점 접근 고객과제 성과 확인 요망입니다.`
       ];
       const checks = [
@@ -1344,18 +1451,15 @@ ${product} 관련 ${kw} 안내드립니다.
         rand01(seed+601) > 0.35,
         true
       ];
-
       return { total, done, notDone, touched, lines, checks };
     }
 
     function renderFinalInline(dateKey, taskName){
       const m = buildFinalInlineMetrics(dateKey, taskName);
-
       document.getElementById("finalInlineDatePill").textContent = `기준일: ${dateKey}`;
       document.getElementById("kpiDone").textContent = `${m.done.toLocaleString()} / ${m.total.toLocaleString()}`;
       document.getElementById("kpiTouchedInline").textContent = `${m.touched.toLocaleString()}`;
       document.getElementById("kpiNotDone").textContent = `${m.notDone.toLocaleString()}`;
-
       document.getElementById("finalChecklistTitle").textContent = taskName;
 
       const ul = document.getElementById("finalChecklistUl");
@@ -1370,105 +1474,95 @@ ${product} 관련 ${kw} 안내드립니다.
       });
     }
 
-    /* =====================
-      8) DOM
-    ====================== */
+    /* ===================== 8) DOM ====================== */
+    const miniYM = document.getElementById("miniYM");
     const bigDay = document.getElementById("bigDay");
     const bigDow = document.getElementById("bigDow");
+    const btnPrevDay = document.getElementById("btnPrevDay");
+    const btnNextDay = document.getElementById("btnNextDay");
 
     const taskTbody = document.getElementById("taskTbody");
-    const taskTabs  = document.getElementById("taskTabs");
-    const iconRow   = document.getElementById("iconRow");
+    const taskTabs = document.getElementById("taskTabs");
+    const iconRow = document.getElementById("iconRow");
     const taskEmpty = document.getElementById("taskEmpty");
     const taskTable = document.getElementById("taskTable");
     const taskThead = document.getElementById("taskThead");
     const btnQuickMyCare = document.getElementById("btnQuickMyCare");
-
     const bottomPanel = document.getElementById("bottomPanel");
-    const btnClear  = document.getElementById("btnClear");
-    const btnRun    = document.getElementById("btnRun");
-    const custHint  = document.getElementById("custHint");
+
+    const btnClear = document.getElementById("btnClear");
+    const btnRun = document.getElementById("btnRun");
+    const custHint = document.getElementById("custHint");
     const custTable = document.getElementById("custTable");
     const custTbody = document.getElementById("custTbody");
 
-    const cntAI    = document.getElementById("cntAI");
-    const cntREQ   = document.getElementById("cntREQ");
+    const cntAI = document.getElementById("cntAI");
+    const cntREQ = document.getElementById("cntREQ");
     const cntCLOSE = document.getElementById("cntCLOSE");
-    const cntSCH   = document.getElementById("cntSCH");
+    const cntSCH = document.getElementById("cntSCH");
 
-    /* Bottom Final Inline */
     const radioCust = document.getElementById("radioCust");
     const radioFinal = document.getElementById("radioFinal");
     const custArea = document.getElementById("custArea");
     const finalInlineArea = document.getElementById("finalInlineArea");
     const finalInlineTaskSelect = document.getElementById("finalInlineTaskSelect");
 
-    /* Weekly buttons */
     const btnPrevWeek = document.getElementById("btnPrevWeek");
     const btnNextWeek = document.getElementById("btnNextWeek");
     const btnThisWeek = document.getElementById("btnThisWeek");
 
-    /* SMS */
     const overlaySMS = document.getElementById("overlaySMS");
     const smsTplTbody= document.getElementById("smsTplTbody");
     const smsCustList= document.getElementById("smsCustList");
     const btnSmsSend = document.getElementById("btnSmsSend");
     const smsPreviewBox = document.getElementById("smsPreviewBox");
 
-    /* Overlays */
-    const overlay1  = document.getElementById("overlay1");
+    const overlay1 = document.getElementById("overlay1");
     const overlayTM = document.getElementById("overlayTM");
-    const close1    = document.getElementById("close1");
-    const closeTM   = document.getElementById("closeTM");
-    const closeSMS  = document.getElementById("closeSMS");
-    const btnGoTM   = document.getElementById("btnGoTM");
-    const btnGoSMS  = document.getElementById("btnGoSMS");
-    const tmCnt     = document.getElementById("tmCnt");
-    const smsCnt    = document.getElementById("smsCnt");
+    const close1 = document.getElementById("close1");
+    const closeTM = document.getElementById("closeTM");
+    const closeSMS = document.getElementById("closeSMS");
+    const btnGoTM = document.getElementById("btnGoTM");
+    const btnGoSMS = document.getElementById("btnGoSMS");
+    const tmCnt = document.getElementById("tmCnt");
+    const smsCnt = document.getElementById("smsCnt");
 
-    /* TM */
     const scriptBox = document.getElementById("scriptBox");
-    const btnGenTM  = document.getElementById("btnGenTM");
+    const btnGenTM = document.getElementById("btnGenTM");
     const tmPickList= document.getElementById("tmPickList");
     const btnTmExec = document.getElementById("btnTmExec");
     let typingTimer = null;
 
-    /* Briefing */
     const overlayBrief = document.getElementById("overlayBrief");
     const closeBrief = document.getElementById("closeBrief");
     const briefText = document.getElementById("briefText");
     let briefTimer = null;
 
-    /* MyCare */
     const overlayMyCare = document.getElementById("overlayMyCare");
     const closeMyCare = document.getElementById("closeMyCare");
 
-    /* 헤더 전체선택 */
     const chkAllCustomers = document.getElementById("chkAllCustomers");
 
-    /* =====================
-      9) 상태
-    ====================== */
+    /* ===================== 9) 상태 ====================== */
     let selectedCategory = "AI";
     let selectedDateKey = "2026-01-19";
     let selectedTaskIdxWithinDate = 0;
-
     let currentTasksForDate = { AI:[], REQ:[], CLOSE:[], SCH:[] };
     let currentCustomers = [];
     let selectedCustNos = new Set();
-
     let selectedTplIdx = null;
     let selectedTaskName = "";
 
-    /* =====================
-      10) UI helper
-    ====================== */
+    /* ===================== 10) UI helper ====================== */
     function updateBigDate(dateKey){
-      const d = Number(dateKey.split("-")[2]);
+      const dt = parseDateKey(dateKey);
+      const y = dt.getFullYear();
+      const m = dt.getMonth()+1;
+      const d = dt.getDate();
+      miniYM.textContent = `${y}-${String(m).padStart(2,"0")}`;
       bigDay.textContent = String(d);
-      bigDow.textContent = dayOfWeekStr(CAL_YEAR, CAL_MONTH, d);
+      bigDow.textContent = dayOfWeekStr(y, m, d);
     }
-
     function setActiveIcons(cat){
       [...iconRow.querySelectorAll(".round")].forEach(r=>{
         r.classList.toggle("active", r.dataset.cat === cat);
@@ -1479,18 +1573,15 @@ ${product} 관련 ${kw} 안내드립니다.
         t.classList.toggle("active", t.dataset.cat === cat);
       });
     }
-
     function updateHeaderCounts(){
       const c = getCountsForDate(selectedDateKey);
-      cntAI.textContent    = `(${c.AI})`;
-      cntREQ.textContent   = `(${c.REQ})`;
+      cntAI.textContent = `(${c.AI})`;
+      cntREQ.textContent = `(${c.REQ})`;
       cntCLOSE.textContent = `(${c.CLOSE})`;
-      cntSCH.textContent   = `(${c.SCH})`;
+      cntSCH.textContent = `(${c.SCH})`;
     }
 
-    /* =====================
-      11) 카테고리 전환
-    ====================== */
+    /* ===================== 11) 카테고리 전환 ====================== */
     function selectCategory(cat){
       if(["ETC1","ETC2","ETC3"].includes(cat)){
         alert("해당 아이콘은 별도 화면으로 이동하는 영역입니다. (데모에서는 화면 전환만 구현)");
@@ -1499,7 +1590,6 @@ ${product} 관련 ${kw} 안내드립니다.
       selectedCategory = cat;
       setActiveIcons(cat);
       setActiveTabs(cat);
-
       renderTasksForSelectedDateAndCategory();
 
       if(cat === "AI"){
@@ -1510,17 +1600,13 @@ ${product} 관련 ${kw} 안내드립니다.
           btnRun.disabled = true;
           selectedCustNos.clear();
           syncHeaderCheckbox();
-        } else {
+        }else{
           selectTaskAI(0);
         }
-      } else {
+      }else{
         bottomPanel.style.display = "none";
       }
-
-      /* ✅ iconRow 높이 변화 가능성 대응 */
-      syncDateTileHeightToIconRow();
     }
-
     iconRow.querySelectorAll(".round").forEach(el=>{
       el.addEventListener("click", ()=>selectCategory(el.dataset.cat));
     });
@@ -1528,14 +1614,11 @@ ${product} 관련 ${kw} 안내드립니다.
       el.addEventListener("click", ()=>selectCategory(el.dataset.cat));
     });
 
-    /* =====================
-      12) 날짜 선택
-    ====================== */
+    /* ===================== 12) 날짜 선택 ====================== */
     function selectDate(dateKey){
       selectedDateKey = dateKey;
       updateBigDate(dateKey);
       updateHeaderCounts();
-
       currentTasksForDate = DATE_TASK_MAP[dateKey] || {AI:[],REQ:[],CLOSE:[],SCH:[]};
 
       renderTasksForSelectedDateAndCategory();
@@ -1543,7 +1626,6 @@ ${product} 관련 ${kw} 안내드립니다.
 
       if(isFinalMode()){
         refreshFinalInlineDropdown();
-        syncDateTileHeightToIconRow();
         return;
       }
 
@@ -1554,18 +1636,13 @@ ${product} 관련 ${kw} 안내드립니다.
           selectedCustNos.clear();
           btnRun.disabled = true;
           syncHeaderCheckbox();
-        } else {
+        }else{
           selectTaskAI(0);
         }
       }
-
-      /* ✅ 날짜 변경 시에도 재동기화 */
-      syncDateTileHeightToIconRow();
     }
 
-    /* =====================
-      13) 우측 과제 리스트 렌더
-    ====================== */
+    /* ===================== 13) 우측 과제 리스트 렌더 ====================== */
     function setTaskTableHeaderForCategory(cat){
       if(cat === "REQ" || cat === "CLOSE"){
         taskThead.innerHTML = `
@@ -1574,8 +1651,9 @@ ${product} 관련 ${kw} 안내드립니다.
             <th>과제명</th>
             <th style="width:90px;">대상건수</th>
             <th style="width:90px;">실시건수</th>
-          </tr>`;
-      } else {
+          </tr>
+        `;
+      }else{
         taskThead.innerHTML = `<tr><th style="width:56px;">No</th><th>과제명</th></tr>`;
       }
     }
@@ -1583,8 +1661,8 @@ ${product} 관련 ${kw} 안내드립니다.
     function renderTasksForSelectedDateAndCategory(){
       const idxList = currentTasksForDate[selectedCategory] || [];
       taskTbody.innerHTML = "";
-
       btnQuickMyCare.style.display = (selectedCategory === "REQ" || selectedCategory === "CLOSE") ? "inline-flex" : "none";
+
       setTaskTableHeaderForCategory(selectedCategory);
 
       if(idxList.length === 0){
@@ -1607,44 +1685,38 @@ ${product} 관련 ${kw} 안내드립니다.
             <td>${i+1}</td>
             <td>${escapeHtml(name)}</td>
             <td style="text-align:right;">${c.target.toLocaleString()}</td>
-            <td style="text-align:right;">${c.done.toLocaleString()}</td>`;
-        } else {
+            <td style="text-align:right;">${c.done.toLocaleString()}</td>
+          `;
+        }else{
           tr.innerHTML = `<td>${i+1}</td><td>${escapeHtml(name)}</td>`;
         }
 
         if(selectedCategory === "AI"){
           tr.addEventListener("click", ()=>selectTaskAI(i));
           if(i===selectedTaskIdxWithinDate) tr.classList.add("active");
-        } else {
+        }else{
           tr.addEventListener("click", ()=>{
             [...taskTbody.querySelectorAll("tr")].forEach(x=>x.classList.remove("active"));
             tr.classList.add("active");
           });
         }
-
         taskTbody.appendChild(tr);
       });
     }
 
-    /* =====================
-      14) AI 과제 선택 → 고객 리스트
-    ====================== */
+    /* ===================== 14) AI 과제 선택 → 고객 리스트 ====================== */
     function selectTaskAI(idxWithinDate){
       selectedTaskIdxWithinDate = idxWithinDate;
-
       [...taskTbody.querySelectorAll("tr")].forEach(tr=>{
         tr.classList.toggle("active", Number(tr.dataset.idx) === idxWithinDate);
       });
 
       const masterIdx = currentTasksForDate.AI[idxWithinDate];
       selectedTaskName = TASKS_MASTER.AI[masterIdx];
-
       currentCustomers = buildCustomersForTask(masterIdx);
       selectedCustNos.clear();
-
       renderCustomers();
       updateRunButton();
-
       custHint.textContent = `선택 과제: ${selectedTaskName} (고객 ${currentCustomers.length}명)`;
       custTable.style.display = "table";
 
@@ -1655,18 +1727,15 @@ ${product} 관련 ${kw} 안내드립니다.
 
     function syncHeaderCheckbox(){
       if(!chkAllCustomers) return;
-
       const all = currentCustomers.map(c=>c.custNo);
       const anyChecked = all.some(no=>selectedCustNos.has(no));
       const allChecked = all.length>0 && all.every(no=>selectedCustNos.has(no));
-
       chkAllCustomers.checked = allChecked;
       chkAllCustomers.indeterminate = !allChecked && anyChecked;
     }
 
     function renderCustomers(){
       custTbody.innerHTML = "";
-
       if(chkAllCustomers){
         chkAllCustomers.checked = false;
         chkAllCustomers.indeterminate = false;
@@ -1710,7 +1779,6 @@ ${product} 관련 ${kw} 안내드립니다.
           const custNo = e.target.dataset.cust;
           if(e.target.checked) selectedCustNos.add(custNo);
           else selectedCustNos.delete(custNo);
-
           syncHeaderCheckbox();
           updateRunButton();
         });
@@ -1738,15 +1806,11 @@ ${product} 관련 ${kw} 안내드립니다.
       updateRunButton();
     });
 
-    /* =====================
-      15) 팝업 공통
-    ====================== */
+    /* ===================== 15) 팝업 공통 ====================== */
     function openOverlay(el){ el.style.display = "flex"; }
     function closeOverlay(el){ el.style.display = "none"; }
 
-    /* =====================
-      16) 1차 팝업(채널 선택)
-    ====================== */
+    /* ===================== 16) 1차 팝업(채널 선택) ====================== */
     function openModal1(){
       const picked = Array.from(selectedCustNos);
       tmCnt.textContent = Math.min(2, picked.length);
@@ -1754,12 +1818,11 @@ ${product} 관련 ${kw} 안내드립니다.
       openOverlay(overlay1);
     }
     btnRun.addEventListener("click", openModal1);
+
     close1.addEventListener("click", ()=>closeOverlay(overlay1));
     overlay1.addEventListener("click", (e)=>{ if(e.target === overlay1) closeOverlay(overlay1); });
 
-    /* =====================
-      17) TM 팝업 (✅ 고객별 스크립트 생성)
-    ====================== */
+    /* ===================== 17) TM 팝업 ====================== */
     function resetTMModal(){
       if(typingTimer) clearInterval(typingTimer);
       typingTimer = null;
@@ -1801,8 +1864,8 @@ ${product} 관련 ${kw} 안내드립니다.
       renderTmPickList();
       openOverlay(overlayTM);
     }
-
     btnGoTM.addEventListener("click", openTMModal);
+
     closeTM.addEventListener("click", ()=>closeOverlay(overlayTM));
     overlayTM.addEventListener("click", (e)=>{ if(e.target === overlayTM) closeOverlay(overlayTM); });
 
@@ -1834,15 +1897,12 @@ ${product} 관련 ${kw} 안내드립니다.
       closeOverlay(overlayTM);
     });
 
-    /* =====================
-      18) SMS 팝업
-    ====================== */
+    /* ===================== 18) SMS 팝업 ====================== */
     function getFirstSmsCustomer(){
       const pickedNos = Array.from(selectedCustNos);
       const show = pickedNos.slice(0,3).map(no => currentCustomers.find(c=>c.custNo===no)).filter(Boolean);
       return show[0] ?? null;
     }
-
     function highlightTplRow(idx){
       [...smsTplTbody.querySelectorAll("tr")].forEach(tr=>{
         tr.classList.toggle("rowPick", Number(tr.dataset.idx) === idx);
@@ -1880,7 +1940,7 @@ ${product} 관련 ${kw} 안내드립니다.
             const custName = anyCust?.custName ?? "고객";
             const tpl = SMS_TEMPLATES[idx];
             smsPreviewBox.textContent = makeSmsCopy({custName, product: tpl.product, kw: tpl.kw});
-          } else {
+          }else{
             selectedTplIdx = null;
             clearTplHighlight();
             smsPreviewBox.textContent = "템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.";
@@ -1932,13 +1992,12 @@ ${product} 관련 ${kw} 안내드립니다.
       selectedTplIdx = null;
       btnSmsSend.disabled = true;
       smsPreviewBox.textContent = "템플릿을 선택하면 이 영역에 미리보기 문구가 표시됩니다.";
-
       renderSmsTemplates();
       renderSmsCustomers();
       openOverlay(overlaySMS);
     }
-
     btnGoSMS.addEventListener("click", openSMSModal);
+
     closeSMS.addEventListener("click", ()=>closeOverlay(overlaySMS));
     overlaySMS.addEventListener("click", (e)=>{ if(e.target === overlaySMS) closeOverlay(overlaySMS); });
 
@@ -1957,40 +2016,27 @@ ${product} 관련 ${kw} 안내드립니다.
       closeOverlay(overlaySMS);
     });
 
-    /* =====================
-      19) 고객 브리핑 팝업(✅ 고객별)
-    ====================== */
+    /* ===================== 19) 고객 브리핑 팝업 ====================== */
     function openBriefingModal(cust){
       if(!cust) return;
-
       if(briefTimer) clearInterval(briefTimer);
       briefText.textContent = "고객 브리핑을 생성 중입니다...";
-
       const payload = buildBriefing(cust, selectedTaskName || "AI연계과제", selectedDateKey);
-
       openOverlay(overlayBrief);
-
       setTimeout(()=>{
         if(briefTimer) clearInterval(briefTimer);
         briefTimer = typewriter(briefText, payload, 6);
       }, 220);
     }
-
     closeBrief.addEventListener("click", ()=>closeOverlay(overlayBrief));
     overlayBrief.addEventListener("click", (e)=>{ if(e.target === overlayBrief) closeOverlay(overlayBrief); });
 
-    /* =====================
-      20) MyCare 바로가기 팝업
-    ====================== */
-    btnQuickMyCare.addEventListener("click", ()=>{
-      openOverlay(overlayMyCare);
-    });
+    /* ===================== 20) MyCare 바로가기 팝업 ====================== */
+    btnQuickMyCare.addEventListener("click", ()=>{ openOverlay(overlayMyCare); });
     closeMyCare.addEventListener("click", ()=>closeOverlay(overlayMyCare));
     overlayMyCare.addEventListener("click", (e)=>{ if(e.target === overlayMyCare) closeOverlay(overlayMyCare); });
 
-    /* =====================
-      21) Bottom Final Report 토글/드롭다운
-    ====================== */
+    /* ===================== 21) Bottom Final Report 토글/드롭다운 ====================== */
     function isFinalMode(){ return radioFinal && radioFinal.checked; }
 
     function getTasksForFinalDropdown(dateKey){
@@ -2015,7 +2061,7 @@ ${product} 관련 ${kw} 안내드립니다.
       if(preferred){
         finalInlineTaskSelect.value = preferred;
         renderFinalInline(selectedDateKey, preferred);
-      } else {
+      }else{
         renderFinalInline(selectedDateKey, "AI연계과제");
       }
     }
@@ -2024,7 +2070,6 @@ ${product} 관련 ${kw} 안내드립니다.
       custArea.style.display = "block";
       finalInlineArea.style.display = "none";
     }
-
     function showBottomFinal(){
       custArea.style.display = "none";
       finalInlineArea.style.display = "flex";
@@ -2036,24 +2081,18 @@ ${product} 관련 ${kw} 안내드립니다.
     });
 
     if(radioFinal && radioCust){
-      radioFinal.addEventListener("change", ()=>{
-        if(radioFinal.checked) showBottomFinal();
-      });
-      radioCust.addEventListener("change", ()=>{
-        if(radioCust.checked) showBottomCust();
-      });
+      radioFinal.addEventListener("change", ()=>{ if(radioFinal.checked) showBottomFinal(); });
+      radioCust.addEventListener("change", ()=>{ if(radioCust.checked) showBottomCust(); });
     }
 
-    /* =====================
-      22) Weekly buttons
-    ====================== */
+    /* ===================== 22) Weekly buttons + Day arrows ====================== */
     btnPrevWeek.addEventListener("click", ()=>moveWeek(-7));
     btnNextWeek.addEventListener("click", ()=>moveWeek(7));
     btnThisWeek.addEventListener("click", ()=>renderWeek(selectedDateKey));
+    btnPrevDay.addEventListener("click", ()=>moveDay(-1));
+    btnNextDay.addEventListener("click", ()=>moveDay(1));
 
-    /* =====================1
-      23) Utils + Init
-    ====================== */
+    /* ===================== 23) Utils + Init ====================== */
     function escapeHtml(str){
       return String(str)
         .replaceAll("&","&amp;")
@@ -2065,28 +2104,17 @@ ${product} 관련 ${kw} 안내드립니다.
 
     function selectDefault(){
       buildDateTaskMap();
-
       currentTasksForDate = DATE_TASK_MAP[selectedDateKey];
-
       updateBigDate(selectedDateKey);
       updateHeaderCounts();
-
       renderWeek(selectedDateKey);
       renderTasksForSelectedDateAndCategory();
-
       selectCategory("AI");
       showBottomCust();
-
-      /* ✅ 최초 렌더 직후 높이 동기화(레이아웃 확정 후) */
-      requestAnimationFrame(()=>syncDateTileHeightToIconRow());
-      setTimeout(syncDateTileHeightToIconRow, 0);
     }
 
     /* 초기 실행 */
     selectDefault();
-
-    /* ✅ 리사이즈 시에도 지속 동기화 */
-    window.addEventListener("resize", syncDateTileHeightToIconRow);
   </script>
 </body>
 </html>
