@@ -1858,6 +1858,88 @@ html, body{
 /* 템플릿명(맞춤 문자 List) 행이 많아도 좌측 표만 스크롤되게 유지 */
 #overlaySMS .smsTableWrap{ overflow:auto !important; }
 
+
+
+/* ===== FIX(재): 발송대상 스크롤 강제 + 문자발송 버튼 항상 노출 ===== */
+#overlaySMS .modal.modalSMS{
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+#overlaySMS .smsBody{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+#overlaySMS .smsGrid{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+#overlaySMS .smsRight{
+  flex: 0 0 auto !important;
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:0 !important;
+  max-height:100% !important;
+  overflow:hidden !important;
+}
+/* 발송대상 목록이 많으면 여기서 반드시 스크롤 */
+#overlaySMS .smsCustBox{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: calc(100% - 54px) !important; /* 버튼 영역 제외 */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+/* 버튼은 팝업 안 하단에 항상 붙어 있게 */
+#overlaySMS #btnSmsSend{
+  flex: 0 0 44px !important;
+  height: 44px !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 5 !important;
+  width: 100% !important;
+  margin-top: 10px !important;
+}
+
+/* ===== FIX: 발송대상 체크박스/텍스트 줄바꿈으로 폭 과점유 방지 ===== */
+#overlaySMS .smsCustBox label{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  white-space:normal !important;
+  word-break:break-word !important;
+}
+
+/* ===== Responsive scaler 개선: 여백 최소화(가로/세로 중 큰 비율로 확대, overflow로 보장) ===== */
+#viewport{
+  overflow:auto !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+}
+
+
+
+/* ===== FULL FILL (no blank margins, no page scroll): non-uniform scale to viewport ===== */
+html, body{
+  width:100% !important;
+  height:100% !important;
+  margin:0 !important;
+  overflow:hidden !important; /* 페이지 자체 스크롤 제거 */
+}
+#viewport{
+  width:100vw !important;
+  height:100vh !important;
+  overflow:hidden !important; /* viewport 자체 스크롤 제거 */
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+}
+#appRoot{
+  transform-origin: top left !important;
+}
+
 </style>
 </head>
 <body><div id="viewport"><div id="appRoot"><div id="scale-root">
@@ -4187,24 +4269,26 @@ function updateScale(){
   const baseW = 1280, baseH = 800;
   const vw = window.innerWidth, vh = window.innerHeight;
 
-  // Fill width to reduce side margins; allow vertical scroll if height is insufficient.
-  let scale = vw / baseW;
-
-  // Prevent extreme upscaling that can make text too large on very wide screens.
-  scale = Math.min(scale, 1.15);
+  // 여백 0: 화면을 완전히 채우기 위해 X/Y를 각각 스케일링 (비율 왜곡은 최소 수준으로만 발생)
+  const sx = vw / baseW;
+  const sy = vh / baseH;
 
   const root = document.getElementById('appRoot') || document.getElementById('app') || document.body;
   root.style.width = baseW + 'px';
   root.style.height = baseH + 'px';
   root.style.transformOrigin = 'top left';
-  root.style.transform = `scale(${scale})`;
+  root.style.transform = `scaleX(${sx}) scaleY(${sy})`;
 
-  // Make viewport scroll range match scaled size (so no cropping, less empty margins)
   const vp = document.getElementById('viewport');
   if(vp){
-    vp.style.overflow = 'auto';
-    vp.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#f3f4f6';
+    vp.style.width = '100vw';
+    vp.style.height = '100vh';
+    vp.style.overflow = 'hidden';
   }
+
+  // 페이지 스크롤이 생기지 않도록 강제
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
 }
 window.addEventListener('resize', updateScale);
 window.addEventListener('orientationchange', updateScale);
