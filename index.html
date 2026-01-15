@@ -1454,9 +1454,357 @@ html, body{
   #overlaySMS .modal3Body{ grid-template-columns: 1fr 260px; }
 }
 
+
+
+/* ================== FIX: 문자 발송 팝업(발송대상/버튼) 오버플로 방지 ================== */
+#overlaySMS{
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+/* 실제 모달 클래스는 modalSMS 사용 */
+#overlaySMS .modalSMS{
+  width: min(900px, 92vw) !important;
+  height: min(520px, 70vh) !important;
+  max-height: min(520px, 70vh) !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+/* 본문 높이 계산을 위해 min-height:0 필수 */
+#overlaySMS .smsBody{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
+#overlaySMS .smsCard{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
+#overlaySMS .smsGrid{
+  flex:1 1 auto;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns: 1fr 300px;
+  gap:14px;
+}
+
+/* 좌측(템플릿 리스트)도 내부 스크롤로 */
+#overlaySMS .smsLeft{ min-height:0 !important; display:flex; flex-direction:column; }
+#overlaySMS .smsTableWrap{ flex:1 1 auto; min-height:0 !important; overflow:auto !important; }
+
+/* 우측(발송대상 + 발송버튼)을 팝업 높이 안에서만 동작 */
+#overlaySMS .smsRight{
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+#overlaySMS .smsCustBox{
+  flex:1 1 auto;
+  min-height:0 !important;
+  overflow:auto !important;   /* 발송대상만 스크롤 */
+}
+#overlaySMS #smsCustList{ overflow:auto !important; }
+#overlaySMS #btnSmsSend{
+  flex:0 0 auto;
+  margin-top:10px !important;
+  height:42px !important;
+  width:100% !important;
+}
+
+/* 좁은 화면에서는 우측폭 축소 */
+@media (max-width: 900px){
+  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px; }
+}
+
+/* ================== FIX: DM/SMS/MOB/URL 타일 높이/마진 좌우 균형 ================== */
+.mini-grid{
+  gap:10px !important;
+}
+.mini-tile{
+  height:36px !important;              /* 좌우 요소와 동일한 높이감 */
+  padding:0 12px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin:0 !important;
+  line-height:1 !important;
+}
+
+
+
+/* ===== PATCH v3: 문자 발송 팝업 오버플로 완전 차단 + 채널 타일 높이/마진 정합 ===== */
+
+/* 문자 발송 팝업: 모달 내부에서만 스크롤되도록 강제 */
+#overlaySMS{ display:none; }
+#overlaySMS.show, #overlaySMS[style*="display:block"], #overlaySMS[style*="display: block"]{ display:flex !important; }
+#overlaySMS{ position:fixed; inset:0; align-items:center !important; justify-content:center !important; z-index:9999; }
+
+#overlaySMS .modal.modalSMS{
+  width: min(900px, 92vw) !important;
+  height: min(520px, 70vh) !important;
+  max-height: min(520px, 70vh) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important; /* 모달 밖으로 버튼/리스트가 튀어나가는 현상 방지 */
+}
+
+#overlaySMS .smsBody{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+
+#overlaySMS .smsCard{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+
+#overlaySMS .smsTitle{ flex:0 0 auto !important; }
+
+#overlaySMS .smsGrid{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns: 1fr 300px !important;
+  gap:14px !important;
+  overflow:hidden !important;
+}
+
+/* 좌측 리스트: 표 영역만 스크롤 */
+#overlaySMS .smsLeft{ min-height:0 !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; }
+#overlaySMS .smsTableWrap{ flex:1 1 auto !important; min-height:0 !important; overflow:auto !important; }
+
+/* 우측 발송대상: 고객 리스트만 스크롤, 버튼은 하단 고정 */
+#overlaySMS .smsRight{ min-height:0 !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; }
+#overlaySMS .smsCustBox{ flex:1 1 auto !important; min-height:0 !important; overflow:auto !important; padding-right:2px; }
+#overlaySMS #smsCustList{ max-height:none !important; overflow:auto !important; }
+#overlaySMS #btnSmsSend{
+  flex:0 0 auto !important;
+  margin-top:10px !important;
+  width:100% !important;
+  height:42px !important;
+}
+
+/* 하단 힌트가 높이를 밀어내지 않도록(필요 시 줄바꿈만) */
+#overlaySMS .hint{
+  flex:0 0 auto !important;
+  font-size:12px !important;
+  line-height:1.35 !important;
+  padding:8px 16px 12px 16px !important;
+  margin:0 !important;
+  white-space:normal !important;
+}
+
+/* 좁은 화면 */
+@media (max-width:900px){
+  #overlaySMS .modal.modalSMS{ height: min(520px, 74vh) !important; }
+  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px !important; }
+}
+
+/* 채널 바로가기(DM/SMS/MOB/URL): 높이/세로 정렬/간격을 좌우와 동일하게 */
+.channelArea .mini-grid, .mini-grid{ gap:10px !important; }
+.channelArea .mini-tile, .mini-tile{
+  height:36px !important;
+  min-height:36px !important;
+  padding:0 12px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1 !important;
+}
+
+
+
+/* ===== FIX: #viewport 잘림/검은 여백/스케일 동작 안정화 (기존 깨진 CSS 오버라이드) ===== */
+#viewport{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100vh !important;
+  overflow:hidden !important;
+  background: var(--bg, #f3f4f6) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+/* ===== FIX: 상단 탭(top2) 우측 버튼과 겹침 방지 ===== */
+.top2{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0; /* 중요: 내부 축소 허용 */
+}
+.top2 .tabs{
+  flex: 1 1 auto;  /* 탭 영역이 남는 폭을 사용 */
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  overflow:auto;               /* 좁아지면 탭만 스크롤 */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;       /* FF */
+}
+.top2 .tabs::-webkit-scrollbar{ height:0; } /* Chrome */
+.top2 .tab{ white-space:nowrap; flex:0 0 auto; }
+.top2 .spacer{ flex:0 0 6px; } /* 탭이 길어도 우측 버튼 침범 방지 */
+.top2 .mini-btn{ flex:0 0 auto; }
+
+/* (보너스) 탭이 너무 길면 살짝 컴팩트 */
+.top2 .tab{
+  padding:6px 10px;
+  border-radius:6px;
+}
+
+
+
+/* ===== FIX: 문자 발송 팝업(발송대상/버튼) 오버플로 방지 + 미리보기 우선 표시 ===== */
+#overlaySMS{ z-index: 10000 !important; }
+#overlaySMS .modal.modalSMS{
+  width: min(900px, 92vw) !important;
+  height: min(520px, 70vh) !important;
+  max-height: min(520px, 70vh) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important; /* 팝업 밖으로 튀는 요소 차단 */
+}
+#overlaySMS .smsBody{ flex:1 1 auto; min-height:0 !important; }
+#overlaySMS .smsCard{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
+#overlaySMS .smsGrid{
+  flex:1 1 auto;
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns: 1fr 300px;
+  gap:14px;
+}
+#overlaySMS .smsLeft{ min-height:0 !important; display:flex; flex-direction:column; }
+#overlaySMS .smsTableWrap{ flex:1 1 auto; min-height:0 !important; overflow:auto !important; }
+#overlaySMS .smsRight{
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+}
+#overlaySMS .smsCustBox{
+  flex:1 1 auto;
+  min-height:0 !important;
+  overflow:auto !important;   /* 발송대상 리스트만 스크롤 */
+  padding-bottom:6px;
+}
+#overlaySMS #btnSmsSend{
+  flex:0 0 auto !important;
+  width:100% !important;
+  height:42px !important;
+  margin-top:10px !important;
+}
+
+/* 맞춤 문자 List: 미리보기 컬럼이 항상 보이도록 살짝 컴팩트 */
+#overlaySMS table{ width:100%; border-collapse:collapse; }
+#overlaySMS th, #overlaySMS td{ padding:8px 8px !important; font-size:12px !important; }
+#overlaySMS .smsPreviewBtn{
+  padding:6px 10px !important;
+  font-size:12px !important;
+  white-space:nowrap !important;
+}
+
+/* 좁은 화면 대응 */
+@media (max-width: 900px){
+  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px; }
+}
+
+/* ===== FIX: SMS 미리보기 팝업이 항상 최상단에 뜨도록(z-index) ===== */
+#overlaySmsPreview{
+  position:fixed !important;
+  inset:0 !important;
+  z-index: 10050 !important; /* SMS 팝업보다 위 */
+}
+#overlaySmsPreview.show, 
+#overlaySmsPreview[style*="display:block"], 
+#overlaySmsPreview[style*="display: block"]{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+
+
+
+/* ===== Responsive full-viewport scaler: fill width, allow vertical scroll instead of big margins ===== */
+#viewport{
+  overflow:auto !important;          /* allow scroll if scaled content taller */
+  align-items:flex-start !important; /* no forced centering (reduces margins) */
+  justify-content:flex-start !important;
+}
+#appRoot{
+  width:1280px;
+  height:800px;
+  transform-origin: top left;
+}
+
+
+
+
+/* ===== SMS 팝업 레이아웃 재조정: 하단(미리보기) 항상 노출 + 우측 발송대상 폭 축소 ===== */
+#overlaySMS .modal.modalSMS{
+  height: min(520px, 70vh) !important;
+  overflow:hidden !important;
+}
+
+/* 그리드: 우측을 auto로(내용 길이에 맞춰) + 최대폭 제한 */
+#overlaySMS .smsGrid{
+  grid-template-columns: 1fr auto !important;
+}
+#overlaySMS .smsRight{
+  width: auto !important;
+  min-width: 200px !important;
+  max-width: 260px !important; /* 우측 폭 축소 */
+}
+
+/* 좌측: '맞춤 문자 List' + '미리보기'가 항상 보이도록 */
+#overlaySMS .smsLeft{
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:0 !important;
+}
+
+/* 표 영역은 스크롤, 하단 미리보기는 고정 높이로 항상 노출 */
+#overlaySMS .smsTableWrap{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+/* 미리보기 영역 클래스/ID가 다를 수 있어 범용 선택자 추가 */
+#overlaySMS .smsPreviewWrap,
+#overlaySMS .smsPreviewBox,
+#overlaySMS #smsPreview,
+#overlaySMS .previewBox{
+  flex: 0 0 160px !important;     /* 하단 미리보기 고정 */
+  max-height: 160px !important;
+  overflow: auto !important;      /* 미리보기 내용만 스크롤 */
+  margin-top: 10px !important;
+  border: 1px solid var(--line2, #e6ebf2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+/* 우측: 발송대상 리스트만 스크롤, 버튼은 항상 보이게 */
+#overlaySMS .smsCustBox{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+#overlaySMS #btnSmsSend{
+  flex: 0 0 auto !important;
+}
+
+/* 아주 좁은 경우 우측 폭 추가 축소 */
+@media (max-width: 760px){
+  #overlaySMS .smsRight{ min-width: 180px !important; max-width: 220px !important; }
+}
+
 </style>
 </head>
-<body><div id="viewport"><div id="scale-root">
+<body><div id="viewport"><div id="appRoot"><div id="scale-root">
 <div class="tablet-wrap">
 <!-- TOP -->
 <div class="top">
@@ -1736,7 +2084,7 @@ html, body{
 <div class="scriptPanel">
 <div class="h">AI-Generated TM 스크립트</div>
 <div class="scriptBox" id="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
-<div class="scriptFooter"><button class="tmExec" id="btnGenTM">TM 스크립트 생성</button></div>
+<div class="scriptFooter"><button class="btn primary" id="btnGenTM">TM 스크립트 생성</button></div>
 </div>
 <div class="tmSide">
 <div class="h">고객 선택</div>
@@ -3733,7 +4081,7 @@ function buildBriefing(cust, taskName, dateKey){
 
 </script>
 </div>
-</div></div><script>
+</div></div></div><script>
 (function fitToScreen(){ /* disabled */ }
 })();
 </script>
@@ -3775,6 +4123,36 @@ function buildBriefing(cust, taskName, dateKey){
   apply();
   window.addEventListener('resize', apply, {passive:true});
 })();
+</script>
+
+
+<script>
+function updateScale(){
+  const baseW = 1280, baseH = 800;
+  const vw = window.innerWidth, vh = window.innerHeight;
+
+  // Fill width to reduce side margins; allow vertical scroll if height is insufficient.
+  let scale = vw / baseW;
+
+  // Prevent extreme upscaling that can make text too large on very wide screens.
+  scale = Math.min(scale, 1.15);
+
+  const root = document.getElementById('appRoot') || document.getElementById('app') || document.body;
+  root.style.width = baseW + 'px';
+  root.style.height = baseH + 'px';
+  root.style.transformOrigin = 'top left';
+  root.style.transform = `scale(${scale})`;
+
+  // Make viewport scroll range match scaled size (so no cropping, less empty margins)
+  const vp = document.getElementById('viewport');
+  if(vp){
+    vp.style.overflow = 'auto';
+    vp.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#f3f4f6';
+  }
+}
+window.addEventListener('resize', updateScale);
+window.addEventListener('orientationchange', updateScale);
+document.addEventListener('DOMContentLoaded', updateScale);
 </script>
 
 </body>
