@@ -45,7 +45,7 @@
     }
     .searchbar .select{
       background:#fff; height:28px; border-radius:4px; padding:0 8px;
-      display:flex; align-items:center; gap:6px; color:#111827; font-size:12px; min-width:72px;
+      display:flex; align-items:center; gap:6px; color:#111827; font-size:12px; min-width:96px;
     }
     .searchbar input{
       flex:1; height:28px; border-radius:4px; border:none; outline:none; padding:0 10px; font-size:12px;
@@ -188,7 +188,7 @@
     /* ✅ mid: 캘린더/우측 패널 */
     .mid{
       display:grid;
-      grid-template-columns: 1fr 300px;
+      grid-template-columns: 1fr 520px;
       gap:10px;
       min-height:0;
       flex:1;
@@ -1986,7 +1986,7 @@ input, select{ height:30px !important; font-size: var(--fs-xs) !important; paddi
 /* 3-column side widths shrink */
 .leftCol, .left-col, #leftCol, .leftPanel, .left-panel{ width:300px !important; min-width:280px !important; }
 .rightCol, .right-col, #rightCol, .rightPanel, .right-panel{ width:320px !important; min-width:300px !important; }
-.mainGrid, .main-grid, .layoutGrid, .layout-grid{ grid-template-columns:300px 1fr 300px !important; }
+.mainGrid, .main-grid, .layoutGrid, .layout-grid{ grid-template-columns:300px 1fr 320px !important; }
 
 /* tables compact */
 table{ font-size: var(--fs-xxs) !important; }
@@ -2055,7 +2055,7 @@ thead th{ font-size: var(--fs-xxs) !important; }
 }
 .rightCol, .right-col, #rightCol, .rightPanel, .right-panel{
   width: 280px !important;
-  min-width: 220px !important;
+  min-width: 240px !important;
 }
 .mainGrid, .main-grid, .layoutGrid, .layout-grid{
   grid-template-columns: 260px 1fr 280px !important;
@@ -2116,6 +2116,50 @@ html, body{
   height:100%;
   overflow:auto;
 }
+
+
+/* ===== MODAL CLOSE BUTTON VISIBILITY FIX ===== */
+.modal, .modalBox, .modalSMS, .modalTM, .modalBrief, .modalContent{
+  box-sizing:border-box !important;
+  max-width: calc(100vw - 16px) !important;  /* prevent edge clipping */
+  width: min(980px, calc(100vw - 16px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.modalHeader, .modal .header{
+  box-sizing:border-box !important;
+  padding-right: 10px !important;
+}
+.modalHeader .close,
+.modalHeader .btnClose,
+.modal .close,
+.modal .btnClose{
+  position: relative !important;
+  right: 0 !important;
+  margin-left: 8px !important;
+  display: inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  z-index: 50 !important;
+}
+/* If any modal container uses overflow hidden that clips header, ensure header stays visible */
+.modalHeader{
+  overflow: visible !important;
+}
+
+
+
+/* ===== GLOBAL SCROLL ENABLED (if content is clipped) ===== */
+html, body{
+  overflow: auto !important;           /* allow both x/y scroll */
+  -webkit-overflow-scrolling: touch;
+}
+#viewport, #appRoot, #app{
+  overflow: auto !important;           /* allow scroll inside root if used */
+  max-width: none !important;
+  max-height: none !important;
+}
+
 </style>
 </head>
 <body><div id="viewport"><div id="appRoot"><div id="scale-root">
@@ -2167,6 +2211,7 @@ html, body{
 <!-- LEFT -->
 <section class="left">
 <div class="left-head">
+<button class="btn">초기화</button>
 <button class="btn">조회</button>
 <button class="btn">고객종합정보</button>
 </div>
@@ -2237,6 +2282,7 @@ html, body{
 <div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
 </div>
 <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+<div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
 </div>
 </div>
 <div class="weekBody">
@@ -2304,14 +2350,14 @@ html, body{
 <table id="custTable" style="display:none;">
 <thead>
 <tr>
-<th style="width:50px; text-align:center;">
+<th style="width:60px; text-align:center;">
 <input class="chk" id="chkAllCustomers" title="전체 선택" type="checkbox"/>
 </th>
-<th style="width:70px;">실시여부</th>
-<th style="width:80px;">고객번호</th>
-<th style="width:50px;">고객명</th>
-<th style="width:70px;">과제시작일</th>
-<th style="width:70px;">과제종료일</th>
+<th style="width:86px;">실시여부</th>
+<th style="width:110px;">고객번호</th>
+<th style="width:90px;">고객명</th>
+<th style="width:110px;">과제시작일</th>
+<th style="width:110px;">과제종료일</th>
 <th style="width:90px;">고객브리핑</th>
 <th style="width:90px;">우선순위</th>
 </tr>
