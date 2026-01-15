@@ -2160,6 +2160,83 @@ html, body{
   max-height: none !important;
 }
 
+
+
+/* ===== SMS POPUP: recipient list scroll + keep send button visible ===== */
+#overlaySMS, #overlaySms, #overlaySmsSend, #smsOverlay{
+  overflow: visible !important;
+}
+
+/* Make SMS modal a flex column so footer can stay visible */
+#overlaySMS .modal, 
+#overlaySMS .modalSMS,
+#overlaySMS .modalBox,
+#overlaySMS .modalContent,
+#overlaySMS .smsModal,
+#overlaySMS .sms-modal{
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: calc(100vh - 24px) !important;
+  overflow: hidden !important; /* prevent modal itself from scrolling */
+}
+
+/* Body area inside SMS modal should take remaining space */
+#overlaySMS .smsBody,
+#overlaySMS .body,
+#overlaySMS .modalBody,
+#overlaySMS .content{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure right panel (recipients) can scroll when list grows */
+#overlaySMS .smsRight,
+#overlaySMS .right,
+#overlaySMS .sms-right{
+  display:flex !important;
+  flex-direction: column !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+
+/* The actual recipient list container */
+#overlaySMS .smsCustBox,
+#overlaySMS .custBox,
+#overlaySMS .recipientBox,
+#overlaySMS .recipients,
+#overlaySMS #smsCustBox{
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px !important;
+}
+
+/* Keep the send button always visible at the bottom of the SMS modal */
+#overlaySMS #btnSmsSend,
+#overlaySMS .btnSmsSend,
+#overlaySMS .sendBtn,
+#overlaySMS button[data-action="sms-send"]{
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 100 !important;
+  width: 100% !important;
+}
+
+/* If there is a footer container, keep it visible */
+#overlaySMS .smsFooter,
+#overlaySMS .footer,
+#overlaySMS .modalFooter{
+  flex: 0 0 auto !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 90 !important;
+  background: inherit !important;
+}
+
 </style>
 </head>
 <body><div id="viewport"><div id="appRoot"><div id="scale-root">
