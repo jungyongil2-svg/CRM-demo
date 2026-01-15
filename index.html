@@ -1802,6 +1802,62 @@ html, body{
   #overlaySMS .smsRight{ min-width: 180px !important; max-width: 220px !important; }
 }
 
+
+
+/* ===== FIX: 문자 미리보기(휴대폰 모양) 팝업에서 phone 전체가 항상 보이도록 ===== */
+#overlaySmsPreview{
+  display:none;
+}
+#overlaySmsPreview.show,
+#overlaySmsPreview[style*="display:block"],
+#overlaySmsPreview[style*="display: block"]{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+#overlaySmsPreview .smsPhoneModal{
+  width: 440px !important;
+  max-width: calc(100vw - 24px) !important;
+  max-height: calc(100vh - 24px) !important;
+  display:flex !important;
+  flex-direction:column !important;
+  overflow:hidden !important;
+}
+#overlaySmsPreview .smsPhoneBody{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:auto !important; /* viewport가 낮으면 여기서 스크롤 */
+  padding: 14px 14px 18px !important;
+}
+#overlaySmsPreview .phone{
+  margin: 0 auto !important;
+}
+
+/* ===== FIX: 문자 발송 팝업에서 '문자 발송' 버튼이 항상 보이도록(리스트만 스크롤) ===== */
+#overlaySMS .smsRight{
+  display:flex !important;
+  flex-direction:column !important;
+  min-height:0 !important;
+  overflow:hidden !important;
+}
+#overlaySMS .smsCustBox{
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  overflow:auto !important;   /* 발송대상만 스크롤 */
+  padding-bottom: 6px !important;
+}
+#overlaySMS #btnSmsSend{
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 2 !important;
+  margin-top: 10px !important;
+  height: 44px !important;
+  box-shadow: 0 -10px 18px rgba(255,255,255,.85);
+}
+
+/* 템플릿명(맞춤 문자 List) 행이 많아도 좌측 표만 스크롤되게 유지 */
+#overlaySMS .smsTableWrap{ overflow:auto !important; }
+
 </style>
 </head>
 <body><div id="viewport"><div id="appRoot"><div id="scale-root">
