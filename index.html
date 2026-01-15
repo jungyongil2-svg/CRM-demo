@@ -2028,6 +2028,39 @@ thead th{ font-size: var(--fs-xxs) !important; }
 /* modals: keep size, scroll inside only */
 .modal .modalBody, .modalBody{ min-height:0 !important; overflow:auto !important; }
 
+
+
+/* ===== PATCH: Final Report table row height & padding ===== */
+#finalGrid table th, #finalGrid table td,
+.finalGrid table th, .finalGrid table td,
+.bottomGrid table th, .bottomGrid table td,
+.taskGrid table th, .taskGrid table td{
+  padding: 3px 6px !important;   /* reduce internal whitespace */
+}
+#finalGrid table tr, .finalGrid table tr, .bottomGrid table tr, .taskGrid table tr{
+  height: 26px !important;       /* slightly larger than magnifier icon */
+}
+#finalGrid .iconBtn, #finalGrid .icon-btn,
+.finalGrid .iconBtn, .finalGrid .icon-btn,
+.bottomGrid .iconBtn, .bottomGrid .icon-btn,
+.taskGrid .iconBtn, .taskGrid .icon-btn{
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* ===== PATCH: Reduce min-width to fit viewport (no horizontal crop) ===== */
+.leftCol, .left-col, #leftCol, .leftPanel, .left-panel{
+  width: 260px !important;
+  min-width: 220px !important;
+}
+.rightCol, .right-col, #rightCol, .rightPanel, .right-panel{
+  width: 280px !important;
+  min-width: 240px !important;
+}
+.mainGrid, .main-grid, .layoutGrid, .layout-grid{
+  grid-template-columns: 260px 1fr 280px !important;
+}
+
 </style>
 </head>
 <body><div id="viewport"><div id="appRoot"><div id="scale-root">
