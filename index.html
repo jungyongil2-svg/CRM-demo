@@ -466,7 +466,18 @@
       display:flex; align-items:center; gap:10px;
       font-size:12px; color:#374151; font-weight:700;
     }
-    .run-btn{
+    
+    .radio label{
+      display:inline-flex; align-items:center; gap:6px;
+      line-height:1; white-space:nowrap;
+    }
+    .radio input[type="radio"]{
+      margin:0;
+      width:14px; height:14px;
+      vertical-align:middle;
+      flex:0 0 auto;
+    }
+.run-btn{
       background:#ff7a18; color:#111827;
       border:none; border-radius:8px;
       padding:10px 14px; font-weight:900;
@@ -771,10 +782,18 @@
 
   
 /* ================= Galaxy Tab S7 최적화 ================= */
+/*
+  목표
+  - 레이아웃 구조는 유지
+  - 뷰포트(창 확대/축소)에 맞춰 너비/높이를 끝까지 사용
+  - 기준 레이아웃(1280x800)보다 작아지면 가로/세로 스크롤로 처리
+*/
 .tablet-wrap{
-  width:1280px;
-  height:800px;
-  margin:0 auto;
+  width:100%;
+  height:100%;
+  min-width:1280px;
+  min-height:800px;
+  margin:0;
   background: var(--bg,#f3f4f6);
 }
 
@@ -815,9 +834,30 @@
 
 /* ===== Tablet fit (Galaxy Tab S7, 1280x800 landscape) ===== */
 html, body { height: 100%; }
-body { overflow: hidden; }
-#viewport{ position:fixed; inset:0; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--bg); }
-#scale-root{ width:var(--design-w); height:var(--design-h); transform:scale(var(--scale, 1)); transform-origin:center center; overflow:visible; }
+/*
+  중요: 화면이 기준(1280x800)보다 작아질 때 '잘림'이 아닌 스크롤로 처리해야 하므로
+  body/viewport에서 overflow를 숨기지 않습니다.
+*/
+body { overflow: auto; }
+#viewport{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:stretch;
+  justify-content:stretch;
+  overflow:auto;
+  background:var(--bg);
+}
+#scale-root{
+  /* 확대/축소에 따라 뷰포트 전체를 사용 (여백 없이) */
+  width:100%;
+  height:100%;
+  transform:none;
+  transform-origin:0 0;
+  overflow:visible;
+}
 /* Slightly tighten typography for tablet without changing layout semantics */
 :root{
   --tablet-font-scale: 0.96;
@@ -885,8 +925,27 @@ html, body{height:100%;}
 
 /* ==== Tablet fullscreen override (Galaxy Tab S7) ==== */
 html, body { width:100%; height:100%; }
-#viewport{ position:fixed; inset:0; width:100vw; height:100vh; display:flex; justify-content:stretch; align-items:stretch; }
-#scale-root{ position:relative; width:100vw; height:100vh; transform:none !important; left:0 !important; top:0 !important; }
+#viewport{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  justify-content:stretch;
+  align-items:stretch;
+  overflow:auto;            /* 화면이 기준 레이아웃보다 작으면 가로/세로 스크롤 */
+  background:var(--bg);
+}
+#scale-root{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-width:1280px;         /* Galaxy Tab S7 기준 레이아웃 */
+  min-height:800px;
+  transform:none !important;
+  left:0 !important;
+  top:0 !important;
+}
 
 
 /* === Patch (Galaxy Tab S7) : fixed-size modals with inner scroll + icon/radio alignment === */
@@ -956,6 +1015,198 @@ html, body { width:100%; height:100%; }
   height: 18px;
   transform: translateY(0.5px);
 }
+
+
+
+/* ================= 추가: 창 크기(확대/축소) 따라 유동 레이아웃 ================= */
+.wrap, .app, .container{ width:100%; max-width:none !important; }
+
+/* 우측(캠페인) 패널 유동 폭(최소 보장) */
+.right, .rightPane, .taskPanel, #taskPanel{
+  flex: 0 0 clamp(320px, 30vw, 520px);
+  min-width: 320px;
+  max-width: 520px;
+}
+
+/* 좁은 화면: 우측 유지 + 가독성 확보 */
+@media (max-width: 980px){
+  .right, .rightPane, .taskPanel, #taskPanel{
+    flex: 0 0 320px;
+    max-width: 360px;
+  }
+  #taskTable, .taskTable{ font-size: 11px !important; }
+  #taskTable td, #taskTable th, .taskTable td, .taskTable th{ padding: 6px 6px !important; }
+}
+
+/* ================= 추가: 고객브리핑/TM 팝업 크기 축소 + 내부 스크롤 ================= */
+.overlay .modal, .modal{
+  width: min(760px, 78vw) !important;
+  max-width: min(760px, 78vw) !important;
+  height: min(560px, 76vh) !important;
+  max-height: min(560px, 76vh) !important;
+}
+
+/* 본문 텍스트(브리핑/TM) 스크롤 */
+#briefText, #tmText, .briefText, .tmText, textarea#briefText, textarea#tmText{
+  max-height: calc(min(560px, 76vh) - 160px) !important;
+  overflow: auto !important;
+  white-space: pre-wrap;
+}
+
+/* 일반 컨테이너 대응 */
+.modal .content, .modalBody, .modal-content, .modalContent{
+  max-height: calc(min(560px, 76vh) - 120px) !important;
+  overflow: auto !important;
+}
+
+
+
+/* ================= 가로 스크롤 허용 ================= */
+html, body{
+  overflow-x: auto !important;
+}
+#viewport, .viewport, .app, .wrap{
+  min-width: 1280px; /* 화면보다 작아지면 가로 스크롤 생성 */
+}
+
+/* ================= 좌측 영역 폭 축소 ================= */
+/* 좌측 버튼 영역 */
+.left, .leftPane, #leftPanel{
+  width: 200px !important;
+  min-width: 200px !important;
+}
+
+/* 조회 조건 영역 */
+.searchArea, .filterArea, #searchArea{
+  width: 100% !important;
+  padding: 8px 6px !important;
+}
+
+/* 채널 바로가기 */
+.channelArea, .quickChannel, #channelArea{
+  gap: 6px !important;
+}
+.channelArea button,
+.quickChannel button{
+  padding: 6px 8px !important;
+  font-size: 11px !important;
+}
+
+/* 하단 4개 아이콘 버튼 */
+.iconGroup, .quickIcons, #quickIcons{
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 6px !important;
+}
+.iconGroup button,
+.quickIcons button{
+  padding: 6px !important;
+  font-size: 10px !important;
+}
+
+/* 아이콘 사이즈 축소 */
+.iconGroup img,
+.quickIcons img{
+  width: 20px !important;
+  height: 20px !important;
+}
+
+
+/* ================= 추가: 화면 축소 시 가로 스크롤 + 좌측 패널 폭/컴포넌트 슬림화 ================= */
+html, body{
+  overflow-x:auto; /* 뷰포트보다 작아지면 가로 스크롤 */
+}
+
+/* 전체 레이아웃은 가능한 화면을 꽉 채우되, 최소 폭(디자인 기준) 아래로는 가로 스크롤로 대응 */
+#viewport, .viewport, .app, .wrap{
+  width:100vw;
+  height:100vh;
+  min-width: 1280px;
+}
+
+/* 좌측 패널(초기화/조회/고객종합정보 버튼 영역) 폭을 약간 줄이고 내부 컴포넌트도 동일 폭으로 수렴 */
+.wrap{ grid-template-columns: 44px 190px 1fr !important; }
+
+.left, .leftPanel, #leftPanel{
+  width: 190px !important;
+  min-width: 190px !important;
+}
+
+/* 좌측 '조회 조건' 카드(입력 필드) */
+.left-card{
+  padding: 8px !important;
+}
+.left-card .box{
+  padding: 8px !important;
+}
+.left-card .title{
+  font-size: 11px !important;
+  margin-bottom: 6px !important;
+}
+.left-card .fields{
+  gap: 6px !important;
+}
+.left-card .field{
+  gap: 4px !important;
+}
+.left-card .field label{
+  font-size: 11px !important;
+  min-width: 84px !important; /* 라벨 폭 축소 */
+}
+.left-card .field input{
+  height: 20px !important;
+  font-size: 11px !important;
+  padding: 0 6px !important;
+}
+
+/* 채널 바로가기 + 하단 4개 아이콘 버튼(미니 타일) */
+.mini-grid{
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+.mini-tile{
+  padding: 6px 4px !important;
+  border-radius: 10px !important;
+  min-height: 54px !important;
+}
+.mini-tile .ico{
+  width: 22px !important;
+  height: 22px !important;
+}
+.mini-tile .lbl{
+  font-size: 10px !important;
+  line-height: 1.15 !important;
+}
+
+
+
+
+/* ===== TM 팝업 하단 버튼 항상 보이게 ===== */
+#overlayTM .modal{
+  display:flex;
+  flex-direction:column;
+}
+
+/* 본문만 스크롤 */
+#overlayTM .modal .content,
+#overlayTM .modalBody,
+#overlayTM .modal-content,
+#overlayTM .modalContent,
+#overlayTM #tmText{
+  flex:1 1 auto;
+  overflow-y:auto !important;
+}
+
+/* 하단 버튼 영역 고정 */
+#overlayTM .modal .footer,
+#overlayTM .modalFooter,
+#overlayTM .tmFooter,
+#overlayTM .tm-actions{
+  flex:0 0 auto;
+  padding-top:8px;
+  border-top:1px solid #e5e7eb;
+  background:#fff;
+}
+
 
 </style>
 </head>
@@ -1240,14 +1491,18 @@ html, body { width:100%; height:100%; }
 <div class="h">AI-Generated TM 스크립트</div>
 <div class="scriptBox" id="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
 <div style="display:flex; gap:8px; justify-content:flex-end;">
-<button class="btnBig" id="btnGenTM" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
+
 </div>
 </div>
 <div class="tmSide">
 <div class="h">고객 선택</div>
 <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
 <div class="tmPickList" id="tmPickList"></div>
-<button class="tmExec" disabled="" id="btnTmExec">TM 실행</button>
+<div class="tmFooter">
+          <button class="btn primary" id="btnGenTM">TM 스크립트 생성</button>
+          <button class="tmExec" disabled id="btnTmExec">TM 실행</button>
+        </div>
+
 </div>
 </div>
 </div>
