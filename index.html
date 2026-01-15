@@ -780,6 +780,8 @@
 
 /* 전체 스케일 다운 */
 @media (max-width: 1400px){
+  :root{ --design-w:1280px; --design-h:800px; }
+
   body{
     font-size:13px;
   }
@@ -814,16 +816,8 @@
 /* ===== Tablet fit (Galaxy Tab S7, 1280x800 landscape) ===== */
 html, body { height: 100%; }
 body { overflow: hidden; }
-#viewport{
-  position: fixed; inset: 0;
-  overflow: hidden;
-  background: var(--bg, #f3f4f6);
-}
-#scale-root{
-  position: absolute; top: 0; left: 0;
-  transform-origin: top left;
-  will-change: transform;
-}
+#viewport{ position:fixed; inset:0; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; background:var(--bg); }
+#scale-root{ width:var(--design-w); height:var(--design-h); transform:scale(var(--scale, 1)); transform-origin:center center; overflow:visible; }
 /* Slightly tighten typography for tablet without changing layout semantics */
 :root{
   --tablet-font-scale: 0.96;
@@ -831,6 +825,138 @@ body { overflow: hidden; }
 body, button, input, textarea, select{
   font-size: calc(14px * var(--tablet-font-scale));
 }
+
+    /* Tablet compactness: keep right campaign list fully visible */
+    .taskTable th, .taskTable td{ padding:6px 8px; font-size:12px; }
+    .taskTabs .t{ padding:6px 8px; font-size:12px; }
+    .custTable th, .custTable td{ padding:6px 8px; font-size:12px; }
+    .smsItem{ padding:8px 10px; }
+    
+/* ===== Galaxy Tab S7 추가 최적화: 우측 AI영업기회(캠페인) 목록 항상 가시성 확보 ===== */
+.tablet-wrap .mid{
+  /* 우측 패널은 너무 좁아지지 않게 최소폭 확보, 필요 시 좌측이 먼저 축소 */
+  grid-template-columns: 1fr clamp(360px, 32vw, 520px) !important;
+  gap:10px !important;
+}
+.tablet-wrap .taskPanel{
+  min-width:360px;
+}
+.tablet-wrap .taskTopBar{
+  padding:6px 8px !important;
+}
+.tablet-wrap #taskTable th{
+  font-size:11px !important;
+  padding:4px 6px !important;
+  line-height:1.1 !important;
+}
+.tablet-wrap #taskTable td{
+  font-size:11px !important;
+  padding:5px 6px !important;
+  line-height:1.15 !important;
+}
+/* 과제명/캠페인명은 줄바꿈 허용 + 행 높이 최소화 */
+.tablet-wrap #taskTable td:nth-child(2){
+  white-space:normal !important;
+  word-break:keep-all;
+}
+/* 숫자 컬럼은 줄바꿈 방지 */
+.tablet-wrap #taskTable td:nth-child(3),
+.tablet-wrap #taskTable td:nth-child(4),
+.tablet-wrap #taskTable td:nth-child(5){
+  white-space:nowrap !important;
+}
+.tablet-wrap .taskTableWrap{
+  overflow:auto !important;
+  min-height:0 !important;
+  max-height: calc(100% - 6px) !important;
+}
+/* 우측 패널 내부 스크롤을 확실히 확보 (Chrome Android에서 flex overflow 이슈 회피) */
+.tablet-wrap .taskPanel{
+  display:flex !important;
+  flex-direction:column !important;
+}
+.tablet-wrap .taskTableWrap{
+  flex:1 1 auto !important;
+}
+
+/* 전체화면 사용(주소창 축소/확대 대응): JS가 var(--vh) 갱신 시 동작 */
+html, body{height:100%;}
+
+
+/* ==== Tablet fullscreen override (Galaxy Tab S7) ==== */
+html, body { width:100%; height:100%; }
+#viewport{ position:fixed; inset:0; width:100vw; height:100vh; display:flex; justify-content:stretch; align-items:stretch; }
+#scale-root{ position:relative; width:100vw; height:100vh; transform:none !important; left:0 !important; top:0 !important; }
+
+
+/* === Patch (Galaxy Tab S7) : fixed-size modals with inner scroll + icon/radio alignment === */
+
+/* 고객브리핑 팝업: 모달 크기는 유지하고 내용은 내부 스크롤 */
+.modalBrief{
+  max-height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+}
+.modalBrief .modalTop{ flex: 0 0 auto; }
+.briefBody{ flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.briefBox{ height: 100%; min-height: 0; }
+.briefScroll{
+  max-height: none;           /* 바깥(모달)에서 높이 제어 */
+  height: 100%;
+  overflow: auto;
+}
+
+/* TM스크립트 팝업(모달2): 모달 크기는 유지하고 내용은 내부 스크롤 */
+.modal2{
+  max-height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+}
+.modal2 .modalTop{ flex: 0 0 auto; }
+.modal2Body{ flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.modal2Body .scriptBox{ height: 100%; overflow: auto; }
+
+/* (보조) modal1을 쓰는 팝업이 있을 경우에도 동일하게 내부 스크롤 처리 */
+.modal1{
+  max-height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+}
+.modal1 .modalTop{ flex: 0 0 auto; }
+.modal1Body{ flex: 1 1 auto; min-height: 0; overflow: auto; }
+
+/* 고객브리핑 컬럼 돋보기 아이콘 정렬/가시성 */
+.mag-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  line-height: 1;
+}
+
+/* AI Agent 알림센터: 라디오/텍스트 정렬 */
+.cardHead{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.cardHead .title{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cardHead .radio{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transform: translateY(0.5px);
+}
+
 </style>
 </head>
 <body><div id="viewport"><div id="scale-root">
@@ -3111,29 +3237,30 @@ function buildBriefing(cust, taskName, dateKey){
 </div>
 </div></div><script>
 (function fitToScreen(){
-  const BASE_W = 1440;
-  const BASE_H = 900;
-
+  // Disabled: use full viewport without scaling
   const root = document.getElementById('scale-root');
   const vp = document.getElementById('viewport');
-
+  if(!root || !vp) return;
   function apply(){
-    const vw = window.innerWidth || 1280;
-    const vh = window.innerHeight || 800;
-
-    const s = Math.min(vw / BASE_W, vh / BASE_H);
-
-    const x = Math.max(0, (vw - BASE_W * s) / 2);
-    const y = Math.max(0, (vh - BASE_H * s) / 2);
-
-    root.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
-    // Ensure viewport background covers letterbox areas
-    vp.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#f3f4f6';
+    vp.style.justifyContent = 'stretch';
+    vp.style.alignItems = 'stretch';
+    root.style.transform = 'none';
+    root.style.transformOrigin = '0 0';
+    root.style.width = '100vw';
+    root.style.height = '100vh';
+    root.style.left = '0px';
+    root.style.top = '0px';
   }
-
-  window.addEventListener('resize', apply, {passive:true});
-  window.addEventListener('orientationchange', apply, {passive:true});
   apply();
+  window.addEventListener('resize', apply);
 })();
-</script></body>
+</script>
+<script>
+/* Tablet full-screen scaler (Galaxy Tab S7 landscape target: 1280x800 CSS px) */
+(function(){
+  // Disabled legacy scaler
+})();
+</script>
+
+</body>
 </html>
