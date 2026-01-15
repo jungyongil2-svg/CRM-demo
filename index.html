@@ -1,10 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="ko">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CRM 데모 (AI/필수/밀착/일정 + TM/SMS)</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>CRM 데모 (AI/필수/밀착/일정 + TM/SMS)</title>
+<style>
     :root{
       --bg:#f3f4f6; --panel:#fff; --line:#cfd6df; --line2:#e6ebf2;
       --text:#1f2937; --muted:#6b7280;
@@ -768,420 +769,453 @@
   background: rgba(255,255,255,.22);
 }
 
-  </style>
+  
+/* ================= Galaxy Tab S7 최적화 ================= */
+.tablet-wrap{
+  width:1280px;
+  height:800px;
+  margin:0 auto;
+  background: var(--bg,#f3f4f6);
+}
+
+/* 전체 스케일 다운 */
+@media (max-width: 1400px){
+  body{
+    font-size:13px;
+  }
+
+  h1{font-size:18px;}
+  h2{font-size:16px;}
+  h3{font-size:14px;}
+
+  table{font-size:12px;}
+
+  button{
+    font-size:12px;
+    padding:6px 10px;
+  }
+
+  input, select{
+    font-size:12px;
+    height:28px;
+  }
+
+  .panel, .card{
+    padding:8px;
+  }
+
+  /* 주요 레이아웃 유지 */
+  .wrap{grid-template-columns: 60px 230px 1fr;}
+  .mid{grid-template-columns: 1fr 440px;}
+}
+
+
+
+/* ===== Tablet fit (Galaxy Tab S7, 1280x800 landscape) ===== */
+html, body { height: 100%; }
+body { overflow: hidden; }
+#viewport{
+  position: fixed; inset: 0;
+  overflow: hidden;
+  background: var(--bg, #f3f4f6);
+}
+#scale-root{
+  position: absolute; top: 0; left: 0;
+  transform-origin: top left;
+  will-change: transform;
+}
+/* Slightly tighten typography for tablet without changing layout semantics */
+:root{
+  --tablet-font-scale: 0.96;
+}
+body, button, input, textarea, select{
+  font-size: calc(14px * var(--tablet-font-scale));
+}
+</style>
 </head>
-
-<body>
-  <!-- TOP -->
-  <div class="top">
-    <div class="top1">
-      <div class="brand">
-        <div class="next"><span class="the">THE</span><span class="word">next</span></div>
-        <div class="title">대면1차</div>
-      </div>
-      <div class="searchbar">
-        <div class="select">통합검색 ▾</div>
-        <input placeholder="화면번호 또는 화면명을 검색하세요." />
-        <button class="go">검색</button>
-      </div>
-      <div class="top1-right">
-        <div class="chip">워크플로우</div>
-        <div class="chip">신규 과장</div>
-        <div class="chip">개인정보</div>
-        <div class="chip">도움말</div>
-      </div>
-    </div>
-    <div class="top2">
-      <div class="tabs">
-        <div class="tab">개별조회</div>
-        <div class="tab">일괄조회</div>
-        <div class="tab active">[351182] 오늘의일정</div>
-      </div>
-      <div class="spacer"></div>
-      <button class="mini-btn">◀</button>
-      <button class="mini-btn">▶</button>
-      <button class="mini-btn">⤢</button>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <!-- VBAR -->
-    <aside class="vbar">
-      <div class="vico">≡</div>
-      <div class="vico dim">⌂</div>
-      <div class="vico dim">★</div>
-      <div class="vico dim">⎙</div>
-      <div class="vico dim">↺</div>
-      <div class="vico dim">?</div>
-      <div style="flex:1"></div>
-      <div class="vico dim">⚙</div>
-      <div class="vico dim">⏻</div>
-    </aside>
-
-    <!-- LEFT -->
-    <section class="left">
-      <div class="left-head">
-        <button class="btn">초기화</button>
-        <button class="btn">조회</button>
-        <button class="btn">고객종합정보</button>
-      </div>
-      <div class="left-card">
-        <div class="box">
-          <div class="title">조회 조건</div>
-          <div class="fields">
-            <div class="field"><div>고객</div><input/></div>
-            <div class="field"><div>실명</div><input/></div>
-            <div class="field"><div>계좌</div><input/></div>
-          </div>
-        </div>
-        <div class="box">
-          <div class="title">채널 바로가기</div>
-          <div class="mini-grid">
-            <div class="mini-tile">DM</div>
-            <div class="mini-tile">SMS</div>
-            <div class="mini-tile">MOB</div>
-            <div class="mini-tile">URL</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- MAIN -->
-    <section class="main">
-      <div class="content-top">
-        <div class="path" id="pathText">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
-        <div class="actions">
-          <button>초기화</button>
-          <button>조회</button>
-          <button>닫기</button>
-        </div>
-      </div>
-
-      <div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
-        <div class="mid">
-          <!-- calendarPanel -->
-          <div class="calendarPanel" id="calendarPanel">
-            <div class="calTopBar">
-              <div class="dateMini">
-                <div class="dateMiniTop">
-                  <span id="miniYM">2026-01</span>
-                  <span style="opacity:.95;font-weight:900;">▦</span>
-                </div>
-                <div class="dateMiniMid">
-                  <div class="arr" id="btnPrevDay">‹</div>
-                  <div class="center">
-                    <div class="d" id="bigDay">19</div>
-                  </div>
-                  <div class="arr" id="btnNextDay">›</div>
-                </div>
-                <div class="dateMiniBottom" id="bigDow">MONDAY</div>
-              </div>
-
-              <div class="iconRow" id="iconRow">
-                <div class="round active" data-cat="AI">
-                  <div class="circle">👤</div>
-                  <div class="label">AI영업기회 <span class="cnt" id="cntAI">(0)</span></div>
-                </div>
-                <div class="round" data-cat="REQ">
-                  <div class="circle">🧩</div>
-                  <div class="label">필수케어 <span class="cnt" id="cntREQ">(0)</span></div>
-                </div>
-                <div class="round" data-cat="CLOSE">
-                  <div class="circle">📎</div>
-                  <div class="label">밀착케어 <span class="cnt" id="cntCLOSE">(0)</span></div>
-                </div>
-                <div class="round" data-cat="SCH">
-                  <div class="circle">📋</div>
-                  <div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
-                </div>
-                <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
-                <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
-                <!-- ✅ 문구 변경: 비대면 필수 → 콜센터 연계 과제 -->
-                <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">콜센터 연계 과제</div></div>
-              </div>
-            </div>
-
-            <div class="weekBody">
-              <div class="weekHeader">
-                <div class="leftGroup">
-                  <div class="wkTitle" id="wkTitle">주간 일정</div>
-                  <div id="wkRange">-</div>
-                </div>
-                <div class="btns">
-                  <button class="wkBtn" id="btnPrevWeek">지난주</button>
-                  <button class="wkBtn" id="btnThisWeek">이번주</button>
-                  <button class="wkBtn" id="btnNextWeek">다음주</button>
-                </div>
-              </div>
-
-              <div class="weekGrid" id="weekGrid"></div>
-
-              <div class="hint">
+<body><div id="viewport"><div id="scale-root">
+<div class="tablet-wrap">
+<!-- TOP -->
+<div class="top">
+<div class="top1">
+<div class="brand">
+<div class="next"><span class="the">THE</span><span class="word">next</span></div>
+<div class="title">대면1차</div>
+</div>
+<div class="searchbar">
+<div class="select">통합검색 ▾</div>
+<input placeholder="화면번호 또는 화면명을 검색하세요."/>
+<button class="go">검색</button>
+</div>
+<div class="top1-right">
+<div class="chip">워크플로우</div>
+<div class="chip">신규 과장</div>
+<div class="chip">개인정보</div>
+<div class="chip">도움말</div>
+</div>
+</div>
+<div class="top2">
+<div class="tabs">
+<div class="tab">개별조회</div>
+<div class="tab">일괄조회</div>
+<div class="tab active">[351182] 오늘의일정</div>
+</div>
+<div class="spacer"></div>
+<button class="mini-btn">◀</button>
+<button class="mini-btn">▶</button>
+<button class="mini-btn">⤢</button>
+</div>
+</div>
+<div class="wrap">
+<!-- VBAR -->
+<aside class="vbar">
+<div class="vico">≡</div>
+<div class="vico dim">⌂</div>
+<div class="vico dim">★</div>
+<div class="vico dim">⎙</div>
+<div class="vico dim">↺</div>
+<div class="vico dim">?</div>
+<div style="flex:1"></div>
+<div class="vico dim">⚙</div>
+<div class="vico dim">⏻</div>
+</aside>
+<!-- LEFT -->
+<section class="left">
+<div class="left-head">
+<button class="btn">초기화</button>
+<button class="btn">조회</button>
+<button class="btn">고객종합정보</button>
+</div>
+<div class="left-card">
+<div class="box">
+<div class="title">조회 조건</div>
+<div class="fields">
+<div class="field"><div>고객</div><input/></div>
+<div class="field"><div>실명</div><input/></div>
+<div class="field"><div>계좌</div><input/></div>
+</div>
+</div>
+<div class="box">
+<div class="title">채널 바로가기</div>
+<div class="mini-grid">
+<div class="mini-tile">DM</div>
+<div class="mini-tile">SMS</div>
+<div class="mini-tile">MOB</div>
+<div class="mini-tile">URL</div>
+</div>
+</div>
+</div>
+</section>
+<!-- MAIN -->
+<section class="main">
+<div class="content-top">
+<div class="path" id="pathText">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
+<div class="actions">
+<button>초기화</button>
+<button>조회</button>
+<button>닫기</button>
+</div>
+</div>
+<div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
+<div class="mid">
+<!-- calendarPanel -->
+<div class="calendarPanel" id="calendarPanel">
+<div class="calTopBar">
+<div class="dateMini">
+<div class="dateMiniTop">
+<span id="miniYM">2026-01</span>
+<span style="opacity:.95;font-weight:900;">▦</span>
+</div>
+<div class="dateMiniMid">
+<div class="arr" id="btnPrevDay">‹</div>
+<div class="center">
+<div class="d" id="bigDay">19</div>
+</div>
+<div class="arr" id="btnNextDay">›</div>
+</div>
+<div class="dateMiniBottom" id="bigDow">MONDAY</div>
+</div>
+<div class="iconRow" id="iconRow">
+<div class="round active" data-cat="AI">
+<div class="circle">👤</div>
+<div class="label">AI영업기회 <span class="cnt" id="cntAI">(0)</span></div>
+</div>
+<div class="round" data-cat="REQ">
+<div class="circle">🧩</div>
+<div class="label">필수케어 <span class="cnt" id="cntREQ">(0)</span></div>
+</div>
+<div class="round" data-cat="CLOSE">
+<div class="circle">📎</div>
+<div class="label">밀착케어 <span class="cnt" id="cntCLOSE">(0)</span></div>
+</div>
+<div class="round" data-cat="SCH">
+<div class="circle">📋</div>
+<div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
+</div>
+<div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+<div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
+<!-- ✅ 문구 변경: 비대면 필수 → 콜센터 연계 과제 -->
+<div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">콜센터 연계 과제</div></div>
+</div>
+</div>
+<div class="weekBody">
+<div class="weekHeader">
+<div class="leftGroup">
+<div class="wkTitle" id="wkTitle">주간 일정</div>
+<div id="wkRange">-</div>
+</div>
+<div class="btns">
+<button class="wkBtn" id="btnPrevWeek">지난주</button>
+<button class="wkBtn" id="btnThisWeek">이번주</button>
+<button class="wkBtn" id="btnNextWeek">다음주</button>
+</div>
+</div>
+<div class="weekGrid" id="weekGrid"></div>
+<div class="hint">
                 * 주간(7일)만 표시합니다. 날짜를 클릭하면 우측 과제 리스트/하단 패널이 갱신됩니다.
               </div>
-            </div>
-          </div>
-
-          <!-- taskPanel -->
-          <div class="taskPanel" id="taskPanel">
-            <div class="taskTabs" id="taskTabs">
-              <div class="t active" data-cat="AI">AI영업기회</div>
-              <div class="t" data-cat="REQ">필수케어</div>
-              <div class="t" data-cat="CLOSE">밀착케어</div>
-              <div class="t" data-cat="SCH">일정관리</div>
-            </div>
-            <div class="taskTableWrap">
-              <div class="taskTopBar">
-                <button id="btnQuickMyCare" class="quickLinkBtn" style="display:none;">바로가기</button>
-              </div>
-
-              <div id="taskEmpty" class="empty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
-
-              <table id="taskTable">
-                <thead id="taskThead">
-                  <tr><th style="width:56px;">No</th><th>과제명</th></tr>
-                </thead>
-                <tbody id="taskTbody"></tbody>
-              </table>
-
-              <div class="hint" id="taskHint">
+</div>
+</div>
+<!-- taskPanel -->
+<div class="taskPanel" id="taskPanel">
+<div class="taskTabs" id="taskTabs">
+<div class="t active" data-cat="AI">AI영업기회</div>
+<div class="t" data-cat="REQ">필수케어</div>
+<div class="t" data-cat="CLOSE">밀착케어</div>
+<div class="t" data-cat="SCH">일정관리</div>
+</div>
+<div class="taskTableWrap">
+<div class="taskTopBar">
+<button class="quickLinkBtn" id="btnQuickMyCare" style="display:none;">바로가기</button>
+</div>
+<div class="empty" id="taskEmpty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
+<table id="taskTable">
+<thead id="taskThead">
+<tr><th style="width:56px;">No</th><th>과제명</th></tr>
+</thead>
+<tbody id="taskTbody"></tbody>
+</table>
+<div class="hint" id="taskHint">
                 * AI영업기회만 하단 고객명단이 표시됩니다. (필수/밀착/일정은 과제리스트만 표시)
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottom (AI에서만 표시) -->
-        <div class="bottom" id="bottomPanel">
-          <div class="bottomHead">
-            <div class="title">
+</div>
+</div>
+</div>
+<!-- Bottom (AI에서만 표시) -->
+<div class="bottom" id="bottomPanel">
+<div class="bottomHead">
+<div class="title">
               AI Agent 알림센터
               <span class="radio">
-                <label><input type="radio" name="r" id="radioCust" checked/> 고객 현황</label>
-                <label><input type="radio" name="r" id="radioFinal"/> Final Report</label>
-              </span>
-            </div>
-            <div style="display:flex;gap:6px;align-items:center;">
-              <button id="btnClear">초기화</button>
-              <button id="btnRun" class="run-btn" disabled>실행</button>
-            </div>
-          </div>
-
-          <div class="bottomBody">
-            <!-- 고객 현황 -->
-            <div id="custArea">
-              <div id="custHint" class="hint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
-              <table id="custTable" style="display:none;">
-                <thead>
-                  <tr>
-                    <th style="width:60px; text-align:center;">
-                      <input id="chkAllCustomers" class="chk" type="checkbox" title="전체 선택"/>
-                    </th>
-                    <th style="width:86px;">실시여부</th>
-                    <th style="width:110px;">고객번호</th>
-                    <th style="width:90px;">고객명</th>
-                    <th style="width:110px;">과제시작일</th>
-                    <th style="width:110px;">과제종료일</th>
-                    <th style="width:90px;">고객브리핑</th>
-                    <th style="width:90px;">우선순위</th>
-                  </tr>
-                </thead>
-                <tbody id="custTbody"></tbody>
-              </table>
-            </div>
-
-            <!-- Final Report -->
-            <div id="finalInlineArea" class="finalInline" style="display:none;">
-              <div class="finalInlineTop">
-                <div class="l">
-                  <div class="ttl">과제 별 성과 Final Report</div>
-                  <div class="pill2" id="finalInlineDatePill">기준일: -</div>
-                </div>
-                <select id="finalInlineTaskSelect"></select>
-              </div>
-
-              <div class="finalKpiRow">
-                <div class="miniKpi">
-                  <div class="k">완료대상</div>
-                  <div class="v" id="kpiDone">-</div>
-                  <div class="s">완료/전체 (더미)</div>
-                </div>
-                <div class="miniKpi">
-                  <div class="k">완료 건수</div>
-                  <div class="v" id="kpiTouchedInline">-</div>
-                  <div class="s">TM+SMS 접촉 (더미)</div>
-                </div>
-                <div class="miniKpi">
-                  <div class="k">미완료</div>
-                  <div class="v" id="kpiNotDone">-</div>
-                  <div class="s">잔여 고객수 (더미)</div>
-                </div>
-              </div>
-
-              <div class="finalChecklist">
-                <div class="h">
-                  <span id="finalChecklistTitle">-</span>
-                  <span style="color:#6b7280; font-weight:800;">* 시연용 더미</span>
-                </div>
-                <ul id="finalChecklistUl"></ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- 1차 팝업: 채널 선택 -->
-  <div id="overlay1" class="overlay">
-    <div class="modal modal1">
-      <div class="modalTop">
-        <div class="mtitle">AI Agent 과제 수행</div>
-        <button id="close1">닫기</button>
-      </div>
-      <div class="modal1Body">
-        <div class="agentBox">
-          <div class="agentTitle">AI Agent 과제 수행</div>
-          <div class="agentRow">
-            <div class="agentText">
+<label><input checked="" id="radioCust" name="r" type="radio"/> 고객 현황</label>
+<label><input id="radioFinal" name="r" type="radio"/> Final Report</label>
+</span>
+</div>
+<div style="display:flex;gap:6px;align-items:center;">
+<button id="btnClear">초기화</button>
+<button class="run-btn" disabled="" id="btnRun">실행</button>
+</div>
+</div>
+<div class="bottomBody">
+<!-- 고객 현황 -->
+<div id="custArea">
+<div class="hint" id="custHint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
+<table id="custTable" style="display:none;">
+<thead>
+<tr>
+<th style="width:60px; text-align:center;">
+<input class="chk" id="chkAllCustomers" title="전체 선택" type="checkbox"/>
+</th>
+<th style="width:86px;">실시여부</th>
+<th style="width:110px;">고객번호</th>
+<th style="width:90px;">고객명</th>
+<th style="width:110px;">과제시작일</th>
+<th style="width:110px;">과제종료일</th>
+<th style="width:90px;">고객브리핑</th>
+<th style="width:90px;">우선순위</th>
+</tr>
+</thead>
+<tbody id="custTbody"></tbody>
+</table>
+</div>
+<!-- Final Report -->
+<div class="finalInline" id="finalInlineArea" style="display:none;">
+<div class="finalInlineTop">
+<div class="l">
+<div class="ttl">과제 별 성과 Final Report</div>
+<div class="pill2" id="finalInlineDatePill">기준일: -</div>
+</div>
+<select id="finalInlineTaskSelect"></select>
+</div>
+<div class="finalKpiRow">
+<div class="miniKpi">
+<div class="k">완료대상</div>
+<div class="v" id="kpiDone">-</div>
+<div class="s">완료/전체 (더미)</div>
+</div>
+<div class="miniKpi">
+<div class="k">완료 건수</div>
+<div class="v" id="kpiTouchedInline">-</div>
+<div class="s">TM+SMS 접촉 (더미)</div>
+</div>
+<div class="miniKpi">
+<div class="k">미완료</div>
+<div class="v" id="kpiNotDone">-</div>
+<div class="s">잔여 고객수 (더미)</div>
+</div>
+</div>
+<div class="finalChecklist">
+<div class="h">
+<span id="finalChecklistTitle">-</span>
+<span style="color:#6b7280; font-weight:800;">* 시연용 더미</span>
+</div>
+<ul id="finalChecklistUl"></ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- 1차 팝업: 채널 선택 -->
+<div class="overlay" id="overlay1">
+<div class="modal modal1">
+<div class="modalTop">
+<div class="mtitle">AI Agent 과제 수행</div>
+<button id="close1">닫기</button>
+</div>
+<div class="modal1Body">
+<div class="agentBox">
+<div class="agentTitle">AI Agent 과제 수행</div>
+<div class="agentRow">
+<div class="agentText">
 안녕하세요! AI CRM 아이참이에요~
 선택된 고객을 기반으로 적합 채널과 스크립트를 추천해 드릴게요.
             </div>
-            <div class="btnCol">
-              <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
-              <button id="btnGoSMS" class="btnBig">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
-            </div>
-          </div>
-          <div class="hint" style="padding:10px 0 0 0;"> * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다. </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2차 팝업: TM -->
-  <div id="overlayTM" class="overlay">
-    <div class="modal modal2">
-      <div class="modalTop">
-        <div class="mtitle">TM 실행 하기</div>
-        <button id="closeTM">닫기</button>
-      </div>
-      <div class="modal2Body">
-        <div class="scriptPanel">
-          <div class="h">AI-Generated TM 스크립트</div>
-          <div id="scriptBox" class="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
-          <div style="display:flex; gap:8px; justify-content:flex-end;">
-            <button id="btnGenTM" class="btnBig" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
-          </div>
-        </div>
-        <div class="tmSide">
-          <div class="h">고객 선택</div>
-          <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
-          <div id="tmPickList" class="tmPickList"></div>
-          <button id="btnTmExec" class="tmExec" disabled>TM 실행</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2차 팝업: SMS -->
-  <div id="overlaySMS" class="overlay">
-    <div class="modal modalSMS">
-      <div class="modalTop">
-        <div class="mtitle">문자 발송 하기</div>
-        <button id="closeSMS">닫기</button>
-      </div>
-      <div class="smsBody">
-        <div class="smsCard">
-          <div class="smsTitle">문자 발송 하기</div>
-          <div class="smsGrid">
-            <div class="smsLeft">
-              <div class="sub">맞춤 문자 List</div>
-              <div class="smsTableWrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="width:44px;"></th>
-                      <th>템플릿명</th>
-                      <th style="width:92px;">발송목적</th>
-                      <th style="width:80px;">미리보기</th>
-                    </tr>
-                  </thead>
-                  <tbody id="smsTplTbody"></tbody>
-                </table>
-              </div>
-            
-            </div>
-            <div class="smsRight">
-              <div class="smsCustBox">
-                <div style="font-weight:900;">발송 대상</div>
-                <div id="smsCustList"></div>
-              </div>
-              <button id="btnSmsSend" class="smsBtn" disabled>문자 발송</button>
-            </div>
-          </div>
-          <div class="hint" style="padding:10px 0 0 0;"> * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송 </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 고객 브리핑 팝업 -->
-  <div id="overlayBrief" class="overlay">
-    <div class="modal modalBrief">
-      <div class="modalTop">
-        <div class="mtitle">추천사유</div>
-        <button id="closeBrief">닫기</button>
-      </div>
-      <div class="briefBody">
-        <div class="briefBox">
-          <div class="briefHeader">🪄 AI Agent 고객 브리핑</div>
-          <div id="briefText" class="briefScroll">고객 브리핑을 생성 중입니다...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MyCare 바로가기 팝업 -->
-<!-- ✅ SMS 휴대폰 미리보기 팝업 -->
-<div id="overlaySmsPreview" class="overlay">
-  <div class="modal smsPhoneModal">
-    <div class="modalTop">
-      <div class="mtitle">문자 미리보기</div>
-      <button id="closeSmsPreview">닫기</button>
-    </div>
-
-    <div class="smsPhoneBody">
-      <div class="phone">
-        <div class="phoneTop"><div class="phoneNotch"></div></div>
-
-        <div class="phoneHeader">
-          <div class="phTitle">[신한] 문자</div>
-          <div class="phSub" id="smsPhoneTo">수신자: -</div>
-        </div>
-
-        <div class="bubbleWrap">
-          <div class="bubble" id="smsPhoneText">미리보기 내용</div>
-        </div>
-
-        <div class="phoneBottom"><div class="homeBar"></div></div>
-      </div>
-    </div>
-  </div>
+<div class="btnCol">
+<button class="btnBig" id="btnGoTM">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
+<button class="btnBig" id="btnGoSMS">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
 </div>
-
-  <div id="overlayMyCare" class="overlay">
-    <div class="modal modalMyCare">
-      <div class="modalTop">
-        <div class="mtitle">바로가기</div>
-        <button id="closeMyCare">닫기</button>
-      </div>
-      <div class="mycareBody">
-        <div class="mycareBox">마이케어과제로 이동합니다. (시연용)</div>
-      </div>
-    </div>
-  </div>
-
-  <script>
+</div>
+<div class="hint" style="padding:10px 0 0 0;"> * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다. </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 2차 팝업: TM -->
+<div class="overlay" id="overlayTM">
+<div class="modal modal2">
+<div class="modalTop">
+<div class="mtitle">TM 실행 하기</div>
+<button id="closeTM">닫기</button>
+</div>
+<div class="modal2Body">
+<div class="scriptPanel">
+<div class="h">AI-Generated TM 스크립트</div>
+<div class="scriptBox" id="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
+<div style="display:flex; gap:8px; justify-content:flex-end;">
+<button class="btnBig" id="btnGenTM" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
+</div>
+</div>
+<div class="tmSide">
+<div class="h">고객 선택</div>
+<div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
+<div class="tmPickList" id="tmPickList"></div>
+<button class="tmExec" disabled="" id="btnTmExec">TM 실행</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 2차 팝업: SMS -->
+<div class="overlay" id="overlaySMS">
+<div class="modal modalSMS">
+<div class="modalTop">
+<div class="mtitle">문자 발송 하기</div>
+<button id="closeSMS">닫기</button>
+</div>
+<div class="smsBody">
+<div class="smsCard">
+<div class="smsTitle">문자 발송 하기</div>
+<div class="smsGrid">
+<div class="smsLeft">
+<div class="sub">맞춤 문자 List</div>
+<div class="smsTableWrap">
+<table>
+<thead>
+<tr>
+<th style="width:44px;"></th>
+<th>템플릿명</th>
+<th style="width:92px;">발송목적</th>
+<th style="width:80px;">미리보기</th>
+</tr>
+</thead>
+<tbody id="smsTplTbody"></tbody>
+</table>
+</div>
+</div>
+<div class="smsRight">
+<div class="smsCustBox">
+<div style="font-weight:900;">발송 대상</div>
+<div id="smsCustList"></div>
+</div>
+<button class="smsBtn" disabled="" id="btnSmsSend">문자 발송</button>
+</div>
+</div>
+<div class="hint" style="padding:10px 0 0 0;"> * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송 </div>
+</div>
+</div>
+</div>
+</div>
+<!-- 고객 브리핑 팝업 -->
+<div class="overlay" id="overlayBrief">
+<div class="modal modalBrief">
+<div class="modalTop">
+<div class="mtitle">추천사유</div>
+<button id="closeBrief">닫기</button>
+</div>
+<div class="briefBody">
+<div class="briefBox">
+<div class="briefHeader">🪄 AI Agent 고객 브리핑</div>
+<div class="briefScroll" id="briefText">고객 브리핑을 생성 중입니다...</div>
+</div>
+</div>
+</div>
+</div>
+<!-- MyCare 바로가기 팝업 -->
+<!-- ✅ SMS 휴대폰 미리보기 팝업 -->
+<div class="overlay" id="overlaySmsPreview">
+<div class="modal smsPhoneModal">
+<div class="modalTop">
+<div class="mtitle">문자 미리보기</div>
+<button id="closeSmsPreview">닫기</button>
+</div>
+<div class="smsPhoneBody">
+<div class="phone">
+<div class="phoneTop"><div class="phoneNotch"></div></div>
+<div class="phoneHeader">
+<div class="phTitle">[신한] 문자</div>
+<div class="phSub" id="smsPhoneTo">수신자: -</div>
+</div>
+<div class="bubbleWrap">
+<div class="bubble" id="smsPhoneText">미리보기 내용</div>
+</div>
+<div class="phoneBottom"><div class="homeBar"></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="overlay" id="overlayMyCare">
+<div class="modal modalMyCare">
+<div class="modalTop">
+<div class="mtitle">바로가기</div>
+<button id="closeMyCare">닫기</button>
+</div>
+<div class="mycareBody">
+<div class="mycareBox">마이케어과제로 이동합니다. (시연용)</div>
+</div>
+</div>
+</div>
+<script>
 /* ===================== A) 엑셀 기반 캠페인 DB ====================== */
 const CAMPAIGN_DB = 
 [
@@ -3074,5 +3108,32 @@ function buildBriefing(cust, taskName, dateKey){
 }
 
 </script>
-</body>
+</div>
+</div></div><script>
+(function fitToScreen(){
+  const BASE_W = 1440;
+  const BASE_H = 900;
+
+  const root = document.getElementById('scale-root');
+  const vp = document.getElementById('viewport');
+
+  function apply(){
+    const vw = window.innerWidth || 1280;
+    const vh = window.innerHeight || 800;
+
+    const s = Math.min(vw / BASE_W, vh / BASE_H);
+
+    const x = Math.max(0, (vw - BASE_W * s) / 2);
+    const y = Math.max(0, (vh - BASE_H * s) / 2);
+
+    root.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+    // Ensure viewport background covers letterbox areas
+    vp.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#f3f4f6';
+  }
+
+  window.addEventListener('resize', apply, {passive:true});
+  window.addEventListener('orientationchange', apply, {passive:true});
+  apply();
+})();
+</script></body>
 </html>
