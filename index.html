@@ -530,17 +530,20 @@
       cursor:pointer; text-align:center;
     }
 
-    .modal2{ width:1120px; max-width:calc(100vw - 24px); }
+    .modal2{ width:820px; max-width:calc(100vw - 24px); max-height:65vh; overflow:auto; }
     .modal2Body{
       display:grid; grid-template-columns: 1fr 360px;
       gap:12px; padding:14px;
-      min-height: 620px;
+      height:60vh;
+      min-height:0;
+      overflow:hidden;
     }
     .scriptPanel{
       border:1px solid #e1e7ef; border-radius:10px;
       padding:12px; background:#fff;
       display:flex; flex-direction:column; gap:10px;
-      min-height: 560px;
+      min-height:0;
+      height:100%;
     }
     .scriptPanel .h{ font-weight:900; font-size:13px; }
     .scriptBox{
@@ -553,10 +556,11 @@
       border:1px solid #e1e7ef; border-radius:10px;
       padding:12px; background:#fff;
       display:flex; flex-direction:column; gap:10px;
-      min-height: 560px;
+      min-height:0;
+      height:100%;
     }
     .tmSide .h{ font-weight:900; font-size:13px; }
-    .tmPickList{ display:flex; flex-direction:column; gap:8px; }
+    .tmPickList{ display:flex; flex-direction:column; gap:8px; overflow:auto; flex:1; min-height:0; }
     .custPickItem{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       padding:10px 10px; border:1px solid #e1e7ef;
