@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
-<title>CRM 데모 (AI/필수/밀착/일정 + TM/SMS)</title>
-<style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CRM 데모 (AI/필수/밀착/일정 + TM/SMS)</title>
+  <style>
     :root{
       --bg:#f3f4f6; --panel:#fff; --line:#cfd6df; --line2:#e6ebf2;
       --text:#1f2937; --muted:#6b7280;
@@ -466,18 +465,7 @@
       display:flex; align-items:center; gap:10px;
       font-size:12px; color:#374151; font-weight:700;
     }
-    
-    .radio label{
-      display:inline-flex; align-items:center; gap:6px;
-      line-height:1; white-space:nowrap;
-    }
-    .radio input[type="radio"]{
-      margin:0;
-      width:14px; height:14px;
-      vertical-align:middle;
-      flex:0 0 auto;
-    }
-.run-btn{
+    .run-btn{
       background:#ff7a18; color:#111827;
       border:none; border-radius:8px;
       padding:10px 14px; font-weight:900;
@@ -780,1847 +768,513 @@
   background: rgba(255,255,255,.22);
 }
 
-  
-/* ================= Galaxy Tab S7 최적화 ================= */
-/*
-  목표
-  - 레이아웃 구조는 유지
-  - 뷰포트(창 확대/축소)에 맞춰 너비/높이를 끝까지 사용
-  - 기준 레이아웃(1280x800)보다 작아지면 가로/세로 스크롤로 처리
-*/
-.tablet-wrap{width:1280px; height:800px; margin:0; padding:0 10px 10px; box-sizing:border-box;}
 
-/* 전체 스케일 다운 */
-@media (max-width: 1400px){
-  :root{ --design-w:1280px; --design-h:800px; }
-
-  body{
-    font-size:13px;
-  }
-
-  h1{font-size:18px;}
-  h2{font-size:16px;}
-  h3{font-size:14px;}
-
-  table{font-size:12px;}
-
-  button{
-    font-size:12px;
-    padding:6px 10px;
-  }
-
-  input, select{
-    font-size:12px;
-    height:28px;
-  }
-
-  .panel, .card{
-    padding:8px;
-  }
-
-  /* 주요 레이아웃 유지 */
-  .wrap{grid-template-columns: 60px 230px 1fr;}
-  .mid{grid-template-columns: 1fr 440px;}
-}
-
-
-
-/* ===== Tablet fit (Galaxy Tab S7, 1280x800 landscape) ===== */
-html, body { height: 100%; }
-/*
-  중요: 화면이 기준(1280x800)보다 작아질 때 '잘림'이 아닌 스크롤로 처리해야 하므로
-  body/viewport에서 overflow를 숨기지 않습니다.
-*/
-body { overflow: auto; }
-#viewport{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:var(--bg); display:flex; align-items:center; justify-content:center;}
-#scale-root{position:relative; width:1280px; height:800px; transform-origin:top left;}
-/* Slightly tighten typography for tablet without changing layout semantics */
-:root{
-  --tablet-font-scale: 0.96;
-}
-body, button, input, textarea, select{
-  font-size: calc(14px * var(--tablet-font-scale));
-}
-
-    /* Tablet compactness: keep right campaign list fully visible */
-    .taskTable th, .taskTable td{ padding:6px 8px; font-size:12px; }
-    .taskTabs .t{ padding:6px 8px; font-size:12px; }
-    .custTable th, .custTable td{ padding:6px 8px; font-size:12px; }
-    .smsItem{ padding:8px 10px; }
-    
-/* ===== Galaxy Tab S7 추가 최적화: 우측 AI영업기회(캠페인) 목록 항상 가시성 확보 ===== */
-.tablet-wrap .mid{
-  /* 우측 패널은 너무 좁아지지 않게 최소폭 확보, 필요 시 좌측이 먼저 축소 */
-  grid-template-columns: 1fr clamp(360px, 32vw, 520px) !important;
-  gap:10px !important;
-}
-.tablet-wrap .taskPanel{
-  min-width:360px;
-}
-.tablet-wrap .taskTopBar{
-  padding:6px 8px !important;
-}
-.tablet-wrap #taskTable th{
-  font-size:11px !important;
-  padding:4px 6px !important;
-  line-height:1.1 !important;
-}
-.tablet-wrap #taskTable td{
-  font-size:11px !important;
-  padding:5px 6px !important;
-  line-height:1.15 !important;
-}
-/* 과제명/캠페인명은 줄바꿈 허용 + 행 높이 최소화 */
-.tablet-wrap #taskTable td:nth-child(2){
-  white-space:normal !important;
-  word-break:keep-all;
-}
-/* 숫자 컬럼은 줄바꿈 방지 */
-.tablet-wrap #taskTable td:nth-child(3),
-.tablet-wrap #taskTable td:nth-child(4),
-.tablet-wrap #taskTable td:nth-child(5){
-  white-space:nowrap !important;
-}
-.tablet-wrap .taskTableWrap{
-  overflow:auto !important;
-  min-height:0 !important;
-  max-height: calc(100% - 6px) !important;
-}
-/* 우측 패널 내부 스크롤을 확실히 확보 (Chrome Android에서 flex overflow 이슈 회피) */
-.tablet-wrap .taskPanel{
-  display:flex !important;
-  flex-direction:column !important;
-}
-.tablet-wrap .taskTableWrap{
-  flex:1 1 auto !important;
-}
-
-/* 전체화면 사용(주소창 축소/확대 대응): JS가 var(--vh) 갱신 시 동작 */
-html, body{height:100%;}
-
-
-/* ==== Tablet fullscreen override (Galaxy Tab S7) ==== */
-html, body { width:100%; height:100%; }
-#viewport{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:var(--bg); display:flex; align-items:center; justify-content:center;}
-#scale-root{position:relative; width:1280px; height:800px; transform-origin:top left;}
-
-
-/* === Patch (Galaxy Tab S7) : fixed-size modals with inner scroll + icon/radio alignment === */
-
-/* 고객브리핑 팝업: 모달 크기는 유지하고 내용은 내부 스크롤 */
-.modalBrief{
-  max-height: calc(100vh - 24px);
-  display: flex;
-  flex-direction: column;
-}
-.modalBrief .modalTop{ flex: 0 0 auto; }
-.briefBody{ flex: 1 1 auto; min-height: 0; overflow: hidden; }
-.briefBox{ height: 100%; min-height: 0; }
-.briefScroll{
-  max-height: none;           /* 바깥(모달)에서 높이 제어 */
-  height: 100%;
-  overflow: auto;
-}
-
-/* TM스크립트 팝업(모달2): 모달 크기는 유지하고 내용은 내부 스크롤 */
-.modal2{
-  max-height: calc(100vh - 24px);
-  display: flex;
-  flex-direction: column;
-}
-.modal2 .modalTop{ flex: 0 0 auto; }
-.modal2Body{ flex: 1 1 auto; min-height: 0; overflow: hidden; }
-.modal2Body .scriptBox{ height: 100%; overflow: auto; }
-
-/* (보조) modal1을 쓰는 팝업이 있을 경우에도 동일하게 내부 스크롤 처리 */
-.modal1{
-  max-height: calc(100vh - 24px);
-  display: flex;
-  flex-direction: column;
-}
-.modal1 .modalTop{ flex: 0 0 auto; }
-.modal1Body{ flex: 1 1 auto; min-height: 0; overflow: auto; }
-
-/* 고객브리핑 컬럼 돋보기 아이콘 정렬/가시성 */
-.mag-btn{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin: 0 auto;
-  line-height: 1;
-}
-
-/* AI Agent 알림센터: 라디오/텍스트 정렬 */
-.cardHead{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.cardHead .title{
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.cardHead .radio{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  transform: translateY(0.5px);
-}
-
-
-
-/* ================= 추가: 창 크기(확대/축소) 따라 유동 레이아웃 ================= */
-.wrap, .app, .container{ width:100%; max-width:none !important; }
-
-/* 우측(캠페인) 패널 유동 폭(최소 보장) */
-.right, .rightPane, .taskPanel, #taskPanel{
-  flex: 0 0 clamp(320px, 30vw, 520px);
-  min-width: 320px;
-  max-width: 520px;
-}
-
-/* 좁은 화면: 우측 유지 + 가독성 확보 */
-@media (max-width: 980px){
-  .right, .rightPane, .taskPanel, #taskPanel{
-    flex: 0 0 320px;
-    max-width: 360px;
-  }
-  #taskTable, .taskTable{ font-size: 11px !important; }
-  #taskTable td, #taskTable th, .taskTable td, .taskTable th{ padding: 6px 6px !important; }
-}
-
-/* ================= 추가: 고객브리핑/TM 팝업 크기 축소 + 내부 스크롤 ================= */
-.overlay .modal, .modal{
-  width: min(760px, 78vw) !important;
-  max-width: min(760px, 78vw) !important;
-  height: min(560px, 76vh) !important;
-  max-height: min(560px, 76vh) !important;
-}
-
-/* 본문 텍스트(브리핑/TM) 스크롤 */
-#briefText, #tmText, .briefText, .tmText, textarea#briefText, textarea#tmText{
-  max-height: calc(min(560px, 76vh) - 160px) !important;
-  overflow: auto !important;
-  white-space: pre-wrap;
-}
-
-/* 일반 컨테이너 대응 */
-.modal .content, .modalBody, .modal-content, .modalContent{
-  max-height: calc(min(560px, 76vh) - 120px) !important;
-  overflow: auto !important;
-}
-
-
-
-/* ================= 가로 스크롤 허용 ================= */
-html, body{
-  overflow-x: auto !important;
-}
-#viewport, .viewport, .app, .wrap{
-  min-width: 1280px; /* 화면보다 작아지면 가로 스크롤 생성 */
-}
-
-/* ================= 좌측 영역 폭 축소 ================= */
-/* 좌측 버튼 영역 */
-.left, .leftPane, #leftPanel{
-  width: 200px !important;
-  min-width: 200px !important;
-}
-
-/* 조회 조건 영역 */
-.searchArea, .filterArea, #searchArea{
-  width: 100% !important;
-  padding: 8px 6px !important;
-}
-
-/* 채널 바로가기 */
-.channelArea, .quickChannel, #channelArea{
-  gap: 6px !important;
-}
-.channelArea button,
-.quickChannel button{
-  padding: 6px 8px !important;
-  font-size: 11px !important;
-}
-
-/* 하단 4개 아이콘 버튼 */
-.iconGroup, .quickIcons, #quickIcons{
-  grid-template-columns: repeat(4, 1fr) !important;
-  gap: 6px !important;
-}
-.iconGroup button,
-.quickIcons button{
-  padding: 6px !important;
-  font-size: 10px !important;
-}
-
-/* 아이콘 사이즈 축소 */
-.iconGroup img,
-.quickIcons img{
-  width: 20px !important;
-  height: 20px !important;
-}
-
-
-/* ================= 추가: 화면 축소 시 가로 스크롤 + 좌측 패널 폭/컴포넌트 슬림화 ================= */
-html, body{
-  overflow-x:auto; /* 뷰포트보다 작아지면 가로 스크롤 */
-}
-
-/* 전체 레이아웃은 가능한 화면을 꽉 채우되, 최소 폭(디자인 기준) 아래로는 가로 스크롤로 대응 */
-#viewport, .viewport, .app, .wrap{
-  width:100vw;
-  height:100vh;
-  min-width: 1280px;
-}
-
-/* 좌측 패널(초기화/조회/고객종합정보 버튼 영역) 폭을 약간 줄이고 내부 컴포넌트도 동일 폭으로 수렴 */
-.wrap{ grid-template-columns: 44px 190px 1fr !important; }
-
-.left, .leftPanel, #leftPanel{
-  width: 190px !important;
-  min-width: 190px !important;
-}
-
-/* 좌측 '조회 조건' 카드(입력 필드) */
-.left-card{
-  padding: 8px !important;
-}
-.left-card .box{
-  padding: 8px !important;
-}
-.left-card .title{
-  font-size: 11px !important;
-  margin-bottom: 6px !important;
-}
-.left-card .fields{
-  gap: 6px !important;
-}
-.left-card .field{
-  gap: 4px !important;
-}
-.left-card .field label{
-  font-size: 11px !important;
-  min-width: 84px !important; /* 라벨 폭 축소 */
-}
-.left-card .field input{
-  height: 20px !important;
-  font-size: 11px !important;
-  padding: 0 6px !important;
-}
-
-/* 채널 바로가기 + 하단 4개 아이콘 버튼(미니 타일) */
-.mini-grid{
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 6px !important;
-}
-.mini-tile{
-  padding: 6px 4px !important;
-  border-radius: 10px !important;
-  min-height: 54px !important;
-}
-.mini-tile .ico{
-  width: 22px !important;
-  height: 22px !important;
-}
-.mini-tile .lbl{
-  font-size: 10px !important;
-  line-height: 1.15 !important;
-}
-
-
-
-
-/* ===== TM 팝업 하단 버튼 항상 보이게 ===== */
-#overlayTM .modal{
-  display:flex;
-  flex-direction:column;
-}
-
-/* 본문만 스크롤 */
-#overlayTM .modal .content,
-#overlayTM .modalBody,
-#overlayTM .modal-content,
-#overlayTM .modalContent,
-#overlayTM #tmText{
-  flex:1 1 auto;
-  overflow-y:auto !important;
-}
-
-/* 하단 버튼 영역 고정 */
-#overlayTM .modal .footer,
-#overlayTM .modalFooter,
-#overlayTM .tmFooter,
-#overlayTM .tm-actions{
-  flex:0 0 auto;
-  padding-top:8px;
-  border-top:1px solid #e5e7eb;
-  background:#fff;
-}
-
-
-
-/* Tablet fit-to-viewport scaling */
-#viewport{position:fixed; inset:0; width:100vw; height:100vh; overflow:hidden; background:var(--bg); display:flex; align-items:center; justify-content:center;}
-#scale-root{position:relative; width:1280px; height:800px; transform-origin:top left;}
-/* Ensure customer table shows at least ~2 rows on first load */
-#custArea{min-height:110px;}
-
-
-
-/* ===== TM 실행 팝업(과제 수행) 크기/버튼 배치 개선 ===== */
-#overlayTM .modal.modal2{
-  width: min(980px, 92vw) !important;
-  max-width: min(980px, 92vw) !important;
-  height: min(520px, 68vh) !important;          /* 기존보다 높이 축소 */
-  max-height: min(520px, 68vh) !important;
-}
-
-/* 좌/우 패널이 팝업 높이 안에서 꽉 차도록 */
-#overlayTM .modal2Body{
-  height: calc(100% - 44px); /* modalTop 제외 */
-}
-
-/* 좌측 스크립트 패널: 내용은 스크롤, 버튼은 하단 고정 */
-#overlayTM .scriptPanel{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
-#overlayTM #scriptBox{
-  flex:1;
-  min-height:0;
-  overflow:auto;             /* 스크립트가 길면 여기만 스크롤 */
-}
-#overlayTM .scriptFooter{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  padding-top:10px;
-}
-
-/* 우측 실행 버튼: 하단에 크게, 고정 */
-#overlayTM .tmSide{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
-#overlayTM .tmPickList{ flex:1; min-height:0; overflow:auto; }
-#overlayTM .tmFooter{
-  padding-top:10px;
-}
-#overlayTM .tmExec{
-  width: 100%;
-  height: 42px;
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-/* 태블릿에서 버튼/여백 과도하지 않게 */
-@media (max-width: 980px){
-  #overlayTM .modal.modal2{
-    height: min(500px, 66vh) !important;
-    max-height: min(500px, 66vh) !important;
-  }
-  #overlayTM .tmExec{ height:40px; font-size:13px; }
-}
-
-
-
-/* ================= FIX: overlay가 block으로 열려도 중앙정렬 유지 ================= */
-.overlay[style*="display: block"], .overlay[style*="display:block"]{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-/* ================= FIX: TM 팝업 레이아웃(좌/우 패널) 정상화 ================= */
-#overlayTM .modal.modal2{
-  width: min(980px, 92vw) !important;
-  max-width: min(980px, 92vw) !important;
-  height: min(520px, 68vh) !important;
-  max-height: min(520px, 68vh) !important;
-}
-
-#overlayTM .modal2Body{
-  display:grid !important;
-  grid-template-columns: 1fr 380px !important;
-  gap:14px !important;
-  padding:14px !important;
-  height: calc(min(520px, 68vh) - 54px) !important; /* 헤더 높이 제외(대략) */
-  box-sizing:border-box;
-}
-
-#overlayTM .scriptPanel{
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-}
-
-#overlayTM .scriptBox{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  overflow:auto !important;
-  max-height: none !important;
-}
-
-#overlayTM .scriptFooter{
-  flex:0 0 auto !important;
-  display:flex !important;
-  justify-content:flex-end !important;
-  gap:10px !important;
-  padding-top:10px !important;
-}
-
-#overlayTM .tmSide{
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-}
-
-#overlayTM .tmPickList{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  overflow:auto !important;
-}
-
-#overlayTM .tmFooter{
-  flex:0 0 auto !important;
-  padding-top:10px !important;
-}
-
-#overlayTM .tmExec{
-  width:100% !important;
-}
-
-/* 좁은 화면에서도 우측 패널이 화면 밖으로 밀리지 않도록 */
-@media (max-width: 980px){
-  #overlayTM .modal2Body{
-    grid-template-columns: 1fr 340px !important;
-  }
-  #overlayTM .tmExec{ height:40px !important; font-size:13px !important; }
-}
-
-
-
-/* ===== TM 실행 팝업: 첨부 이미지 레이아웃/사이즈 고정(내용만 스크롤) ===== */
-#overlayTM{ display:none; } /* 기존 JS가 block으로 열어도 아래가 우선 적용되도록 */
-#overlayTM.show, #overlayTM[style*="display: block"], #overlayTM[style*="display:block"]{
-  display:flex !important;
-}
-#overlayTM{
-  position:fixed; inset:0;
-  background: rgba(15, 23, 42, .35);
-  align-items:center; justify-content:center;
-  z-index: 9999;
-}
-
-/* 팝업 자체 크기: 화면 대비 과도하게 크지 않게 축소 */
-#overlayTM .modal2{
-  width: min(980px, 92vw) !important;
-  height: min(560px, 72vh) !important;   /* <- 높이 축소 */
-  max-height: min(560px, 72vh) !important;
-  display:flex; flex-direction:column;
-}
-
-/* 헤더 고정 */
-#overlayTM .modalTop{
-  flex: 0 0 auto;
-  display:flex; align-items:center; justify-content:space-between;
-}
-
-/* 본문: 2컬럼(좌:스크립트, 우:고객선택) */
-#overlayTM .modal2Body{
-  flex: 1 1 auto;
-  display:grid;
-  grid-template-columns: 1fr 320px;
-  gap: 16px;
-  padding: 14px 16px 16px 16px;
-  min-height: 0; /* overflow 계산 필수 */
-}
-
-/* 좌측 스크립트 패널 */
-#overlayTM .scriptPanel{
-  display:flex; flex-direction:column;
-  min-height:0;
-}
-#overlayTM .scriptBox{
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow:auto;              /* <- 스크립트만 스크롤 */
-  white-space: pre-wrap;
-}
-
-/* 좌측 하단 버튼은 항상 보이게 */
-#overlayTM .scriptFooter{
-  flex: 0 0 auto;
-  display:flex; justify-content:flex-end;
-  padding-top: 10px;
-}
-
-/* 우측 고객 선택 패널 */
-#overlayTM .tmSide{
-  display:flex; flex-direction:column;
-  min-height:0;
-}
-#overlayTM .tmPickList{
-  flex: 1 1 auto;
-  min-height:0;
-  overflow:auto;              /* 고객이 많아도 우측만 스크롤 */
-}
-#overlayTM .tmFooter{
-  flex: 0 0 auto;
-  padding-top: 10px;
-}
-#overlayTM .tmFooter .tmExec{
-  width:100%;
-  height: 44px;
-}
-
-/* 좁은 화면에서는 우측 폭을 조금 줄임 */
-@media (max-width: 900px){
-  #overlayTM .modal2Body{ grid-template-columns: 1fr 280px; }
-}
-
-
-
-/* ===== 문자 발송 팝업 사이즈 대응 ===== */
-#overlaySMS{ display:none; }
-#overlaySMS.show, #overlaySMS[style*="display: block"], #overlaySMS[style*="display:block"]{
-  display:flex !important;
-}
-#overlaySMS{
-  position:fixed; inset:0;
-  background: rgba(15,23,42,.35);
-  align-items:center; justify-content:center;
-  z-index: 9999;
-}
-
-/* 팝업 크기 */
-#overlaySMS .modal3{
-  width: min(900px, 92vw) !important;
-  height: min(520px, 70vh) !important;
-  max-height: min(520px, 70vh) !important;
-  display:flex; flex-direction:column;
-}
-
-/* 본문 2영역 */
-#overlaySMS .modal3Body{
-  flex:1 1 auto;
-  display:grid;
-  grid-template-columns: 1fr 300px;
-  gap:14px;
-  padding:14px 16px;
-  min-height:0;
-}
-
-/* 좌측 문자 영역 */
-#overlaySMS .smsBox{
-  flex:1 1 auto;
-  min-height:0;
-  overflow:auto;    /* 내용만 스크롤 */
-  white-space:pre-wrap;
-}
-
-/* 우측 발송대상 */
-#overlaySMS .smsTarget{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
-#overlaySMS .smsTargetList{
-  flex:1 1 auto;
-  overflow:auto;
-  min-height:0;
-}
-
-/* 하단 버튼 고정 */
-#overlaySMS .smsFooter{
-  flex:0 0 auto;
-  padding:10px 16px;
-}
-#overlaySMS .smsFooter button{
-  width:100%;
-  height:42px;
-}
-
-@media (max-width:900px){
-  #overlaySMS .modal3Body{ grid-template-columns: 1fr 260px; }
-}
-
-
-
-/* ================== FIX: 문자 발송 팝업(발송대상/버튼) 오버플로 방지 ================== */
-#overlaySMS{
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-/* 실제 모달 클래스는 modalSMS 사용 */
-#overlaySMS .modalSMS{
-  width: min(900px, 92vw) !important;
-  height: min(520px, 70vh) !important;
-  max-height: min(520px, 70vh) !important;
-  display:flex !important;
-  flex-direction:column !important;
-}
-
-/* 본문 높이 계산을 위해 min-height:0 필수 */
-#overlaySMS .smsBody{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
-#overlaySMS .smsCard{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
-#overlaySMS .smsGrid{
-  flex:1 1 auto;
-  min-height:0 !important;
-  display:grid !important;
-  grid-template-columns: 1fr 300px;
-  gap:14px;
-}
-
-/* 좌측(템플릿 리스트)도 내부 스크롤로 */
-#overlaySMS .smsLeft{ min-height:0 !important; display:flex; flex-direction:column; }
-#overlaySMS .smsTableWrap{ flex:1 1 auto; min-height:0 !important; overflow:auto !important; }
-
-/* 우측(발송대상 + 발송버튼)을 팝업 높이 안에서만 동작 */
-#overlaySMS .smsRight{
-  min-height:0 !important;
-  display:flex !important;
-  flex-direction:column !important;
-}
-#overlaySMS .smsCustBox{
-  flex:1 1 auto;
-  min-height:0 !important;
-  overflow:auto !important;   /* 발송대상만 스크롤 */
-}
-#overlaySMS #smsCustList{ overflow:auto !important; }
-#overlaySMS #btnSmsSend{
-  flex:0 0 auto;
-  margin-top:10px !important;
-  height:42px !important;
-  width:100% !important;
-}
-
-/* 좁은 화면에서는 우측폭 축소 */
-@media (max-width: 900px){
-  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px; }
-}
-
-/* ================== FIX: DM/SMS/MOB/URL 타일 높이/마진 좌우 균형 ================== */
-.mini-grid{
-  gap:10px !important;
-}
-.mini-tile{
-  height:36px !important;              /* 좌우 요소와 동일한 높이감 */
-  padding:0 12px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  margin:0 !important;
-  line-height:1 !important;
-}
-
-
-
-/* ===== PATCH v3: 문자 발송 팝업 오버플로 완전 차단 + 채널 타일 높이/마진 정합 ===== */
-
-/* 문자 발송 팝업: 모달 내부에서만 스크롤되도록 강제 */
-#overlaySMS{ display:none; }
-#overlaySMS.show, #overlaySMS[style*="display:block"], #overlaySMS[style*="display: block"]{ display:flex !important; }
-#overlaySMS{ position:fixed; inset:0; align-items:center !important; justify-content:center !important; z-index:9999; }
-
-#overlaySMS .modal.modalSMS{
-  width: min(900px, 92vw) !important;
-  height: min(520px, 70vh) !important;
-  max-height: min(520px, 70vh) !important;
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important; /* 모달 밖으로 버튼/리스트가 튀어나가는 현상 방지 */
-}
-
-#overlaySMS .smsBody{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important;
-}
-
-#overlaySMS .smsCard{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important;
-}
-
-#overlaySMS .smsTitle{ flex:0 0 auto !important; }
-
-#overlaySMS .smsGrid{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  display:grid !important;
-  grid-template-columns: 1fr 300px !important;
-  gap:14px !important;
-  overflow:hidden !important;
-}
-
-/* 좌측 리스트: 표 영역만 스크롤 */
-#overlaySMS .smsLeft{ min-height:0 !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; }
-#overlaySMS .smsTableWrap{ flex:1 1 auto !important; min-height:0 !important; overflow:auto !important; }
-
-/* 우측 발송대상: 고객 리스트만 스크롤, 버튼은 하단 고정 */
-#overlaySMS .smsRight{ min-height:0 !important; display:flex !important; flex-direction:column !important; overflow:hidden !important; }
-#overlaySMS .smsCustBox{ flex:1 1 auto !important; min-height:0 !important; overflow:auto !important; padding-right:2px; }
-#overlaySMS #smsCustList{ max-height:none !important; overflow:auto !important; }
-#overlaySMS #btnSmsSend{
-  flex:0 0 auto !important;
-  margin-top:10px !important;
-  width:100% !important;
-  height:42px !important;
-}
-
-/* 하단 힌트가 높이를 밀어내지 않도록(필요 시 줄바꿈만) */
-#overlaySMS .hint{
-  flex:0 0 auto !important;
-  font-size:12px !important;
-  line-height:1.35 !important;
-  padding:8px 16px 12px 16px !important;
-  margin:0 !important;
-  white-space:normal !important;
-}
-
-/* 좁은 화면 */
-@media (max-width:900px){
-  #overlaySMS .modal.modalSMS{ height: min(520px, 74vh) !important; }
-  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px !important; }
-}
-
-/* 채널 바로가기(DM/SMS/MOB/URL): 높이/세로 정렬/간격을 좌우와 동일하게 */
-.channelArea .mini-grid, .mini-grid{ gap:10px !important; }
-.channelArea .mini-tile, .mini-tile{
-  height:36px !important;
-  min-height:36px !important;
-  padding:0 12px !important;
-  margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  line-height:1 !important;
-}
-
-
-
-/* ===== FIX: #viewport 잘림/검은 여백/스케일 동작 안정화 (기존 깨진 CSS 오버라이드) ===== */
-#viewport{
-  position:fixed !important;
-  inset:0 !important;
-  width:100vw !important;
-  height:100vh !important;
-  overflow:hidden !important;
-  background: var(--bg, #f3f4f6) !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-/* ===== FIX: 상단 탭(top2) 우측 버튼과 겹침 방지 ===== */
-.top2{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:0; /* 중요: 내부 축소 허용 */
-}
-.top2 .tabs{
-  flex: 1 1 auto;  /* 탭 영역이 남는 폭을 사용 */
-  min-width:0;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  overflow:auto;               /* 좁아지면 탭만 스크롤 */
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;       /* FF */
-}
-.top2 .tabs::-webkit-scrollbar{ height:0; } /* Chrome */
-.top2 .tab{ white-space:nowrap; flex:0 0 auto; }
-.top2 .spacer{ flex:0 0 6px; } /* 탭이 길어도 우측 버튼 침범 방지 */
-.top2 .mini-btn{ flex:0 0 auto; }
-
-/* (보너스) 탭이 너무 길면 살짝 컴팩트 */
-.top2 .tab{
-  padding:6px 10px;
-  border-radius:6px;
-}
-
-
-
-/* ===== FIX: 문자 발송 팝업(발송대상/버튼) 오버플로 방지 + 미리보기 우선 표시 ===== */
-#overlaySMS{ z-index: 10000 !important; }
-#overlaySMS .modal.modalSMS{
-  width: min(900px, 92vw) !important;
-  height: min(520px, 70vh) !important;
-  max-height: min(520px, 70vh) !important;
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important; /* 팝업 밖으로 튀는 요소 차단 */
-}
-#overlaySMS .smsBody{ flex:1 1 auto; min-height:0 !important; }
-#overlaySMS .smsCard{ flex:1 1 auto; min-height:0 !important; display:flex; flex-direction:column; }
-#overlaySMS .smsGrid{
-  flex:1 1 auto;
-  min-height:0 !important;
-  display:grid !important;
-  grid-template-columns: 1fr 300px;
-  gap:14px;
-}
-#overlaySMS .smsLeft{ min-height:0 !important; display:flex; flex-direction:column; }
-#overlaySMS .smsTableWrap{ flex:1 1 auto; min-height:0 !important; overflow:auto !important; }
-#overlaySMS .smsRight{
-  min-height:0 !important;
-  display:flex !important;
-  flex-direction:column !important;
-}
-#overlaySMS .smsCustBox{
-  flex:1 1 auto;
-  min-height:0 !important;
-  overflow:auto !important;   /* 발송대상 리스트만 스크롤 */
-  padding-bottom:6px;
-}
-#overlaySMS #btnSmsSend{
-  flex:0 0 auto !important;
-  width:100% !important;
-  height:42px !important;
-  margin-top:10px !important;
-}
-
-/* 맞춤 문자 List: 미리보기 컬럼이 항상 보이도록 살짝 컴팩트 */
-#overlaySMS table{ width:100%; border-collapse:collapse; }
-#overlaySMS th, #overlaySMS td{ padding:8px 8px !important; font-size:12px !important; }
-#overlaySMS .smsPreviewBtn{
-  padding:6px 10px !important;
-  font-size:12px !important;
-  white-space:nowrap !important;
-}
-
-/* 좁은 화면 대응 */
-@media (max-width: 900px){
-  #overlaySMS .smsGrid{ grid-template-columns: 1fr 260px; }
-}
-
-/* ===== FIX: SMS 미리보기 팝업이 항상 최상단에 뜨도록(z-index) ===== */
-#overlaySmsPreview{
-  position:fixed !important;
-  inset:0 !important;
-  z-index: 10050 !important; /* SMS 팝업보다 위 */
-}
-#overlaySmsPreview.show, 
-#overlaySmsPreview[style*="display:block"], 
-#overlaySmsPreview[style*="display: block"]{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-
-
-
-
-/* ===== Responsive full-viewport scaler: fill width, allow vertical scroll instead of big margins ===== */
-#viewport{
-  overflow:auto !important;          /* allow scroll if scaled content taller */
-  align-items:flex-start !important; /* no forced centering (reduces margins) */
-  justify-content:flex-start !important;
-}
-#appRoot{
-  width:1280px;
-  height:800px;
-  transform-origin: top left;
-}
-
-
-
-
-/* ===== SMS 팝업 레이아웃 재조정: 하단(미리보기) 항상 노출 + 우측 발송대상 폭 축소 ===== */
-#overlaySMS .modal.modalSMS{
-  height: min(520px, 70vh) !important;
-  overflow:hidden !important;
-}
-
-/* 그리드: 우측을 auto로(내용 길이에 맞춰) + 최대폭 제한 */
-#overlaySMS .smsGrid{
-  grid-template-columns: 1fr auto !important;
-}
-#overlaySMS .smsRight{
-  width: auto !important;
-  min-width: 200px !important;
-  max-width: 260px !important; /* 우측 폭 축소 */
-}
-
-/* 좌측: '맞춤 문자 List' + '미리보기'가 항상 보이도록 */
-#overlaySMS .smsLeft{
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-}
-
-/* 표 영역은 스크롤, 하단 미리보기는 고정 높이로 항상 노출 */
-#overlaySMS .smsTableWrap{
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  overflow: auto !important;
-}
-/* 미리보기 영역 클래스/ID가 다를 수 있어 범용 선택자 추가 */
-#overlaySMS .smsPreviewWrap,
-#overlaySMS .smsPreviewBox,
-#overlaySMS #smsPreview,
-#overlaySMS .previewBox{
-  flex: 0 0 160px !important;     /* 하단 미리보기 고정 */
-  max-height: 160px !important;
-  overflow: auto !important;      /* 미리보기 내용만 스크롤 */
-  margin-top: 10px !important;
-  border: 1px solid var(--line2, #e6ebf2);
-  border-radius: 10px;
-  padding: 10px 12px;
-  background: #fff;
-}
-
-/* 우측: 발송대상 리스트만 스크롤, 버튼은 항상 보이게 */
-#overlaySMS .smsCustBox{
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  overflow: auto !important;
-}
-#overlaySMS #btnSmsSend{
-  flex: 0 0 auto !important;
-}
-
-/* 아주 좁은 경우 우측 폭 추가 축소 */
-@media (max-width: 760px){
-  #overlaySMS .smsRight{ min-width: 180px !important; max-width: 220px !important; }
-}
-
-
-
-/* ===== FIX: 문자 미리보기(휴대폰 모양) 팝업에서 phone 전체가 항상 보이도록 ===== */
-#overlaySmsPreview{
-  display:none;
-}
-#overlaySmsPreview.show,
-#overlaySmsPreview[style*="display:block"],
-#overlaySmsPreview[style*="display: block"]{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-}
-#overlaySmsPreview .smsPhoneModal{
-  width: 440px !important;
-  max-width: calc(100vw - 24px) !important;
-  max-height: calc(100vh - 24px) !important;
-  display:flex !important;
-  flex-direction:column !important;
-  overflow:hidden !important;
-}
-#overlaySmsPreview .smsPhoneBody{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  overflow:auto !important; /* viewport가 낮으면 여기서 스크롤 */
-  padding: 14px 14px 18px !important;
-}
-#overlaySmsPreview .phone{
-  margin: 0 auto !important;
-}
-
-/* ===== FIX: 문자 발송 팝업에서 '문자 발송' 버튼이 항상 보이도록(리스트만 스크롤) ===== */
-#overlaySMS .smsRight{
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-  overflow:hidden !important;
-}
-#overlaySMS .smsCustBox{
-  flex:1 1 auto !important;
-  min-height:0 !important;
-  overflow:auto !important;   /* 발송대상만 스크롤 */
-  padding-bottom: 6px !important;
-}
-#overlaySMS #btnSmsSend{
-  position: sticky !important;
-  bottom: 0 !important;
-  z-index: 2 !important;
-  margin-top: 10px !important;
-  height: 44px !important;
-  box-shadow: 0 -10px 18px rgba(255,255,255,.85);
-}
-
-/* 템플릿명(맞춤 문자 List) 행이 많아도 좌측 표만 스크롤되게 유지 */
-#overlaySMS .smsTableWrap{ overflow:auto !important; }
-
-
-
-/* ===== TRUE RESPONSIVE (no scaling, no reflow): fill viewport, keep original 3-column layout, allow horizontal scroll only when needed ===== */
-html,body{height:100%; margin:0;}
-body{overflow:hidden;}
-#viewport{
-  position:fixed; inset:0;
-  width:100vw; height:100vh;
-  background: var(--bg);
-  display:block !important;
-  overflow:auto !important;          /* viewport handles horizontal overflow when < min-width */
-  overscroll-behavior: none;
-}
-#appRoot{
-  width:100% !important;
-  height:100% !important;
-  min-width:1280px !important;
-  min-height:800px !important;
-  transform:none !important;
-}
-#scale-root{
-  width:100% !important;
-  height:100% !important;
-  min-width:1280px !important;
-  min-height:800px !important;
-  transform:none !important;
-}
-/* 화면을 꽉 채우고(여백 제거), 내부에서 높이를 유연하게 분배 */
-.tablet-wrap{
-  width:100% !important;
-  height:100% !important;
-  min-width:1280px !important;
-  min-height:800px !important;
-  margin:0 !important;
-  padding:0 10px 10px !important;
-  box-sizing:border-box;
-  display:flex !important;
-  flex-direction:column !important;
-  gap:0 !important;
-}
-/* 상단은 고정 높이(내용 높이), 메인은 남은 높이를 모두 사용 */
-.top{flex:0 0 auto !important;}
-.main{flex:1 1 auto !important; min-height:0 !important;}
-/* 페이지 전체 세로 스크롤이 생기지 않도록: 스크롤은 표/리스트/팝업 내부에서만 */
-#viewport::-webkit-scrollbar{height:10px; width:10px;}
-
-
-
-/* ====== GLOBAL SCROLL OFF: only inner panels scroll ====== */
-html, body{
-  width:100%;
-  height:100%;
-  margin:0 !important;
-  overflow:hidden !important;   /* 페이지(전체) 스크롤 금지 */
-}
-
-/* 혹시 남아있는 viewport/scale-root 태블릿 스케일링 무력화 */
-#viewport{
-  position:static !important;
-  inset:auto !important;
-  width:100% !important;
-  height:100% !important;
-  overflow:hidden !important;   /* 전체 스크롤 금지 */
-  display:block !important;
-  background: var(--bg, #f3f4f6) !important;
-}
-#scale-root{
-  position:static !important;
-  width:auto !important;
-  height:auto !important;
-  transform:none !important;
-}
-#appRoot{
-  transform:none !important;
-  width:auto !important;
-  height:auto !important;
-}
-
-/* 태블릿 전용 고정폭 래퍼 무력화 */
-.tablet-wrap{
-  width:auto !important;
-  height:auto !important;
-  margin:0 !important;
-  padding:0 !important;
-}
-
-/* 상단(top) 높이 제외한 영역을 정확히 채우고, 내부만 스크롤 */
-.wrap{
-  height: calc(100vh - 76px) !important;
-  min-height:0 !important;
-}
-
-/* main 영역: 내부 레이아웃이 화면 안에서만 돌도록 */
-.main{ min-height:0 !important; }
-.mid{ min-height:0 !important; }
-
-/* 각 패널은 자기 영역에서만 스크롤 */
-.left-card{ overflow:auto !important; min-height:0 !important; }
-.taskTableWrap{ overflow:auto !important; min-height:0 !important; }
-.weekBody{ min-height:0 !important; }
-.bottom{ min-height:200px !important; }
-.bottomBody{ overflow:auto !important; min-height:0 !important; }
-
-/* 모달은 화면 안에 고정, 본문만 스크롤 */
-.overlay{ overflow:hidden !important; }
-.modal{ max-height: calc(100vh - 24px) !important; }
-.modal1Body, .modal2Body, .smsBody, .briefBody{ min-height:0 !important; }
-
-
-
-/* ===== COMPACT LAYOUT OVERRIDE (fit viewport without page scroll) ===== */
-:root{
-  --fs-xxs:11px;
-  --fs-xs:12px;
-  --fs-sm:13px;
-  --row-h:30px;
-  --row-h2:28px;
-}
-body{ font-size: var(--fs-xs) !important; }
-*{ box-sizing:border-box; }
-.panel, .card, .box, .section, .block{ padding:10px !important; }
-.hstack, .row, .toolbar, .filters, .grid{ gap:8px !important; }
-button, .btn{ padding:6px 10px !important; font-size: var(--fs-xs) !important; }
-input, select{ height:30px !important; font-size: var(--fs-xs) !important; padding:4px 8px !important; }
-
-/* 3-column side widths shrink */
-.leftCol, .left-col, #leftCol, .leftPanel, .left-panel{ width:300px !important; min-width:280px !important; }
-.rightCol, .right-col, #rightCol, .rightPanel, .right-panel{ width:320px !important; min-width:300px !important; }
-.mainGrid, .main-grid, .layoutGrid, .layout-grid{ grid-template-columns:300px 1fr 320px !important; }
-
-/* tables compact */
-table{ font-size: var(--fs-xxs) !important; }
-th, td{ padding:6px 8px !important; line-height:1.2 !important; }
-tr{ height: var(--row-h) !important; }
-thead th{ font-size: var(--fs-xxs) !important; }
-
-.list, .listWrap, .tableWrap, .gridTable, .custList, .campaignList{ font-size: var(--fs-xxs) !important; }
-.iconBtn, .icon-btn{ width:28px !important; height:28px !important; }
-.label, .muted, .sub{ font-size: var(--fs-xxs) !important; }
-
-/* bottom grid minimum view for 2 rows */
-#finalGrid, .finalGrid, .bottomGrid, .bottom-grid, .taskGrid, .task-grid{ min-height:160px !important; }
-#finalGrid .tableWrap, .finalGrid .tableWrap, .bottomGrid .tableWrap, .taskGrid .tableWrap{
-  max-height:160px !important; overflow:auto !important;
-}
-
-/* SMS popup: internal scroll, send button sticky */
-#overlaySMS .modalSMS, #overlaySMS .modal.modalSMS{
-  max-height: calc(100vh - 40px) !important;
-  overflow:hidden !important;
-  display:flex !important;
-  flex-direction:column !important;
-}
-#overlaySMS .smsBody{ flex:1 1 auto !important; min-height:0 !important; overflow:hidden !important; }
-#overlaySMS .smsGrid{ flex:1 1 auto !important; min-height:0 !important; overflow:hidden !important; }
-#overlaySMS .smsRight{ display:flex !important; flex-direction:column !important; min-height:0 !important; overflow:hidden !important; }
-#overlaySMS .smsCustBox{
-  flex:1 1 auto !important; min-height:0 !important;
-  overflow-y:auto !important; overflow-x:hidden !important;
-  -webkit-overflow-scrolling:touch;
-}
-#overlaySMS #btnSmsSend{
-  position: sticky !important; bottom: 0 !important;
-  z-index: 10 !important; width:100% !important;
-  height:44px !important; margin-top:8px !important;
-}
-
-/* modals: keep size, scroll inside only */
-.modal .modalBody, .modalBody{ min-height:0 !important; overflow:auto !important; }
-
-
-
-/* ===== PATCH: Final Report table row height & padding ===== */
-#finalGrid table th, #finalGrid table td,
-.finalGrid table th, .finalGrid table td,
-.bottomGrid table th, .bottomGrid table td,
-.taskGrid table th, .taskGrid table td{
-  padding: 3px 6px !important;   /* reduce internal whitespace */
-}
-#finalGrid table tr, .finalGrid table tr, .bottomGrid table tr, .taskGrid table tr{
-  height: 26px !important;       /* slightly larger than magnifier icon */
-}
-#finalGrid .iconBtn, #finalGrid .icon-btn,
-.finalGrid .iconBtn, .finalGrid .icon-btn,
-.bottomGrid .iconBtn, .bottomGrid .icon-btn,
-.taskGrid .iconBtn, .taskGrid .icon-btn{
-  width: 22px !important;
-  height: 22px !important;
-}
-
-/* ===== PATCH: Reduce min-width to fit viewport (no horizontal crop) ===== */
-.leftCol, .left-col, #leftCol, .leftPanel, .left-panel{
-  width: 260px !important;
-  min-width: 220px !important;
-}
-.rightCol, .right-col, #rightCol, .rightPanel, .right-panel{
-  width: 280px !important;
-  min-width: 240px !important;
-}
-.mainGrid, .main-grid, .layoutGrid, .layout-grid{
-  grid-template-columns: 260px 1fr 280px !important;
-}
-
-
-/* ===== ensure modal header incl. close button always visible ===== */
-.modal, .modalBox, .modalSMS, .modalTM, .modalBrief{
-  max-width:100vw !important;
-}
-.modalHeader, .modal .header{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  padding-right:8px !important;
-}
-.modalHeader .close,
-.modalHeader .btnClose,
-.modal .close,
-.modal .btnClose{
-  flex:0 0 auto !important;
-  min-width:28px !important;
-  width:28px !important;
-  height:28px !important;
-  margin-left:6px !important;
-}
-
-/* ===== FULLSCREEN MODE ===== */
-html, body{
-  width:100%;
-  height:100%;
-  margin:0;
-  overflow:hidden; /* 전체 페이지 스크롤 제거 */
-}
-
-#viewport, #appRoot, #app{
-  width:100vw !important;
-  height:100vh !important;
-  max-width:100vw !important;
-  max-height:100vh !important;
-}
-
-.mainWrap, .layoutWrap, .container, .root{
-  width:100%;
-  height:100%;
-}
-
-/* 각 영역만 스크롤 */
-.leftCol, .centerCol, .rightCol,
-.leftPanel, .centerPanel, .rightPanel{
-  height:100%;
-  overflow:hidden;
-}
-
-.leftCol .scrollArea,
-.centerCol .scrollArea,
-.rightCol .scrollArea{
-  height:100%;
-  overflow:auto;
-}
-
-
-/* ===== MODAL CLOSE BUTTON VISIBILITY FIX ===== */
-.modal, .modalBox, .modalSMS, .modalTM, .modalBrief, .modalContent{
-  box-sizing:border-box !important;
-  max-width: calc(100vw - 16px) !important;  /* prevent edge clipping */
-  width: min(980px, calc(100vw - 16px)) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-.modalHeader, .modal .header{
-  box-sizing:border-box !important;
-  padding-right: 10px !important;
-}
-.modalHeader .close,
-.modalHeader .btnClose,
-.modal .close,
-.modal .btnClose{
-  position: relative !important;
-  right: 0 !important;
-  margin-left: 8px !important;
-  display: inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  z-index: 50 !important;
-}
-/* If any modal container uses overflow hidden that clips header, ensure header stays visible */
-.modalHeader{
-  overflow: visible !important;
-}
-
-
-
-/* ===== GLOBAL SCROLL ENABLED (if content is clipped) ===== */
-html, body{
-  overflow: auto !important;           /* allow both x/y scroll */
-  -webkit-overflow-scrolling: touch;
-}
-#viewport, #appRoot, #app{
-  overflow: auto !important;           /* allow scroll inside root if used */
-  max-width: none !important;
-  max-height: none !important;
-}
-
-
-
-/* ===== SMS POPUP: recipient list scroll + keep send button visible ===== */
-#overlaySMS, #overlaySms, #overlaySmsSend, #smsOverlay{
-  overflow: visible !important;
-}
-
-/* Make SMS modal a flex column so footer can stay visible */
-#overlaySMS .modal, 
-#overlaySMS .modalSMS,
-#overlaySMS .modalBox,
-#overlaySMS .modalContent,
-#overlaySMS .smsModal,
-#overlaySMS .sms-modal{
-  display: flex !important;
-  flex-direction: column !important;
-  max-height: calc(100vh - 24px) !important;
-  overflow: hidden !important; /* prevent modal itself from scrolling */
-}
-
-/* Body area inside SMS modal should take remaining space */
-#overlaySMS .smsBody,
-#overlaySMS .body,
-#overlaySMS .modalBody,
-#overlaySMS .content{
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Ensure right panel (recipients) can scroll when list grows */
-#overlaySMS .smsRight,
-#overlaySMS .right,
-#overlaySMS .sms-right{
-  display:flex !important;
-  flex-direction: column !important;
-  min-height:0 !important;
-  overflow:hidden !important;
-}
-
-/* The actual recipient list container */
-#overlaySMS .smsCustBox,
-#overlaySMS .custBox,
-#overlaySMS .recipientBox,
-#overlaySMS .recipients,
-#overlaySMS #smsCustBox{
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  max-height: none !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 8px !important;
-}
-
-/* Keep the send button always visible at the bottom of the SMS modal */
-#overlaySMS #btnSmsSend,
-#overlaySMS .btnSmsSend,
-#overlaySMS .sendBtn,
-#overlaySMS button[data-action="sms-send"]{
-  position: sticky !important;
-  bottom: 0 !important;
-  z-index: 100 !important;
-  width: 100% !important;
-}
-
-/* If there is a footer container, keep it visible */
-#overlaySMS .smsFooter,
-#overlaySMS .footer,
-#overlaySMS .modalFooter{
-  flex: 0 0 auto !important;
-  position: sticky !important;
-  bottom: 0 !important;
-  z-index: 90 !important;
-  background: inherit !important;
-}
-
-</style>
+    /* ================== ULTRA TINY MODE (<= 340px or <= 240px height) ==================
+       목표: 253.8×165.3에서도 '깨짐/증발' 없이 한 화면에 최대한 담기
+       원칙: 기능(JS) 변경 없음, CSS로만 레이아웃/크기 조정
+       조치: 초소형에서 좌측/우측 패널(요청하신 2,3,4 영역 포함) 제거 + 캘린더 중심 배치
+    */
+    @media (max-width: 340px), (max-height: 240px){
+      html, body{ height:100%; overflow:hidden; }
+      body{ margin:0; }
+
+      /* 상단: 탭바(top2)만 남기고 top1 제거 */
+      .top1{ display:none !important; }
+      .top2{
+        height:24px !important;
+        padding:0 6px !important;
+        font-size:10px !important;
+      }
+      .tab{ padding:4px 6px !important; font-size:10px !important; }
+      .top2 .mini-btn{ padding:4px 6px !important; font-size:10px !important; }
+
+      /* wrap: 1열로 단순화 (좌측/우측 영역 제거) */
+      .wrap{
+        grid-template-columns: 1fr !important;
+        height: calc(100vh - 24px) !important;
+        min-height:0 !important;
+      }
+      .vbar{ display:none !important; }
+      .left{ display:none !important; }
+
+      /* 메인 여백 최소화 */
+      .main{ padding:4px !important; gap:4px !important; }
+
+      /* 경로/버튼 라인: 높이 축소, 경로는 숨김(공간 확보) */
+      .content-top{ padding:4px !important; }
+      .content-top .path{ display:none !important; }
+      .content-top .actions button{
+        height:18px !important;
+        padding:0 8px !important;
+        font-size:10px !important;
+        border-radius:999px !important;
+      }
+
+      /* 중단: 캘린더만 남김 (요청하신 2,3,4 영역 = taskPanel 제거) */
+      .mid{ grid-template-columns: 1fr !important; gap:4px !important; }
+      .taskPanel{ display:none !important; }
+
+      /* 하단 고객패널은 초소형에서 제거(스크롤/깨짐 최소화) */
+      .bottom{ display:none !important; }
+
+      /* 캘린더 패널을 화면에 꽉 채움 */
+      .calendarPanel{
+        display:flex !important;
+        flex-direction:column !important;
+        min-height:0 !important;
+        overflow:hidden !important;
+      }
+
+      /* 캘린더 상단 바: 세로 대신 가로 압축 */
+      .calTopBar{ padding:6px !important; gap:6px !important; }
+      .dateMini{ width:84px !important; min-width:84px !important; border-radius:8px !important; }
+      .dateMiniTop{ padding:6px 8px !important; font-size:10px !important; }
+      .dateMiniMid{ padding:6px 8px 8px 8px !important; }
+      .dateMiniMid .arr{ width:18px !important; height:18px !important; font-size:12px !important; border-radius:6px !important; }
+      .dateMiniMid .center .d{ font-size:18px !important; }
+      .dateMiniBottom{ padding:6px 8px !important; font-size:10px !important; }
+
+      /* 아이콘 Row: 라벨 숨기고 아이콘만 표시 */
+      .iconRow{ gap:8px !important; padding-left:4px !important; }
+      .round .label{ display:none !important; }
+      .round .circle{ width:22px !important; height:22px !important; font-size:12px !important; }
+
+      /* 주간 영역: 내부 스크롤로 처리(페이지 스크롤 최소화) */
+      .weekBody{ padding:6px !important; }
+      .weekHeader{ margin-bottom:6px !important; font-size:10px !important; }
+      .wkBtn{ height:18px !important; padding:0 6px !important; font-size:10px !important; border-radius:6px !important; }
+      .hint{ display:none !important; }
+
+      /* 주간 그리드: 셀/칩을 최대한 압축 */
+      .weekGrid{ border-radius:8px !important; }
+      .weekCellTop{ padding:4px 6px !important; }
+      .weekCellTop .dow{ font-size:10px !important; }
+      .weekCellTop .ymd{ font-size:9px !important; }
+      .weekCellMid{ padding:4px 6px !important; gap:4px !important; }
+      .chipPill{ padding:4px 6px !important; font-size:9px !important; }
+      .wkEmpty{ font-size:9px !important; padding:2px 0 !important; }
+
+      /* 모달도 초소형에서 화면 밖으로 튀지 않게 */
+      .modal{ max-width: calc(100vw - 10px) !important; }
+      .modal1, .modal2, .modalSMS, .modalBrief, .modalMyCare, .smsPhoneModal{
+        max-width: calc(100vw - 10px) !important;
+      }
+    }
+
+  </style>
 </head>
-<body><div id="viewport"><div id="appRoot"><div id="scale-root">
-<div class="tablet-wrap">
-<!-- TOP -->
-<div class="top">
-<div class="top1">
-<div class="brand">
-<div class="next"><span class="the">THE</span><span class="word">next</span></div>
-<div class="title">대면1차</div>
-</div>
-<div class="searchbar">
-<div class="select">통합검색 ▾</div>
-<input placeholder="화면번호 또는 화면명을 검색하세요."/>
-<button class="go">검색</button>
-</div>
-<div class="top1-right">
-<div class="chip">워크플로우</div>
-<div class="chip">신규 과장</div>
-<div class="chip">개인정보</div>
-<div class="chip">도움말</div>
-</div>
-</div>
-<div class="top2">
-<div class="tabs">
-<div class="tab">개별조회</div>
-<div class="tab">일괄조회</div>
-<div class="tab active">[351182] 오늘의일정</div>
-</div>
-<div class="spacer"></div>
-<button class="mini-btn">◀</button>
-<button class="mini-btn">▶</button>
-<button class="mini-btn">⤢</button>
-</div>
-</div>
-<div class="wrap">
-<!-- VBAR -->
-<aside class="vbar">
-<div class="vico">≡</div>
-<div class="vico dim">⌂</div>
-<div class="vico dim">★</div>
-<div class="vico dim">⎙</div>
-<div class="vico dim">↺</div>
-<div class="vico dim">?</div>
-<div style="flex:1"></div>
-<div class="vico dim">⚙</div>
-<div class="vico dim">⏻</div>
-</aside>
-<!-- LEFT -->
-<section class="left">
-<div class="left-head">
-<button class="btn">초기화</button>
-<button class="btn">조회</button>
-<button class="btn">고객종합정보</button>
-</div>
-<div class="left-card">
-<div class="box">
-<div class="title">조회 조건</div>
-<div class="fields">
-<div class="field"><div>고객</div><input/></div>
-<div class="field"><div>실명</div><input/></div>
-<div class="field"><div>계좌</div><input/></div>
-</div>
-</div>
-<div class="box">
-<div class="title">채널 바로가기</div>
-<div class="mini-grid">
-<div class="mini-tile">DM</div>
-<div class="mini-tile">SMS</div>
-<div class="mini-tile">MOB</div>
-<div class="mini-tile">URL</div>
-</div>
-</div>
-</div>
-</section>
-<!-- MAIN -->
-<section class="main">
-<div class="content-top">
-<div class="path" id="pathText">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
-<div class="actions">
-<button>초기화</button>
-<button>조회</button>
-<button>닫기</button>
-</div>
-</div>
-<div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
-<div class="mid">
-<!-- calendarPanel -->
-<div class="calendarPanel" id="calendarPanel">
-<div class="calTopBar">
-<div class="dateMini">
-<div class="dateMiniTop">
-<span id="miniYM">2026-01</span>
-<span style="opacity:.95;font-weight:900;">▦</span>
-</div>
-<div class="dateMiniMid">
-<div class="arr" id="btnPrevDay">‹</div>
-<div class="center">
-<div class="d" id="bigDay">19</div>
-</div>
-<div class="arr" id="btnNextDay">›</div>
-</div>
-<div class="dateMiniBottom" id="bigDow">MONDAY</div>
-</div>
-<div class="iconRow" id="iconRow">
-<div class="round active" data-cat="AI">
-<div class="circle">👤</div>
-<div class="label">AI영업기회 <span class="cnt" id="cntAI">(0)</span></div>
-</div>
-<div class="round" data-cat="REQ">
-<div class="circle">🧩</div>
-<div class="label">필수케어 <span class="cnt" id="cntREQ">(0)</span></div>
-</div>
-<div class="round" data-cat="CLOSE">
-<div class="circle">📎</div>
-<div class="label">밀착케어 <span class="cnt" id="cntCLOSE">(0)</span></div>
-</div>
-<div class="round" data-cat="SCH">
-<div class="circle">📋</div>
-<div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
-</div>
-<div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
-<div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
-</div>
-</div>
-<div class="weekBody">
-<div class="weekHeader">
-<div class="leftGroup">
-<div class="wkTitle" id="wkTitle">주간 일정</div>
-<div id="wkRange">-</div>
-</div>
-<div class="btns">
-<button class="wkBtn" id="btnPrevWeek">지난주</button>
-<button class="wkBtn" id="btnThisWeek">이번주</button>
-<button class="wkBtn" id="btnNextWeek">다음주</button>
-</div>
-</div>
-<div class="weekGrid" id="weekGrid"></div>
-<div class="hint">
+
+<body>
+  <!-- TOP -->
+  <div class="top">
+    <div class="top1">
+      <div class="brand">
+        <div class="next"><span class="the">THE</span><span class="word">next</span></div>
+        <div class="title">대면1차</div>
+      </div>
+      <div class="searchbar">
+        <div class="select">통합검색 ▾</div>
+        <input placeholder="화면번호 또는 화면명을 검색하세요." />
+        <button class="go">검색</button>
+      </div>
+      <div class="top1-right">
+        <div class="chip">워크플로우</div>
+        <div class="chip">신규 과장</div>
+        <div class="chip">개인정보</div>
+        <div class="chip">도움말</div>
+      </div>
+    </div>
+    <div class="top2">
+      <div class="tabs">
+        <div class="tab">개별조회</div>
+        <div class="tab">일괄조회</div>
+        <div class="tab active">[351182] 오늘의일정</div>
+      </div>
+      <div class="spacer"></div>
+      <button class="mini-btn">◀</button>
+      <button class="mini-btn">▶</button>
+      <button class="mini-btn">⤢</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- VBAR -->
+    <aside class="vbar">
+      <div class="vico">≡</div>
+      <div class="vico dim">⌂</div>
+      <div class="vico dim">★</div>
+      <div class="vico dim">⎙</div>
+      <div class="vico dim">↺</div>
+      <div class="vico dim">?</div>
+      <div style="flex:1"></div>
+      <div class="vico dim">⚙</div>
+      <div class="vico dim">⏻</div>
+    </aside>
+
+    <!-- LEFT -->
+    <section class="left">
+      <div class="left-head">
+        <button class="btn">초기화</button>
+        <button class="btn">조회</button>
+        <button class="btn">고객종합정보</button>
+      </div>
+      <div class="left-card">
+        <div class="box">
+          <div class="title">조회 조건</div>
+          <div class="fields">
+            <div class="field"><div>고객</div><input/></div>
+            <div class="field"><div>실명</div><input/></div>
+            <div class="field"><div>계좌</div><input/></div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="title">채널 바로가기</div>
+          <div class="mini-grid">
+            <div class="mini-tile">DM</div>
+            <div class="mini-tile">SMS</div>
+            <div class="mini-tile">MOB</div>
+            <div class="mini-tile">URL</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN -->
+    <section class="main">
+      <div class="content-top">
+        <div class="path" id="pathText">[351182] 오늘의일정 · 고객정보 &gt; 일정관리 &gt; 오늘의일정</div>
+        <div class="actions">
+          <button>초기화</button>
+          <button>조회</button>
+          <button>닫기</button>
+        </div>
+      </div>
+
+      <div id="screenMain" style="display:flex; flex-direction:column; min-height:0; gap:10px; flex:1;">
+        <div class="mid">
+          <!-- calendarPanel -->
+          <div class="calendarPanel" id="calendarPanel">
+            <div class="calTopBar">
+              <div class="dateMini">
+                <div class="dateMiniTop">
+                  <span id="miniYM">2026-01</span>
+                  <span style="opacity:.95;font-weight:900;">▦</span>
+                </div>
+                <div class="dateMiniMid">
+                  <div class="arr" id="btnPrevDay">‹</div>
+                  <div class="center">
+                    <div class="d" id="bigDay">19</div>
+                  </div>
+                  <div class="arr" id="btnNextDay">›</div>
+                </div>
+                <div class="dateMiniBottom" id="bigDow">MONDAY</div>
+              </div>
+
+              <div class="iconRow" id="iconRow">
+                <div class="round active" data-cat="AI">
+                  <div class="circle">👤</div>
+                  <div class="label">AI영업기회 <span class="cnt" id="cntAI">(0)</span></div>
+                </div>
+                <div class="round" data-cat="REQ">
+                  <div class="circle">🧩</div>
+                  <div class="label">필수케어 <span class="cnt" id="cntREQ">(0)</span></div>
+                </div>
+                <div class="round" data-cat="CLOSE">
+                  <div class="circle">📎</div>
+                  <div class="label">밀착케어 <span class="cnt" id="cntCLOSE">(0)</span></div>
+                </div>
+                <div class="round" data-cat="SCH">
+                  <div class="circle">📋</div>
+                  <div class="label">일정정보 <span class="cnt" id="cntSCH">(0)</span></div>
+                </div>
+                <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
+                <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
+                <!-- ✅ 문구 변경: 비대면 필수 → 콜센터 연계 과제 -->
+                <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">콜센터 연계 과제</div></div>
+              </div>
+            </div>
+
+            <div class="weekBody">
+              <div class="weekHeader">
+                <div class="leftGroup">
+                  <div class="wkTitle" id="wkTitle">주간 일정</div>
+                  <div id="wkRange">-</div>
+                </div>
+                <div class="btns">
+                  <button class="wkBtn" id="btnPrevWeek">지난주</button>
+                  <button class="wkBtn" id="btnThisWeek">이번주</button>
+                  <button class="wkBtn" id="btnNextWeek">다음주</button>
+                </div>
+              </div>
+
+              <div class="weekGrid" id="weekGrid"></div>
+
+              <div class="hint">
                 * 주간(7일)만 표시합니다. 날짜를 클릭하면 우측 과제 리스트/하단 패널이 갱신됩니다.
               </div>
-</div>
-</div>
-<!-- taskPanel -->
-<div class="taskPanel" id="taskPanel">
-<div class="taskTabs" id="taskTabs">
-<div class="t active" data-cat="AI">AI영업기회</div>
-<div class="t" data-cat="REQ">필수케어</div>
-<div class="t" data-cat="CLOSE">밀착케어</div>
-<div class="t" data-cat="SCH">일정관리</div>
-</div>
-<div class="taskTableWrap">
-<div class="taskTopBar">
-<button class="quickLinkBtn" id="btnQuickMyCare" style="display:none;">바로가기</button>
-</div>
-<div class="empty" id="taskEmpty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
-<table id="taskTable">
-<thead id="taskThead">
-<tr><th style="width:56px;">No</th><th>과제명</th></tr>
-</thead>
-<tbody id="taskTbody"></tbody>
-</table>
-<div class="hint" id="taskHint">
+            </div>
+          </div>
+
+          <!-- taskPanel -->
+          <div class="taskPanel" id="taskPanel">
+            <div class="taskTabs" id="taskTabs">
+              <div class="t active" data-cat="AI">AI영업기회</div>
+              <div class="t" data-cat="REQ">필수케어</div>
+              <div class="t" data-cat="CLOSE">밀착케어</div>
+              <div class="t" data-cat="SCH">일정관리</div>
+            </div>
+            <div class="taskTableWrap">
+              <div class="taskTopBar">
+                <button id="btnQuickMyCare" class="quickLinkBtn" style="display:none;">바로가기</button>
+              </div>
+
+              <div id="taskEmpty" class="empty" style="display:none;">선택한 날짜에는 해당 과제가 없습니다.</div>
+
+              <table id="taskTable">
+                <thead id="taskThead">
+                  <tr><th style="width:56px;">No</th><th>과제명</th></tr>
+                </thead>
+                <tbody id="taskTbody"></tbody>
+              </table>
+
+              <div class="hint" id="taskHint">
                 * AI영업기회만 하단 고객명단이 표시됩니다. (필수/밀착/일정은 과제리스트만 표시)
               </div>
-</div>
-</div>
-</div>
-<!-- Bottom (AI에서만 표시) -->
-<div class="bottom" id="bottomPanel">
-<div class="bottomHead">
-<div class="title">
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom (AI에서만 표시) -->
+        <div class="bottom" id="bottomPanel">
+          <div class="bottomHead">
+            <div class="title">
               AI Agent 알림센터
               <span class="radio">
-<label><input checked="" id="radioCust" name="r" type="radio"/> 고객 현황</label>
-<label><input id="radioFinal" name="r" type="radio"/> Final Report</label>
-</span>
-</div>
-<div style="display:flex;gap:6px;align-items:center;">
-<button id="btnClear">초기화</button>
-<button class="run-btn" disabled="" id="btnRun">실행</button>
-</div>
-</div>
-<div class="bottomBody">
-<!-- 고객 현황 -->
-<div id="custArea">
-<div class="hint" id="custHint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
-<table id="custTable" style="display:none;">
-<thead>
-<tr>
-<th style="width:60px; text-align:center;">
-<input class="chk" id="chkAllCustomers" title="전체 선택" type="checkbox"/>
-</th>
-<th style="width:86px;">실시여부</th>
-<th style="width:110px;">고객번호</th>
-<th style="width:90px;">고객명</th>
-<th style="width:110px;">과제시작일</th>
-<th style="width:110px;">과제종료일</th>
-<th style="width:90px;">고객브리핑</th>
-<th style="width:90px;">우선순위</th>
-</tr>
-</thead>
-<tbody id="custTbody"></tbody>
-</table>
-</div>
-<!-- Final Report -->
-<div class="finalInline" id="finalInlineArea" style="display:none;">
-<div class="finalInlineTop">
-<div class="l">
-<div class="ttl">과제 별 성과 Final Report</div>
-<div class="pill2" id="finalInlineDatePill">기준일: -</div>
-</div>
-<select id="finalInlineTaskSelect"></select>
-</div>
-<div class="finalKpiRow">
-<div class="miniKpi">
-<div class="k">완료대상</div>
-<div class="v" id="kpiDone">-</div>
-<div class="s">완료/전체 (더미)</div>
-</div>
-<div class="miniKpi">
-<div class="k">완료 건수</div>
-<div class="v" id="kpiTouchedInline">-</div>
-<div class="s">TM+SMS 접촉 (더미)</div>
-</div>
-<div class="miniKpi">
-<div class="k">미완료</div>
-<div class="v" id="kpiNotDone">-</div>
-<div class="s">잔여 고객수 (더미)</div>
-</div>
-</div>
-<div class="finalChecklist">
-<div class="h">
-<span id="finalChecklistTitle">-</span>
-<span style="color:#6b7280; font-weight:800;">* 시연용 더미</span>
-</div>
-<ul id="finalChecklistUl"></ul>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-</div>
-<!-- 1차 팝업: 채널 선택 -->
-<div class="overlay" id="overlay1">
-<div class="modal modal1">
-<div class="modalTop">
-<div class="mtitle">AI Agent 과제 수행</div>
-<button id="close1">닫기</button>
-</div>
-<div class="modal1Body">
-<div class="agentBox">
-<div class="agentTitle">AI Agent 과제 수행</div>
-<div class="agentRow">
-<div class="agentText">
+                <label><input type="radio" name="r" id="radioCust" checked/> 고객 현황</label>
+                <label><input type="radio" name="r" id="radioFinal"/> Final Report</label>
+              </span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <button id="btnClear">초기화</button>
+              <button id="btnRun" class="run-btn" disabled>실행</button>
+            </div>
+          </div>
+
+          <div class="bottomBody">
+            <!-- 고객 현황 -->
+            <div id="custArea">
+              <div id="custHint" class="hint">우측 과제 리스트에서 과제를 선택해 주세요.</div>
+              <table id="custTable" style="display:none;">
+                <thead>
+                  <tr>
+                    <th style="width:60px; text-align:center;">
+                      <input id="chkAllCustomers" class="chk" type="checkbox" title="전체 선택"/>
+                    </th>
+                    <th style="width:86px;">실시여부</th>
+                    <th style="width:110px;">고객번호</th>
+                    <th style="width:90px;">고객명</th>
+                    <th style="width:110px;">과제시작일</th>
+                    <th style="width:110px;">과제종료일</th>
+                    <th style="width:90px;">고객브리핑</th>
+                    <th style="width:90px;">우선순위</th>
+                  </tr>
+                </thead>
+                <tbody id="custTbody"></tbody>
+              </table>
+            </div>
+
+            <!-- Final Report -->
+            <div id="finalInlineArea" class="finalInline" style="display:none;">
+              <div class="finalInlineTop">
+                <div class="l">
+                  <div class="ttl">과제 별 성과 Final Report</div>
+                  <div class="pill2" id="finalInlineDatePill">기준일: -</div>
+                </div>
+                <select id="finalInlineTaskSelect"></select>
+              </div>
+
+              <div class="finalKpiRow">
+                <div class="miniKpi">
+                  <div class="k">완료대상</div>
+                  <div class="v" id="kpiDone">-</div>
+                  <div class="s">완료/전체 (더미)</div>
+                </div>
+                <div class="miniKpi">
+                  <div class="k">완료 건수</div>
+                  <div class="v" id="kpiTouchedInline">-</div>
+                  <div class="s">TM+SMS 접촉 (더미)</div>
+                </div>
+                <div class="miniKpi">
+                  <div class="k">미완료</div>
+                  <div class="v" id="kpiNotDone">-</div>
+                  <div class="s">잔여 고객수 (더미)</div>
+                </div>
+              </div>
+
+              <div class="finalChecklist">
+                <div class="h">
+                  <span id="finalChecklistTitle">-</span>
+                  <span style="color:#6b7280; font-weight:800;">* 시연용 더미</span>
+                </div>
+                <ul id="finalChecklistUl"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 1차 팝업: 채널 선택 -->
+  <div id="overlay1" class="overlay">
+    <div class="modal modal1">
+      <div class="modalTop">
+        <div class="mtitle">AI Agent 과제 수행</div>
+        <button id="close1">닫기</button>
+      </div>
+      <div class="modal1Body">
+        <div class="agentBox">
+          <div class="agentTitle">AI Agent 과제 수행</div>
+          <div class="agentRow">
+            <div class="agentText">
 안녕하세요! AI CRM 아이참이에요~
 선택된 고객을 기반으로 적합 채널과 스크립트를 추천해 드릴게요.
             </div>
-<div class="btnCol">
-<button class="btnBig" id="btnGoTM">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
-<button class="btnBig" id="btnGoSMS">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
-</div>
-</div>
-<div class="hint" style="padding:10px 0 0 0;"> * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다. </div>
-</div>
-</div>
-</div>
-</div>
-<!-- 2차 팝업: TM -->
-<div class="overlay" id="overlayTM">
-<div class="modal modal2">
-<div class="modalTop">
-<div class="mtitle">TM 실행 하기</div>
-<button id="closeTM">닫기</button>
-</div>
-<div class="modal2Body">
-<div class="scriptPanel">
-<div class="h">AI-Generated TM 스크립트</div>
-<div class="scriptBox" id="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
-<div class="scriptFooter"><button class="btn primary" id="btnGenTM">TM 스크립트 생성</button></div>
-</div>
-<div class="tmSide">
-<div class="h">고객 선택</div>
-<div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
-<div class="tmPickList" id="tmPickList"></div>
-<div class="tmFooter">
-          <button class="tmExec" disabled id="btnTmExec">TM 실행</button>
+            <div class="btnCol">
+              <button id="btnGoTM" class="btnBig">TM 적합 고객 (<span id="tmCnt">0</span>명)</button>
+              <button id="btnGoSMS" class="btnBig">문자 적합 고객 (<span id="smsCnt">0</span>명)</button>
+            </div>
+          </div>
+          <div class="hint" style="padding:10px 0 0 0;"> * TM/SMS는 각각 별도 실행화면(2차 팝업)으로 열립니다. </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2차 팝업: TM -->
+  <div id="overlayTM" class="overlay">
+    <div class="modal modal2">
+      <div class="modalTop">
+        <div class="mtitle">TM 실행 하기</div>
+        <button id="closeTM">닫기</button>
+      </div>
+      <div class="modal2Body">
+        <div class="scriptPanel">
+          <div class="h">AI-Generated TM 스크립트</div>
+          <div id="scriptBox" class="scriptBox">TM 스크립트를 생성하려면 “TM 스크립트 생성” 버튼을 눌러주세요.</div>
+          <div style="display:flex; gap:8px; justify-content:flex-end;">
+            <button id="btnGenTM" class="btnBig" style="width:auto; padding:10px 14px;">TM 스크립트 생성</button>
+          </div>
+        </div>
+        <div class="tmSide">
+          <div class="h">고객 선택</div>
+          <div class="hint" style="padding:0; margin-top:-4px;">선택 고객 중 TM 대상(최대 2명)을 선택해 실행합니다.</div>
+          <div id="tmPickList" class="tmPickList"></div>
+          <button id="btnTmExec" class="tmExec" disabled>TM 실행</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2차 팝업: SMS -->
+  <div id="overlaySMS" class="overlay">
+    <div class="modal modalSMS">
+      <div class="modalTop">
+        <div class="mtitle">문자 발송 하기</div>
+        <button id="closeSMS">닫기</button>
+      </div>
+      <div class="smsBody">
+        <div class="smsCard">
+          <div class="smsTitle">문자 발송 하기</div>
+          <div class="smsGrid">
+            <div class="smsLeft">
+              <div class="sub">맞춤 문자 List</div>
+              <div class="smsTableWrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width:44px;"></th>
+                      <th>템플릿명</th>
+                      <th style="width:92px;">발송목적</th>
+                      <th style="width:80px;">미리보기</th>
+                    </tr>
+                  </thead>
+                  <tbody id="smsTplTbody"></tbody>
+                </table>
+              </div>
+            
+            </div>
+            <div class="smsRight">
+              <div class="smsCustBox">
+                <div style="font-weight:900;">발송 대상</div>
+                <div id="smsCustList"></div>
+              </div>
+              <button id="btnSmsSend" class="smsBtn" disabled>문자 발송</button>
+            </div>
+          </div>
+          <div class="hint" style="padding:10px 0 0 0;"> * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송 </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 고객 브리핑 팝업 -->
+  <div id="overlayBrief" class="overlay">
+    <div class="modal modalBrief">
+      <div class="modalTop">
+        <div class="mtitle">추천사유</div>
+        <button id="closeBrief">닫기</button>
+      </div>
+      <div class="briefBody">
+        <div class="briefBox">
+          <div class="briefHeader">🪄 AI Agent 고객 브리핑</div>
+          <div id="briefText" class="briefScroll">고객 브리핑을 생성 중입니다...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MyCare 바로가기 팝업 -->
+<!-- ✅ SMS 휴대폰 미리보기 팝업 -->
+<div id="overlaySmsPreview" class="overlay">
+  <div class="modal smsPhoneModal">
+    <div class="modalTop">
+      <div class="mtitle">문자 미리보기</div>
+      <button id="closeSmsPreview">닫기</button>
+    </div>
+
+    <div class="smsPhoneBody">
+      <div class="phone">
+        <div class="phoneTop"><div class="phoneNotch"></div></div>
+
+        <div class="phoneHeader">
+          <div class="phTitle">[신한] 문자</div>
+          <div class="phSub" id="smsPhoneTo">수신자: -</div>
         </div>
 
+        <div class="bubbleWrap">
+          <div class="bubble" id="smsPhoneText">미리보기 내용</div>
+        </div>
+
+        <div class="phoneBottom"><div class="homeBar"></div></div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-<!-- 2차 팝업: SMS -->
-<div class="overlay" id="overlaySMS">
-<div class="modal modalSMS">
-<div class="modalTop">
-<div class="mtitle">문자 발송 하기</div>
-<button id="closeSMS">닫기</button>
-</div>
-<div class="smsBody">
-<div class="smsCard">
-<div class="smsTitle">문자 발송 하기</div>
-<div class="smsGrid">
-<div class="smsLeft">
-<div class="sub">맞춤 문자 List</div>
-<div class="smsTableWrap">
-<table>
-<thead>
-<tr>
-<th style="width:44px;"></th>
-<th>템플릿명</th>
-<th style="width:92px;">발송목적</th>
-<th style="width:80px;">미리보기</th>
-</tr>
-</thead>
-<tbody id="smsTplTbody"></tbody>
-</table>
-</div>
-</div>
-<div class="smsRight">
-<div class="smsCustBox">
-<div style="font-weight:900;">발송 대상</div>
-<div id="smsCustList"></div>
-</div>
-<button class="smsBtn" disabled="" id="btnSmsSend">문자 발송</button>
-</div>
-</div>
-<div class="hint" style="padding:10px 0 0 0;"> * 템플릿 선택 → 미리보기 확인 → 우측 고객 선택 → 문자 발송 </div>
-</div>
-</div>
-</div>
-</div>
-<!-- 고객 브리핑 팝업 -->
-<div class="overlay" id="overlayBrief">
-<div class="modal modalBrief">
-<div class="modalTop">
-<div class="mtitle">추천사유</div>
-<button id="closeBrief">닫기</button>
-</div>
-<div class="briefBody">
-<div class="briefBox">
-<div class="briefHeader">🪄 AI Agent 고객 브리핑</div>
-<div class="briefScroll" id="briefText">고객 브리핑을 생성 중입니다...</div>
-</div>
-</div>
-</div>
-</div>
-<!-- MyCare 바로가기 팝업 -->
-<!-- ✅ SMS 휴대폰 미리보기 팝업 -->
-<div class="overlay" id="overlaySmsPreview">
-<div class="modal smsPhoneModal">
-<div class="modalTop">
-<div class="mtitle">문자 미리보기</div>
-<button id="closeSmsPreview">닫기</button>
-</div>
-<div class="smsPhoneBody">
-<div class="phone">
-<div class="phoneTop"><div class="phoneNotch"></div></div>
-<div class="phoneHeader">
-<div class="phTitle">[신한] 문자</div>
-<div class="phSub" id="smsPhoneTo">수신자: -</div>
-</div>
-<div class="bubbleWrap">
-<div class="bubble" id="smsPhoneText">미리보기 내용</div>
-</div>
-<div class="phoneBottom"><div class="homeBar"></div></div>
-</div>
-</div>
-</div>
-</div>
-<div class="overlay" id="overlayMyCare">
-<div class="modal modalMyCare">
-<div class="modalTop">
-<div class="mtitle">바로가기</div>
-<button id="closeMyCare">닫기</button>
-</div>
-<div class="mycareBody">
-<div class="mycareBox">마이케어과제로 이동합니다. (시연용)</div>
-</div>
-</div>
-</div>
-<script>
+
+  <div id="overlayMyCare" class="overlay">
+    <div class="modal modalMyCare">
+      <div class="modalTop">
+        <div class="mtitle">바로가기</div>
+        <button id="closeMyCare">닫기</button>
+      </div>
+      <div class="mycareBody">
+        <div class="mycareBox">마이케어과제로 이동합니다. (시연용)</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
 /* ===================== A) 엑셀 기반 캠페인 DB ====================== */
 const CAMPAIGN_DB = 
 [
@@ -4513,58 +3167,5 @@ function buildBriefing(cust, taskName, dateKey){
 }
 
 </script>
-</div>
-</div></div></div><script>
-(function fitToScreen(){ /* disabled */ }
-})();
-</script>
-<script>
-/* Tablet full-screen scaler (Galaxy Tab S7 landscape target: 1280x800 CSS px) */
-(function(){
-  // Disabled legacy scaler
-})();
-</script>
-
-
-<script>
-/* ===== Fit entire UI to current viewport (Galaxy Tab S7 Chrome) ===== */
-(function(){
-  const DESIGN_W = 1280;
-  const DESIGN_H = 800;
-  const vp = document.getElementById('viewport');
-  const root = document.getElementById('scale-root');
-  if(!vp || !root) return;
-
-  function apply(){
-    const vw = window.innerWidth || document.documentElement.clientWidth;
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-
-    // Fit whole design into viewport (never crop). Allow upscale up to 1.0 by default.
-    const s = Math.min(vw / DESIGN_W, vh / DESIGN_H);
-    const scale = Math.min(1, s);
-
-    // Center within viewport
-    const left = Math.max(0, (vw - DESIGN_W * scale) / 2);
-    const top  = Math.max(0, (vh - DESIGN_H * scale) / 2);
-
-    root.style.width = DESIGN_W + "px";
-    root.style.height = DESIGN_H + "px";
-    root.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
-    root.style.transformOrigin = "0 0";
-  }
-
-  apply();
-  window.addEventListener('resize', apply, {passive:true});
-})();
-</script>
-
-
-<script>
-function updateScale(){ /* responsive: no scaling */ }
-
-window.addEventListener('orientationchange', updateScale);
-document.addEventListener('DOMContentLoaded', updateScale);
-</script>
-
 </body>
 </html>
