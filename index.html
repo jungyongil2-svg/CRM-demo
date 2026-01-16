@@ -821,6 +821,39 @@
     /* 태블릿 이하에서 우측 리스트 숨김 방지(기존 규칙 무력화) */
     @media (max-width: 1320px){ .taskPanel{ display:flex !important; } }
 
+
+    /* ================== V7: 고객리스트 영역 확보(상단/주간/아이콘 라인 압축) ================== */
+    /* 1) 캘린더 상단(날짜타일+아이콘) 세로 공간 축소 */
+    .calTopBar{ padding:6px 10px !important; }
+    .dateMini{ width:128px !important; min-width:128px !important; }
+    .dateMiniTop{ padding:6px 8px !important; font-size:11px !important; }
+    .dateMiniMid{ padding:6px 8px 8px 8px !important; }
+    .dateMiniMid .arr{ width:24px !important; height:24px !important; border-radius:7px !important; font-size:14px !important; }
+    .dateMiniMid .center{ gap:3px !important; }
+    .dateMiniMid .center .d{ font-size:28px !important; }
+    .dateMiniBottom{ padding:6px 8px !important; font-size:12px !important; letter-spacing:.4px !important; }
+
+    .iconRow{ gap:10px !important; padding:0 8px !important; }
+    .round{ gap:5px !important; }
+    .round .circle{ width:38px !important; height:38px !important; }
+    .round .label{ font-size:11px !important; }
+
+    /* 2) 주간 일정(그리드) 패딩/버튼 축소 */
+    .weekBody{ padding:8px !important; }
+    .weekHeader{ margin-bottom:6px !important; gap:8px !important; }
+    .wkBtn{ height:22px !important; padding:0 8px !important; border-radius:7px !important; font-size:11px !important; }
+    .weekGrid{ border-radius:8px !important; }
+    .weekCellTop{ padding:6px 8px !important; }
+    .weekCellTop .ymd{ font-size:10px !important; }
+    .weekCellMid{ padding:6px 8px !important; gap:6px !important; }
+    .chipPill{ padding:6px 8px !important; font-size:11px !important; }
+
+    /* 3) 우측 과제리스트 패널 폭 소폭 축소(고객리스트 영역 확보) */
+    .mid{ grid-template-columns: 1fr 480px !important; }
+
+    /* 4) 하단 고객리스트 높이 확대(화면 아래로 내려가지 않게) */
+    .bottom{ height: clamp(260px, 38vh, 360px) !important; min-height:240px !important; }
+
 </style>
 </head>
 
