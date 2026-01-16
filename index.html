@@ -692,12 +692,15 @@
     .tick.on{ background:#e6f0ff; border-color:#9fbaf0; }
 
     @media (max-width: 1320px){
-      .mid{ grid-template-columns: 1fr; }
-      .taskPanel{ display:none; }
+      /* 태블릿에서도 우측 리스트가 보이도록 유지 */
+      .mid{ grid-template-columns: 1fr 420px; }
+      .taskPanel{ display:flex; }
       .iconRow{ justify-content:flex-start; }
     }
     @media (max-width: 980px){
       .modal2Body{ grid-template-columns: 1fr; }
+      .mid{ grid-template-columns: 1fr; }
+      .taskPanel{ display:flex; }
       .tmSide{ min-height:auto; }
       .smsGrid{ grid-template-columns: 1fr; }
       .finalKpiRow{ grid-template-columns: 1fr; }
@@ -770,25 +773,54 @@
 
   
 
-    /* ================== Tablet/Small 화면: 좌측 영역 제거 + 우측 리스트 유지 ================== */
-    /* 목적: 갤럭시탭 등 800~1400px 구간에서 좌측 사이드(아이콘바/조회조건)를 제거하고,
-       주간달력 옆 과제리스트(taskPanel)가 숨겨지지 않도록 보장 */
-    @media (max-width: 1600px){
+    /* ================== 레이아웃 압축 옵션 (공간 확보) ================== */
+    /* 상단 헤더(통합검색)는 유지, 탭바는 숨김: 주간달력/리스트 공간 확보 */
+    .top{ display:block; }
+    /* 상단 탭바(개별/일괄/오늘의일정)만 숨김 /*
+    .top2{ display:none; }
+
+    /* 상단 경로/액션바 제거 */
+    .content-top{ display:none; }
+
+    /* 헤더 제거로 전체 높이: 100vh */
+    .wrap{ height: 100vh; }
+
+    /* 날짜 옆 아이콘: 큰 화면에서도 균등 간격/정렬 */
+    .iconRow{
+      justify-content: space-between;
+      gap: 12px;
+      overflow-x: hidden;
+      padding: 0 12px;
+    }
+    /* 아이콘 라인이 너무 넓게 벌어질 경우를 방지 */
+    #iconRow{ max-width: 980px; }
+    .calTopBar{ justify-content:flex-start; }
+
+
+    /* 태블릿에서는 좌측 영역 완전 제거(표시/공간 모두 제거) */
+    @media (max-width: 1200px){
       .wrap{ grid-template-columns: 1fr !important; }
       .vbar, .left{ display:none !important; }
     }
 
-    /* 1320px 이하에서도 taskPanel 숨김 규칙을 무력화하고, 2열(mid) 유지 */
-    @media (max-width: 1320px){
-      .mid{ grid-template-columns: 1fr 440px !important; }
-      .taskPanel{ display:flex !important; }
-    }
 
-    /* 980px 이하에서는 세로 스택(숨기지 않음) */
-    @media (max-width: 980px){
-      .mid{ grid-template-columns: 1fr !important; }
-      .taskPanel{ display:flex !important; }
-    }
+    /* ================== V6: 좌측 완전 제거 + 상단바 유지 ================== */
+    .vbar, .left{ display:none !important; }
+    .wrap{ grid-template-columns: 1fr !important; height: 100vh; }
+    /* 상단(통합검색 바)는 유지, 아래 탭바/경로바만 제거 */
+    .top{ display:block; }
+    .top2{ display:none !important; }
+    .content-top{ display:none !important; }
+
+    /* 아이콘 라인: 큰 화면에서도 폭에 맞춰 균등 정렬 */
+    .calTopBar{ align-items: stretch; }
+    #iconRow{ max-width: 100%; }
+    .iconRow{ justify-content: space-between; gap: 10px; flex-wrap: nowrap; overflow-x: auto; padding: 0 10px; }
+    .iconRow::-webkit-scrollbar{ height: 6px; }
+
+    /* 태블릿 이하에서 우측 리스트 숨김 방지(기존 규칙 무력화) */
+    @media (max-width: 1320px){ .taskPanel{ display:flex !important; } }
+
 </style>
 </head>
 
@@ -917,8 +949,7 @@
                 </div>
                 <div class="round" data-cat="ETC1"><div class="circle">📊</div><div class="label">브랜치싱글뷰</div></div>
                 <div class="round" data-cat="ETC2"><div class="circle">🎯</div><div class="label">스마일콜</div></div>
-                <!-- ✅ 문구 변경: 비대면 필수 → 콜센터 연계 과제 -->
-                <div class="round" data-cat="ETC3"><div class="circle">🎯</div><div class="label">콜센터 연계 과제</div></div>
+                
               </div>
             </div>
 
