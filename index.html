@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ContractAI - 계약관리 AGENT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,7 +36,14 @@
             position: fixed;
             top: 20px;
             right: 20px;
+            left: 20px;
             z-index: 10000;
+        }
+        
+        @media (min-width: 640px) {
+            .toast-container {
+                left: auto;
+            }
         }
         
         .toast {
@@ -45,9 +52,16 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             padding: 16px;
             margin-bottom: 12px;
-            min-width: 300px;
-            max-width: 400px;
+            min-width: 280px;
+            max-width: 100%;
             animation: slideIn 0.3s ease-out;
+        }
+        
+        @media (min-width: 640px) {
+            .toast {
+                min-width: 300px;
+                max-width: 400px;
+            }
         }
         
         @keyframes slideIn {
@@ -95,12 +109,18 @@
             right: 0;
             top: 0;
             height: 100%;
-            width: 600px;
+            width: 100%;
             background: white;
             box-shadow: -2px 0 8px rgba(0,0,0,0.15);
             z-index: 9999;
             animation: slideInRight 0.3s ease-out;
             overflow-y: auto;
+        }
+        
+        @media (min-width: 640px) {
+            .sheet-content {
+                width: 600px;
+            }
         }
         
         @keyframes slideInRight {
@@ -132,10 +152,18 @@
             background: white;
             border-radius: 8px;
             max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
+            width: 95%;
+            max-height: 95vh;
             overflow-y: auto;
             animation: scaleIn 0.2s ease-out;
+            margin: 10px;
+        }
+        
+        @media (min-width: 640px) {
+            .dialog-content {
+                width: 90%;
+                margin: 0;
+            }
         }
         
         @keyframes scaleIn {
@@ -149,9 +177,42 @@
             }
         }
         
+        .mobile-sidebar {
+            position: fixed;
+            left: -100%;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: #1f2937;
+            z-index: 10001;
+            transition: left 0.3s ease-out;
+        }
+        
+        .mobile-sidebar.open {
+            left: 0;
+        }
+        
+        .mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            display: none;
+        }
+        
+        .mobile-overlay.show {
+            display: block;
+        }
+        
         .flow-step {
             position: relative;
             padding-left: 2rem;
+        }
+        
+        @media (max-width: 640px) {
+            .flow-step {
+                padding-left: 1.5rem;
+            }
         }
         
         .flow-step::before {
@@ -202,9 +263,65 @@
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileOverlay" class="mobile-overlay" onclick="toggleMobileSidebar()"></div>
+    
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="mobile-sidebar lg:hidden text-white flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-file-contract text-blue-400 text-xl"></i>
+                <span class="font-bold text-lg">ContractAI</span>
+            </div>
+            <button onclick="toggleMobileSidebar()" class="text-gray-400 hover:text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Menu -->
+        <div class="flex-1 overflow-y-auto p-2">
+            <div class="text-xs text-gray-400 px-3 py-2 uppercase">플랫폼</div>
+            <nav class="space-y-1">
+                <a href="#" onclick="navigateTo('dashboard'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="dashboard">
+                    <i class="fas fa-th-large w-5"></i>
+                    <span>대시보드</span>
+                </a>
+                <a href="#" onclick="navigateTo('workflow'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="workflow">
+                    <i class="fas fa-clock w-5"></i>
+                    <span>WORKFLOW</span>
+                </a>
+                <a href="#" onclick="navigateTo('contracts'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="contracts">
+                    <i class="fas fa-file-alt w-5"></i>
+                    <span>계약 관리</span>
+                </a>
+                <a href="#" onclick="navigateTo('ai-qa'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="ai-qa">
+                    <i class="fas fa-comments w-5"></i>
+                    <span>AI 질의응답</span>
+                </a>
+                <a href="#" onclick="navigateTo('stakeholders'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="stakeholders">
+                    <i class="fas fa-users w-5"></i>
+                    <span>관련자 관리</span>
+                </a>
+                <a href="#" onclick="navigateTo('calendar'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="calendar">
+                    <i class="fas fa-calendar w-5"></i>
+                    <span>일정 및 메일</span>
+                </a>
+            </nav>
+        </div>
+        
+        <!-- Settings -->
+        <div class="p-2 border-t border-gray-700">
+            <a href="#" onclick="navigateTo('settings'); toggleMobileSidebar(); return false;" class="sidebar-menu-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors" data-page="settings">
+                <i class="fas fa-cog w-5"></i>
+                <span>설정</span>
+            </a>
+        </div>
+    </div>
+
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div class="w-64 bg-gray-800 text-white flex flex-col">
+        <!-- Desktop Sidebar -->
+        <div class="hidden lg:flex w-64 bg-gray-800 text-white flex-col">
             <!-- Logo -->
             <div class="p-4 border-b border-gray-700">
                 <div class="flex items-center gap-2">
@@ -256,32 +373,36 @@
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
-            <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-4 flex-1">
+            <header class="bg-white border-b border-gray-200 px-3 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileSidebar()" class="lg:hidden text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                     <div class="flex items-center gap-2 text-blue-600">
                         <i class="fas fa-file-contract"></i>
-                        <span class="font-semibold">ContractAI</span>
+                        <span class="font-semibold text-sm md:text-base">ContractAI</span>
                     </div>
-                    <div class="flex-1 max-w-md">
-                        <div class="relative">
+                    <div class="hidden md:flex flex-1 max-w-md">
+                        <div class="relative w-full">
                             <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                             <input type="text" placeholder="계약, 관련자, 또는 조항 검색..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
                 </div>
-                    <div class="flex items-center gap-4">
-                        <button class="relative">
-                            <i class="fas fa-bell text-gray-600"></i>
-                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
-                        <div class="flex items-center gap-3">
-                            <div class="text-right">
-                                <div class="font-semibold text-sm">김신한</div>
-                                <div class="text-xs text-gray-500">구매팀 리더</div>
-                            </div>
-                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold">신한</div>
+                <div class="flex items-center gap-2 md:gap-4">
+                    <button class="relative">
+                        <i class="fas fa-bell text-gray-600 text-sm md:text-base"></i>
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <div class="hidden sm:flex items-center gap-2 md:gap-3">
+                        <div class="text-right hidden md:block">
+                            <div class="font-semibold text-xs md:text-sm">김신한</div>
+                            <div class="text-[10px] md:text-xs text-gray-500">구매팀 리더</div>
                         </div>
+                        <div class="w-8 h-8 md:w-10 md:h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold text-xs md:text-sm">신한</div>
                     </div>
+                </div>
             </header>
 
             <!-- Page Content -->
@@ -302,64 +423,64 @@
                     </div>
                     
                     <!-- AGENT Progress Card -->
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4 relative overflow-hidden">
-                        <div class="absolute right-0 top-0 w-48 h-48 opacity-10">
-                            <i class="fas fa-sparkles text-blue-500 text-7xl"></i>
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4 mb-3 md:mb-4 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-32 md:w-48 h-32 md:h-48 opacity-10">
+                            <i class="fas fa-sparkles text-blue-500 text-5xl md:text-7xl"></i>
                         </div>
                         <div class="relative">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-1 h-8 bg-blue-500 rounded"></div>
+                            <div class="flex items-center gap-2 mb-2 md:mb-3">
+                                <div class="w-1 h-6 md:h-8 bg-blue-500 rounded"></div>
                                 <div>
-                                    <div class="flex items-center gap-2 mb-0.5">
-                                        <i class="fas fa-sparkles text-blue-500 text-sm"></i>
-                                        <span class="text-xs text-gray-600">실시간 프로세스 가이드 중</span>
+                                    <div class="flex items-center gap-1 md:gap-2 mb-0.5">
+                                        <i class="fas fa-sparkles text-blue-500 text-xs md:text-sm"></i>
+                                        <span class="text-[10px] md:text-xs text-gray-600">실시간 프로세스 가이드 중</span>
                                     </div>
-                                    <div class="text-[10px] text-gray-500">Case ID: #REQ-2024-0012</div>
+                                    <div class="text-[9px] md:text-[10px] text-gray-500">Case ID: #REQ-2024-0012</div>
                                 </div>
                             </div>
-                            <h2 class="text-lg font-bold mb-1">이벤트(카카오 기프티콘 구매계약) 진행 중</h2>
-                            <p class="text-sm text-gray-600 mb-4">사용자의 요청에 따라 [이벤트 시행 매뉴얼]을 분석하여 프로세스를 설계했습니다. 현재 예산 코드 확인을 완료하고, 보안성 심의 단계를 자동으로 생성하여 담당자에게 배정했습니다.</p>
+                            <h2 class="text-base md:text-lg font-bold mb-1">이벤트(카카오 기프티콘 구매계약) 진행 중</h2>
+                            <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">사용자의 요청에 따라 [이벤트 시행 매뉴얼]을 분석하여 프로세스를 설계했습니다. 현재 예산 코드 확인을 완료하고, 보안성 심의 단계를 자동으로 생성하여 담당자에게 배정했습니다.</p>
                             
                             <!-- Progress Steps -->
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="flex items-center gap-1.5">
-                                    <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-check text-white text-[10px]"></i>
+                            <div class="flex items-center gap-2 md:gap-3 mb-3 md:mb-4 overflow-x-auto pb-2">
+                                <div class="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-check text-white text-[8px] md:text-[10px]"></i>
                                     </div>
-                                    <span class="text-xs font-medium">요청 분석</span>
+                                    <span class="text-[10px] md:text-xs font-medium">요청 분석</span>
                                 </div>
-                                <div class="flex-1 h-0.5 bg-gray-200"></div>
-                                <div class="flex items-center gap-1.5">
-                                    <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-check text-white text-[10px]"></i>
+                                <div class="flex-1 min-w-[20px] h-0.5 bg-gray-200"></div>
+                                <div class="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-check text-white text-[8px] md:text-[10px]"></i>
                                     </div>
-                                    <span class="text-xs font-medium">규정 대조</span>
+                                    <span class="text-[10px] md:text-xs font-medium">규정 대조</span>
                                 </div>
-                                <div class="flex-1 h-0.5 bg-gray-200"></div>
-                                <div class="flex items-center gap-1.5">
-                                    <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-spinner spinner text-white text-[10px]"></i>
+                                <div class="flex-1 min-w-[20px] h-0.5 bg-gray-200"></div>
+                                <div class="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-spinner spinner text-white text-[8px] md:text-[10px]"></i>
                                     </div>
-                                    <span class="text-xs font-medium">ERP 연동</span>
+                                    <span class="text-[10px] md:text-xs font-medium">ERP 연동</span>
                                 </div>
-                                <div class="flex-1 h-0.5 bg-gray-200"></div>
-                                <div class="flex items-center gap-1.5">
-                                    <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
-                                        <i class="fas fa-circle text-white text-[10px]"></i>
+                                <div class="flex-1 min-w-[20px] h-0.5 bg-gray-200"></div>
+                                <div class="flex items-center gap-1 md:gap-1.5 flex-shrink-0">
+                                    <div class="w-5 h-5 md:w-6 md:h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-circle text-white text-[8px] md:text-[10px]"></i>
                                     </div>
-                                    <span class="text-xs font-medium">집행</span>
+                                    <span class="text-[10px] md:text-xs font-medium">집행</span>
                                 </div>
                             </div>
                             
-                            <div class="flex gap-2">
-                                <button onclick="navigateTo('contracts')" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-xs hover:bg-blue-600">ERP 연동 화면 보기</button>
-                                <button onclick="navigateTo('workflow')" class="px-3 py-1.5 border border-gray-300 rounded-lg text-xs hover:bg-gray-50">설계된 프로세스 상세</button>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <button onclick="navigateTo('contracts')" class="px-2 md:px-3 py-1 md:py-1.5 bg-blue-500 text-white rounded-lg text-[10px] md:text-xs hover:bg-blue-600">ERP 연동 화면 보기</button>
+                                <button onclick="navigateTo('workflow')" class="px-2 md:px-3 py-1 md:py-1.5 border border-gray-300 rounded-lg text-[10px] md:text-xs hover:bg-gray-50">설계된 프로세스 상세</button>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Stats Cards -->
-                    <div class="grid grid-cols-4 gap-3 mb-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4">
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3">
                             <div class="flex items-center justify-between mb-1">
                                 <i class="fas fa-sparkles text-blue-500 text-sm"></i>
@@ -399,7 +520,7 @@
                     </div>
                     
                     <!-- Chart and Activity -->
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                         <!-- Chart -->
                         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
                             <div class="mb-3">
@@ -459,25 +580,25 @@
                 </div>
 
                 <!-- WORKFLOW Page -->
-                <div id="page-workflow" class="page p-6">
-                    <div class="mb-6">
-                        <h1 class="text-2xl font-bold mb-2">AGENT 자동 프로세스 설계</h1>
-                        <p class="text-gray-600">요청된 업무의 특성을 분석하여 계약업무지침에 따른 최적의 프로세스를 자동 설계하고 가이드를 제공합니다.</p>
+                <div id="page-workflow" class="page p-3 md:p-6">
+                    <div class="mb-4 md:mb-6">
+                        <h1 class="text-lg md:text-2xl font-bold mb-1 md:mb-2">AGENT 자동 프로세스 설계</h1>
+                        <p class="text-sm md:text-base text-gray-600">요청된 업무의 특성을 분석하여 계약업무지침에 따른 최적의 프로세스를 자동 설계하고 가이드를 제공합니다.</p>
                     </div>
                     
-                    <div class="grid grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                         <!-- Main Flow -->
-                        <div class="col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                            <h3 class="font-bold mb-4">업무 Flow (통합 Flowchart 분석)</h3>
-                            <p class="text-sm text-gray-600 mb-6">신규 사업 및 이벤트 진행 시 표준 프로세스</p>
+                        <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-4 md:p-6">
+                            <h3 class="font-bold mb-2 md:mb-4 text-sm md:text-base">업무 Flow (통합 Flowchart 분석)</h3>
+                            <p class="text-xs md:text-sm text-gray-600 mb-4 md:mb-6">신규 사업 및 이벤트 진행 시 표준 프로세스</p>
                             
                             <!-- Start -->
-                            <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="mb-4 md:mb-6 p-3 md:p-4 bg-blue-50 rounded-lg border border-blue-200">
                                 <div class="flex items-center gap-2 mb-2">
-                                    <i class="fas fa-star text-yellow-500"></i>
-                                    <span class="font-semibold">신규 사업 및 이벤트 진행</span>
+                                    <i class="fas fa-star text-yellow-500 text-sm"></i>
+                                    <span class="font-semibold text-sm md:text-base">신규 사업 및 이벤트 진행</span>
                                 </div>
-                                <div class="text-sm text-gray-600 space-y-1">
+                                <div class="text-xs md:text-sm text-gray-600 space-y-1">
                                     <label class="flex items-center gap-2">
                                         <input type="checkbox" id="ictContract" class="w-4 h-4" onchange="updateWorkflowStatus()"> ICT 개발 계약?
                                     </label>
@@ -494,69 +615,69 @@
                             </div>
                             
                             <!-- Step 1 -->
-                            <div class="flow-step pending mb-6">
+                            <div class="flow-step pending mb-4 md:mb-6">
                                 <div class="flow-step-number">1</div>
-                                <div class="bg-white border border-gray-200 rounded-lg p-4">
-                                    <h4 class="font-semibold mb-1">사업 품의</h4>
-                                    <p class="text-sm text-gray-600">이벤트 기획안 작성 및 예산 승인</p>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 md:p-4">
+                                    <h4 class="font-semibold mb-1 text-sm md:text-base">사업 품의</h4>
+                                    <p class="text-xs md:text-sm text-gray-600">이벤트 기획안 작성 및 예산 승인</p>
                                 </div>
                             </div>
                             
                             <!-- Step 2 -->
-                            <div class="flow-step pending mb-6">
+                            <div class="flow-step pending mb-4 md:mb-6">
                                 <div class="flow-step-number">2</div>
-                                <div class="bg-white border border-gray-200 rounded-lg p-4">
-                                    <h4 class="font-semibold mb-1">구매 품의 (계약등록)</h4>
-                                    <p class="text-sm text-gray-600 mb-3">계약 종류/방법, 낙찰자 선정, 예정가격 조사.</p>
-                                    <div class="space-y-2 text-sm">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 md:p-4">
+                                    <h4 class="font-semibold mb-1 text-sm md:text-base">구매 품의 (계약등록)</h4>
+                                    <p class="text-xs md:text-sm text-gray-600 mb-2 md:mb-3">계약 종류/방법, 낙찰자 선정, 예정가격 조사.</p>
+                                    <div class="space-y-1 md:space-y-2 text-xs md:text-sm">
                                         <div class="flex items-center gap-2 text-green-700">
-                                            <i class="fas fa-check-circle"></i>
+                                            <i class="fas fa-check-circle text-xs"></i>
                                             <span>자동화 견적서 징구 → 견적서 샘플 자동 발송</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-blue-700">
-                                            <i class="fas fa-robot"></i>
+                                            <i class="fas fa-robot text-xs"></i>
                                             <span>AI OCR 견적서 이미지 업로드 → 예정가격조사서 자동 작성</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-purple-700">
-                                            <i class="fas fa-link"></i>
+                                            <i class="fas fa-link text-xs"></i>
                                             <span>연동 조사서 기반 → 입찰 보증금 징구 자동화</span>
                                         </div>
                                     </div>
-                                    <button onclick="navigateTo('contracts')" class="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
+                                    <button onclick="navigateTo('contracts')" class="mt-2 md:mt-3 text-xs md:text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
                                 </div>
                             </div>
                             
                             <!-- Step 3 -->
-                            <div class="flow-step pending mb-6">
+                            <div class="flow-step pending mb-4 md:mb-6">
                                 <div class="flow-step-number">3</div>
-                                <div class="bg-white border border-gray-200 rounded-lg p-4">
-                                    <h4 class="font-semibold mb-1">계약 품의</h4>
-                                    <p class="text-sm text-gray-600">계약서 검토, 계약업체 특수관계 확인. → 하자보증금 → 계약이행보증금 → 청렴상생이행계약</p>
-                                    <button onclick="navigateTo('contract-proposal')" class="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 md:p-4">
+                                    <h4 class="font-semibold mb-1 text-sm md:text-base">계약 품의</h4>
+                                    <p class="text-xs md:text-sm text-gray-600">계약서 검토, 계약업체 특수관계 확인. → 하자보증금 → 계약이행보증금 → 청렴상생이행계약</p>
+                                    <button onclick="navigateTo('contract-proposal')" class="mt-2 md:mt-3 text-xs md:text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
                                 </div>
                             </div>
                             
                             <!-- Step 4 -->
                             <div class="flow-step pending">
                                 <div class="flow-step-number">4</div>
-                                <div class="bg-white border border-gray-200 rounded-lg p-4">
+                                <div class="bg-white border border-gray-200 rounded-lg p-3 md:p-4">
                                     <div class="flex items-center justify-between mb-2">
-                                        <h4 class="font-semibold">경비 집행 (종료 품의)</h4>
-                                        <span class="text-xs bg-green-500 text-white px-2 py-1 rounded">최종</span>
+                                        <h4 class="font-semibold text-sm md:text-base">경비 집행 (종료 품의)</h4>
+                                        <span class="text-[10px] md:text-xs bg-green-500 text-white px-2 py-0.5 md:py-1 rounded">최종</span>
                                     </div>
-                                    <p class="text-sm text-gray-600">세금계산서, 사업자등록증, 통장사본 징구. 재산상이익제공 확인.</p>
-                                    <button onclick="navigateTo('expense-execution')" class="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
+                                    <p class="text-xs md:text-sm text-gray-600">세금계산서, 사업자등록증, 통장사본 징구. 재산상이익제공 확인.</p>
+                                    <button onclick="navigateTo('expense-execution')" class="mt-2 md:mt-3 text-xs md:text-sm text-blue-600 hover:text-blue-800 font-medium">화면 바로가기 →</button>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Right Panel -->
-                        <div class="space-y-6">
-                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                                <button class="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium mb-4">처음으로</button>
+                        <div class="space-y-4 md:space-y-6">
+                            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 md:p-4">
+                                <button class="w-full px-3 md:px-4 py-1.5 md:py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs md:text-sm font-medium mb-3 md:mb-4">처음으로</button>
                                 
-                                <h4 class="font-semibold mb-3">RAG 학습 문서 목록</h4>
-                                <p class="text-xs text-gray-500 mb-4">현재 워크플로우 분석에 사용 중인 문서</p>
+                                <h4 class="font-semibold mb-2 md:mb-3 text-xs md:text-sm">RAG 학습 문서 목록</h4>
+                                <p class="text-[10px] md:text-xs text-gray-500 mb-3 md:mb-4">현재 워크플로우 분석에 사용 중인 문서</p>
                                 
                                 <div class="space-y-3">
                                     <div class="border border-gray-200 rounded-lg p-3">
@@ -596,16 +717,16 @@
                             </div>
 
                             <!-- 예정가격조사서 첨부 가이드 (SKIP 시 표시) -->
-                            <div id="priceSurveyGuide" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div id="priceSurveyGuide" class="hidden bg-yellow-50 border border-yellow-200 rounded-lg p-3 md:p-4">
                                 <div class="flex items-start gap-2 mb-2">
-                                    <i class="fas fa-file-upload text-yellow-600 mt-0.5"></i>
-                                    <h4 class="font-semibold text-sm">예정가격조사서 첨부 가이드</h4>
+                                    <i class="fas fa-file-upload text-yellow-600 mt-0.5 text-xs"></i>
+                                    <h4 class="font-semibold text-xs md:text-sm">예정가격조사서 첨부 가이드</h4>
                                 </div>
-                                <p class="text-xs text-gray-700 mb-3">
+                                <p class="text-[10px] md:text-xs text-gray-700 mb-2 md:mb-3">
                                     예정가격조사서를 첨부하지 않으셨습니다. 아래 버튼을 통해 구매 품의 화면에서 첨부할 수 있습니다.
                                 </p>
-                                <button onclick="navigateTo('contracts')" class="w-full px-3 py-2 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center gap-2">
-                                    <i class="fas fa-arrow-right"></i>
+                                <button onclick="navigateTo('contracts')" class="w-full px-2 md:px-3 py-1.5 md:py-2 text-[10px] md:text-xs bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center gap-1 md:gap-2">
+                                    <i class="fas fa-arrow-right text-xs"></i>
                                     구매 품의 화면으로 이동하여 첨부하기
                                 </button>
                             </div>
@@ -614,26 +735,26 @@
                 </div>
 
                 <!-- Contracts Page (구매 품의) -->
-                <div id="page-contracts" class="page p-6">
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-yellow-400">☆</span>
-                            <span class="font-bold text-lg">[736130]구매계약 등록/현황</span>
+                <div id="page-contracts" class="page p-3 md:p-6">
+                    <div class="mb-3 md:mb-4">
+                        <div class="flex items-center gap-1 md:gap-2 mb-1 md:mb-2">
+                            <span class="text-yellow-400 text-sm md:text-base">☆</span>
+                            <span class="font-bold text-sm md:text-lg">[736130]구매계약 등록/현황</span>
                         </div>
-                        <div class="text-sm text-gray-600">홈 > 경영관리 > 통합자원관리 > 구매계약</div>
+                        <div class="text-xs md:text-sm text-gray-600">홈 > 경영관리 > 통합자원관리 > 구매계약</div>
                     </div>
 
-                    <div class="flex gap-2 mb-4">
-                        <button class="px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">계약업무규정</button>
-                        <button class="px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">계약업무지침</button>
-                        <button class="px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">직무전결규정</button>
+                    <div class="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
+                        <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">계약업무규정</button>
+                        <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">계약업무지침</button>
+                        <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">직무전결규정</button>
                     </div>
 
                     <div class="bg-white border border-gray-300 rounded mb-4">
-                        <div class="bg-blue-600 text-white px-4 py-2 flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="font-bold">사업+구매품의등록</span>
-                                <span class="text-xs">* 외화인 경우 원화 환산 금액을 넣어주시기 바랍니다.</span>
+                            <div class="bg-blue-600 text-white px-2 md:px-4 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+                            <div class="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-2">
+                                <span class="font-bold text-sm md:text-base">사업+구매품의등록</span>
+                                <span class="text-[10px] md:text-xs">* 외화인 경우 원화 환산 금액을 넣어주시기 바랍니다.</span>
                             </div>
                             <div id="agentIndicator" class="hidden flex items-center gap-2 bg-green-500 px-3 py-1 rounded text-xs">
                                 <i class="fas fa-robot"></i>
@@ -641,13 +762,13 @@
                             </div>
                         </div>
 
-                        <div class="px-4 py-3 flex items-center justify-between border-b border-gray-200">
-                            <div class="flex items-center gap-2">
-                                <button id="agentSheetBtn" class="px-3 py-1 text-xs bg-purple-500 hover:bg-purple-600 text-white rounded flex items-center gap-1">
+                        <div class="px-2 md:px-4 py-2 md:py-3 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 md:gap-0 border-b border-gray-200">
+                            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1">
+                                <button id="agentSheetBtn" class="px-3 py-1 text-xs bg-purple-500 hover:bg-purple-600 text-white rounded flex items-center justify-center gap-1">
                                     <i class="fas fa-magic"></i>
                                     AGENT에게 등록 요청
                                 </button>
-                                <span class="text-xs text-gray-600">AGENT 계약 자동 등록 수행하고자 하는 업무 내용을 입력하면, AGENT가 규정에 맞는 계약 프로세스를 설계하고 ERP 양식을 자동으로 완성합니다.</span>
+                                <span class="text-[10px] md:text-xs text-gray-600">AGENT 계약 자동 등록 수행하고자 하는 업무 내용을 입력하면, AGENT가 규정에 맞는 계약 프로세스를 설계하고 ERP 양식을 자동으로 완성합니다.</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <button id="tempSaveBtn" class="px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300 rounded">임시저장</button>
@@ -656,8 +777,8 @@
                         </div>
 
                         <!-- ERP Table Form -->
-                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs">
-                            <table class="w-full border-collapse">
+                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs overflow-x-auto">
+                            <table class="w-full border-collapse min-w-[600px]">
                                 <colgroup>
                                     <col class="w-[140px] bg-[#eff3f6]" />
                                     <col class="w-auto" />
@@ -1014,22 +1135,22 @@
                 </div>
 
                 <!-- Contract Proposal Page (계약 품의) -->
-                <div id="page-contract-proposal" class="page p-6">
+                <div id="page-contract-proposal" class="page p-3 md:p-6">
                     <!-- Top Toolbar -->
-                    <div class="bg-white border-b border-gray-300 px-4 py-2 flex items-center justify-between mb-4">
+                    <div class="bg-white border-b border-gray-300 px-2 md:px-4 py-2 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2 mb-4">
                         <div class="flex items-center gap-2">
-                            <span class="font-bold text-sm">통합자원관리</span>
+                            <span class="font-bold text-xs md:text-sm">통합자원관리</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button class="px-3 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 border border-gray-300 rounded">초기화</button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">조회</button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">등록</button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">삭제/해제</button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">승인</button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded flex items-center gap-1">
-                                <i class="fas fa-print"></i>
+                        <div class="flex items-center gap-1 md:gap-2 flex-wrap">
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-yellow-400 hover:bg-yellow-500 border border-gray-300 rounded">초기화</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">조회</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">등록</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">삭제/해제</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">승인</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded flex items-center gap-1">
+                                <i class="fas fa-print text-xs"></i>
                             </button>
-                            <button class="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">종료</button>
+                            <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded">종료</button>
                         </div>
                     </div>
 
@@ -1055,35 +1176,35 @@
                     </div>
 
                     <!-- Progress Status -->
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center gap-2 text-sm">
-                            <span>진행 상태:</span>
-                            <span class="text-gray-600">사업품의</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="text-gray-600">구매품의</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="bg-blue-500 text-white px-2 py-0.5 rounded">계약품의 (현재)</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="text-gray-600">경비집행</span>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-2 md:p-3 mb-3 md:mb-4">
+                        <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm overflow-x-auto pb-1">
+                            <span class="flex-shrink-0">진행 상태:</span>
+                            <span class="text-gray-600 flex-shrink-0">사업품의</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="text-gray-600 flex-shrink-0">구매품의</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="bg-blue-500 text-white px-1.5 md:px-2 py-0.5 rounded flex-shrink-0 text-[10px] md:text-xs">계약품의 (현재)</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="text-gray-600 flex-shrink-0">경비집행</span>
                         </div>
                     </div>
 
                     <!-- Contract Details Section -->
                     <div class="bg-white border border-gray-300 rounded mb-4">
-                        <div class="bg-blue-600 text-white px-4 py-2 flex items-center justify-between">
+                        <div class="bg-blue-600 text-white px-2 md:px-4 py-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-file-contract"></i>
-                                <span class="font-bold">계약세부사항 등록</span>
+                                <span class="font-bold text-sm md:text-base">계약세부사항 등록</span>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button class="px-3 py-1 text-xs bg-green-500 hover:bg-green-600 text-white rounded">법무팀 검토 요청</button>
-                                <button class="px-3 py-1 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300 rounded">임시저장</button>
+                                <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-green-500 hover:bg-green-600 text-white rounded">법무팀 검토 요청</button>
+                                <button class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300 rounded">임시저장</button>
                             </div>
                         </div>
 
                         <!-- Contract Details Form -->
-                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs">
-                            <table class="w-full border-collapse">
+                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs overflow-x-auto">
+                            <table class="w-full border-collapse min-w-[600px]">
                                 <colgroup>
                                     <col class="w-[140px] bg-[#eff3f6]" />
                                     <col class="w-auto" />
@@ -1093,22 +1214,22 @@
                                     <tr class="border-b border-gray-200">
                                         <td class="px-2 py-1 font-bold text-[#334155] border-r border-gray-200 bg-[#eff3f6]">계약서 검토</td>
                                         <td class="px-2 py-1">
-                                            <div class="flex items-start justify-between gap-4">
+                                            <div class="flex flex-col md:flex-row items-stretch md:items-start justify-between gap-3 md:gap-4">
                                                 <div class="flex-1">
-                                                    <div class="flex items-center gap-2">
+                                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                                                         <button class="px-2 py-0.5 text-[10px] bg-blue-500 hover:bg-blue-600 text-white rounded">검토의뢰</button>
                                                         <span class="text-xs">검토번호:</span>
-                                                        <input type="text" class="h-6 w-32 text-[11px] border border-gray-300 px-2 rounded" placeholder="자동생성" disabled />
+                                                        <input type="text" class="h-6 w-full sm:w-32 text-[11px] border border-gray-300 px-2 rounded" placeholder="자동생성" disabled />
                                                     </div>
                                                     <div class="text-[10px] text-gray-600 mt-1">
                                                         * 표준계약서 사용 시 법무팀 검토 생략 가능 (단, 특약사항 존재 시 필수)
                                                     </div>
                                                 </div>
-                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                                                    <i class="fas fa-robot text-green-600 text-sm"></i>
-                                                    <div class="flex flex-col">
-                                                        <span class="text-xs font-semibold text-green-700">AI Agent가 계약서 작성을 완료했어요</span>
-                                                        <button onclick="downloadContractDocument()" class="text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
+                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-2 md:px-3 py-2 flex-shrink-0">
+                                                    <i class="fas fa-robot text-green-600 text-xs md:text-sm"></i>
+                                                    <div class="flex flex-col min-w-0">
+                                                        <span class="text-[10px] md:text-xs font-semibold text-green-700">AI Agent가 계약서 작성을 완료했어요</span>
+                                                        <button onclick="downloadContractDocument()" class="text-[9px] md:text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
                                                             <i class="fas fa-download"></i> 다운로드
                                                         </button>
                                                     </div>
@@ -1172,15 +1293,17 @@
                                     <tr class="border-b border-gray-200 bg-[#fffbeb]">
                                         <td class="px-2 py-1 font-bold text-[#334155] border-r border-gray-200 bg-[#fff7d1]">청렴상생이행계약</td>
                                         <td class="px-2 py-1">
-                                            <div class="flex items-start justify-between gap-4">
+                                            <div class="flex flex-col md:flex-row items-stretch md:items-start justify-between gap-3 md:gap-4">
                                                 <div class="flex-1">
-                                                    <div class="flex items-center gap-2">
+                                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                                                         <label class="flex items-center gap-1">
                                                             <input type="checkbox" id="integrityCheck" class="w-3 h-3 bg-white" />
                                                             <span class="text-xs">✔ 청렴서약서 징구 완료</span>
                                                         </label>
-                                                        <button onclick="downloadIntegrityForm()" class="px-2 py-0.5 text-[10px] bg-blue-500 hover:bg-blue-600 text-white rounded">양식 다운로드</button>
-                                                        <button class="px-2 py-0.5 text-[10px] bg-white border border-gray-400 rounded">서약서 보기</button>
+                                                        <div class="flex items-center gap-2">
+                                                            <button onclick="downloadIntegrityForm()" class="px-2 py-0.5 text-[10px] bg-blue-500 hover:bg-blue-600 text-white rounded">양식 다운로드</button>
+                                                            <button class="px-2 py-0.5 text-[10px] bg-white border border-gray-400 rounded">서약서 보기</button>
+                                                        </div>
                                                     </div>
                                                     <div class="mt-2">
                                                         <input type="file" id="integrityFileInput" class="hidden" accept=".pdf,.doc,.docx" onchange="handleIntegrityFileUpload(event)" />
@@ -1193,11 +1316,11 @@
                                                         * 계약금액 상관없이 전 건 필수 징구 사항입니다.
                                                     </div>
                                                 </div>
-                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                                                    <i class="fas fa-robot text-green-600 text-sm"></i>
-                                                    <div class="flex flex-col">
-                                                        <span class="text-xs font-semibold text-green-700">AI Agent가 청렴상생이행계약서 작성을 완료했어요</span>
-                                                        <button onclick="downloadIntegrityContract()" class="text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
+                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-2 md:px-3 py-2 flex-shrink-0">
+                                                    <i class="fas fa-robot text-green-600 text-xs md:text-sm"></i>
+                                                    <div class="flex flex-col min-w-0">
+                                                        <span class="text-[10px] md:text-xs font-semibold text-green-700">AI Agent가 청렴상생이행계약서 작성을 완료했어요</span>
+                                                        <button onclick="downloadIntegrityContract()" class="text-[9px] md:text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
                                                             <i class="fas fa-download"></i> 다운로드
                                                         </button>
                                                     </div>
@@ -1212,7 +1335,7 @@
                 </div>
 
                 <!-- Expense Execution Page (경비 집행) -->
-                <div id="page-expense-execution" class="page p-6">
+                <div id="page-expense-execution" class="page p-3 md:p-6">
                     <!-- Top Toolbar -->
                     <div class="bg-white border-b border-gray-300 px-4 py-2 flex items-center justify-between mb-4">
                         <div class="flex items-center gap-2">
@@ -1250,25 +1373,25 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-yellow-400">☆</span>
-                            <span class="font-bold text-lg">[910230]경비집행 등록/현황</span>
+                    <div class="mb-3 md:mb-4">
+                        <div class="flex items-center gap-1 md:gap-2 mb-1 md:mb-2">
+                            <span class="text-yellow-400 text-sm md:text-base">☆</span>
+                            <span class="font-bold text-sm md:text-lg">[910230]경비집행 등록/현황</span>
                         </div>
-                        <div class="text-sm text-gray-600">홈 > 경영관리 > 통합자원관리 > 경비집행</div>
+                        <div class="text-xs md:text-sm text-gray-600">홈 > 경영관리 > 통합자원관리 > 경비집행</div>
                     </div>
 
                     <!-- Progress Status -->
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center gap-2 text-sm">
-                            <span>진행 상태:</span>
-                            <span class="text-gray-600">사업품의</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="text-gray-600">구매품의</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="text-gray-600">계약품의</span>
-                            <i class="fas fa-arrow-right text-gray-400"></i>
-                            <span class="bg-green-500 text-white px-2 py-0.5 rounded">경비집행 (현재)</span>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-2 md:p-3 mb-3 md:mb-4">
+                        <div class="flex items-center gap-1 md:gap-2 text-xs md:text-sm overflow-x-auto pb-1">
+                            <span class="flex-shrink-0">진행 상태:</span>
+                            <span class="text-gray-600 flex-shrink-0">사업품의</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="text-gray-600 flex-shrink-0">구매품의</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="text-gray-600 flex-shrink-0">계약품의</span>
+                            <i class="fas fa-arrow-right text-gray-400 text-xs flex-shrink-0"></i>
+                            <span class="bg-green-500 text-white px-1.5 md:px-2 py-0.5 rounded flex-shrink-0 text-[10px] md:text-xs">경비집행 (현재)</span>
                         </div>
                     </div>
 
@@ -1283,8 +1406,8 @@
                         </div>
 
                         <!-- Expense Form -->
-                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs">
-                            <table class="w-full border-collapse">
+                        <div class="border-t-2 border-t-blue-600 border border-gray-300 text-xs overflow-x-auto">
+                            <table class="w-full border-collapse min-w-[600px]">
                                 <colgroup>
                                     <col class="w-[140px] bg-[#eff3f6]" />
                                     <col class="w-auto" />
@@ -1335,22 +1458,24 @@
                                     <tr class="border-b border-gray-200">
                                         <td class="px-2 py-1 font-bold text-[#334155] border-r border-gray-200 bg-[#eff3f6]">재산상이익제공</td>
                                         <td class="px-2 py-1">
-                                            <div class="flex items-start justify-between gap-4">
+                                            <div class="flex flex-col md:flex-row items-stretch md:items-start justify-between gap-3 md:gap-4">
                                                 <div class="flex-1">
-                                                    <div class="flex items-center gap-2">
+                                                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                                                         <label class="flex items-center gap-1">
                                                             <input type="checkbox" class="w-3 h-3" />
                                                             <span class="text-xs">준법감시부 사전보고 대상</span>
                                                         </label>
-                                                        <span class="text-xs text-gray-600">보고서 번호 입력</span>
-                                                        <input type="text" class="h-6 w-32 text-[11px] border border-gray-300 px-2 rounded bg-gray-100" placeholder="보고서 번호 입력" />
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-xs text-gray-600">보고서 번호 입력</span>
+                                                            <input type="text" class="h-6 w-full sm:w-32 text-[11px] border border-gray-300 px-2 rounded bg-gray-100" placeholder="보고서 번호 입력" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                                                    <i class="fas fa-robot text-green-600 text-sm"></i>
-                                                    <div class="flex flex-col">
-                                                        <span class="text-xs font-semibold text-green-700">재산상이익제공 자료도 작성 완료 했어요</span>
-                                                        <button onclick="downloadPropertyInterestDoc()" class="text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
+                                                <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-2 md:px-3 py-2 flex-shrink-0">
+                                                    <i class="fas fa-robot text-green-600 text-xs md:text-sm"></i>
+                                                    <div class="flex flex-col min-w-0">
+                                                        <span class="text-[10px] md:text-xs font-semibold text-green-700">재산상이익제공 자료도 작성 완료 했어요</span>
+                                                        <button onclick="downloadPropertyInterestDoc()" class="text-[9px] md:text-[10px] text-green-600 hover:text-green-800 underline mt-0.5 text-left">
                                                             <i class="fas fa-download"></i> 다운로드
                                                         </button>
                                                     </div>
@@ -1371,38 +1496,38 @@
     <div id="agentSheet" class="hidden">
         <div class="sheet-overlay" onclick="closeAgentSheet()"></div>
         <div class="sheet-content">
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold">AGENT 계약 자동 등록</h2>
+                <div class="p-4 md:p-6">
+                <div class="flex items-center justify-between mb-4 md:mb-6">
+                    <h2 class="text-lg md:text-xl font-bold">AGENT 계약 자동 등록</h2>
                     <button onclick="closeAgentSheet()" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
                 
-                <div class="mb-4">
-                    <label class="block text-sm font-semibold mb-2">업무 내용 서술</label>
-                    <textarea id="agentInput" class="w-full h-32 border border-gray-300 rounded p-3 text-sm" placeholder="예: 2024년 개발 생산성 향상 도구(Cursor AI) 라이센스 구독 계약을 진행하고자 합니다. 연간 구독료는 $3,000입니다."></textarea>
+                <div class="mb-3 md:mb-4">
+                    <label class="block text-xs md:text-sm font-semibold mb-2">업무 내용 서술</label>
+                    <textarea id="agentInput" class="w-full h-24 md:h-32 border border-gray-300 rounded p-2 md:p-3 text-xs md:text-sm" placeholder="예: 2024년 개발 생산성 향상 도구(Cursor AI) 라이센스 구독 계약을 진행하고자 합니다. 연간 구독료는 $3,000입니다."></textarea>
                 </div>
                 
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <h4 class="text-sm font-semibold flex items-center gap-2">
-                            <i class="fas fa-file-alt"></i>
+                <div class="bg-gray-50 p-3 md:p-4 rounded-lg border border-gray-200 mb-3 md:mb-4">
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 mb-3 md:mb-4">
+                        <h4 class="text-xs md:text-sm font-semibold flex items-center gap-2">
+                            <i class="fas fa-file-alt text-xs"></i>
                             AGENT 분석 및 처리 결과
                         </h4>
-                        <button id="generateBtn" onclick="handleGenerate()" class="px-3 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center gap-1">
-                            <i id="generateIcon" class="fas fa-sparkles"></i>
+                        <button id="generateBtn" onclick="handleGenerate()" class="px-2 md:px-3 py-1 text-[10px] md:text-xs bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center gap-1">
+                            <i id="generateIcon" class="fas fa-sparkles text-xs"></i>
                             <span id="generateText">실행</span>
                         </button>
                     </div>
-                    <div id="generatedContent" class="bg-white border border-gray-300 rounded-md p-4 h-[300px] overflow-y-auto text-sm font-mono whitespace-pre-wrap">
+                    <div id="generatedContent" class="bg-white border border-gray-300 rounded-md p-3 md:p-4 h-[200px] md:h-[300px] overflow-y-auto text-xs md:text-sm font-mono whitespace-pre-wrap">
                         요청사항을 분석하여 계약 유형을 판단하고, ERP 필드값을 자동으로 채웁니다...
                     </div>
                 </div>
                 
-                <div class="flex justify-end gap-2">
-                    <button onclick="closeAgentSheet()" class="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50">취소</button>
-                    <button id="applyAgentBtn" onclick="handleApplyAgent()" disabled class="px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed">
+                <div class="flex flex-col sm:flex-row justify-end gap-2">
+                    <button onclick="closeAgentSheet()" class="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm border border-gray-300 rounded hover:bg-gray-50">취소</button>
+                    <button id="applyAgentBtn" onclick="handleApplyAgent()" disabled class="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm bg-blue-500 hover:bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed">
                         시스템 반영 및 결과 확인
                     </button>
                 </div>
@@ -1414,45 +1539,45 @@
     <div id="agentDialog" class="hidden">
         <div class="dialog-overlay" onclick="closeAgentDialog()">
             <div class="dialog-content" onclick="event.stopPropagation()">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-2">
-                            <i class="fas fa-exclamation-circle text-orange-500"></i>
-                            <h3 class="text-lg font-bold">AGENT 처리 결과 및 추가 요청</h3>
+                <div class="p-4 md:p-6">
+                    <div class="flex items-center justify-between mb-3 md:mb-4">
+                        <div class="flex items-center gap-1 md:gap-2 flex-1 min-w-0">
+                            <i class="fas fa-exclamation-circle text-orange-500 text-sm md:text-base"></i>
+                            <h3 class="text-base md:text-lg font-bold truncate">AGENT 처리 결과 및 추가 요청</h3>
                         </div>
-                        <button onclick="closeAgentDialog()" class="text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-times"></i>
+                        <button onclick="closeAgentDialog()" class="text-gray-500 hover:text-gray-700 flex-shrink-0 ml-2">
+                            <i class="fas fa-times text-lg"></i>
                         </button>
                     </div>
-                    <p class="text-sm text-gray-600 mb-4">
+                    <p class="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
                         대부분의 항목이 자동 완성되었으나, 규정에 따라 <strong>증빙 문서 업로드</strong>가 필요합니다.
                     </p>
                     
-                    <div class="space-y-4 mb-4">
-                        <div class="bg-green-50 p-3 rounded-md border border-green-100 text-sm">
+                    <div class="space-y-3 md:space-y-4 mb-3 md:mb-4">
+                        <div class="bg-green-50 p-2 md:p-3 rounded-md border border-green-100 text-xs md:text-sm">
                             <div class="font-bold text-green-800 mb-1 flex items-center gap-1">
-                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-check-circle text-xs"></i>
                                 자동 수행 완료
                             </div>
-                            <ul class="list-disc pl-4 text-green-700 space-y-1">
+                            <ul class="list-disc pl-3 md:pl-4 text-green-700 space-y-0.5 md:space-y-1 text-[10px] md:text-xs">
                                 <li>계약명, 계약방법, 공급방법 설정 완료</li>
                                 <li><strong>[자동화]</strong> 견적서 징구 시 공급업체에 샘플 발송 완료</li>
                             </ul>
                         </div>
 
-                        <div class="bg-orange-50 p-3 rounded-md border border-orange-100 text-sm">
+                        <div class="bg-orange-50 p-2 md:p-3 rounded-md border border-orange-100 text-xs md:text-sm">
                             <div class="font-bold text-orange-800 mb-2 flex items-center gap-1">
-                                <i class="fas fa-upload"></i>
+                                <i class="fas fa-upload text-xs"></i>
                                 추가 수행 필요
                             </div>
-                            <p class="text-orange-700 mb-2">
+                            <p class="text-orange-700 mb-2 text-[10px] md:text-xs">
                                 '예정가격조사서' 작성을 위해 접수된 <strong>견적서 이미지</strong>를 업로드해주세요.
                             </p>
                             
-                            <div id="uploadArea" class="border-2 border-dashed border-orange-200 rounded-lg p-6 flex flex-col items-center justify-center bg-white">
-                                <i class="fas fa-upload text-orange-300 text-2xl mb-2"></i>
-                                <p class="text-xs text-gray-500 mb-3">견적서 이미지 (JPG, PNG, PDF)</p>
-                                <button onclick="document.getElementById('fileInput').click()" class="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">
+                            <div id="uploadArea" class="border-2 border-dashed border-orange-200 rounded-lg p-4 md:p-6 flex flex-col items-center justify-center bg-white">
+                                <i class="fas fa-upload text-orange-300 text-xl md:text-2xl mb-2"></i>
+                                <p class="text-[10px] md:text-xs text-gray-500 mb-2 md:mb-3">견적서 이미지 (JPG, PNG, PDF)</p>
+                                <button onclick="document.getElementById('fileInput').click()" class="px-2 md:px-3 py-1 text-[10px] md:text-xs border border-gray-300 rounded hover:bg-gray-50">
                                     파일 선택
                                 </button>
                                 <input type="file" id="fileInput" class="hidden" accept="image/*,.pdf" onchange="handleFileUpload(event)" />
@@ -1460,11 +1585,11 @@
                         </div>
                     </div>
                     
-                    <div class="flex justify-end gap-2">
-                        <button id="dialogSkipBtn" onclick="handleSkipDialog()" class="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50">
+                    <div class="flex flex-col sm:flex-row justify-end gap-2">
+                        <button id="dialogSkipBtn" onclick="handleSkipDialog()" class="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm border border-gray-300 rounded hover:bg-gray-50">
                             SKIP
                         </button>
-                        <button id="dialogCloseBtn" onclick="closeAgentDialog()" class="px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded">
+                        <button id="dialogCloseBtn" onclick="closeAgentDialog()" class="px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm bg-blue-500 hover:bg-blue-600 text-white rounded">
                             확인
                         </button>
                     </div>
@@ -1984,6 +2109,28 @@
             }
         }
 
+        // Mobile Sidebar Toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            if (sidebar && overlay) {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('show');
+            }
+        }
+
+        // Close mobile sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            const sidebar = document.getElementById('mobileSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            if (sidebar && overlay && !sidebar.contains(e.target) && !e.target.closest('[onclick*="toggleMobileSidebar"]')) {
+                if (sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('show');
+                }
+            }
+        });
+
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
             // Set initial active menu
@@ -2005,6 +2152,16 @@
             if (urlParams.get('auto_fill') === 'true') {
                 fillFormWithAgentData();
                 showToast('success', 'WORKFLOW 데이터 연동 완료', '이전 단계에서 분석된 계약 정보가 자동으로 입력되었습니다.');
+            }
+            
+            // Close mobile sidebar on navigation
+            const mobileSidebar = document.getElementById('mobileSidebar');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (mobileSidebar && mobileOverlay) {
+                if (mobileSidebar.classList.contains('open')) {
+                    mobileSidebar.classList.remove('open');
+                    mobileOverlay.classList.remove('show');
+                }
             }
         });
     </script>
